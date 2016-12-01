@@ -1,20 +1,20 @@
-use instructions::Turn;
+use instructions::{Turn, Step};
 
-#[derive(PartialEq, Eq, Debug, Clone)]
+#[derive(PartialEq, Eq, Debug, Clone, Hash)]
 pub struct Offset {
     northings: i64,
     eastings: i64,
 }
 
 impl Offset {
-    fn new() -> Offset {
+    pub fn new() -> Offset {
         Offset {
             northings: 0,
             eastings: 0,
         }
     }
 
-    fn move_blocks(&self, heading: &Heading, blocks: &u32) -> Offset {
+    pub fn move_blocks(&self, heading: &Heading, blocks: &u32) -> Offset {
         match heading {
             &Heading::North => {
                 Offset {
@@ -43,12 +43,12 @@ impl Offset {
         }
     }
 
-    fn distance(&self) -> i64 {
+    pub fn distance(&self) -> i64 {
         self.northings.abs() + self.eastings.abs()
     }
 }
 
-#[derive(PartialEq, Eq, Debug, Clone)]
+#[derive(PartialEq, Eq, Debug, Clone, Hash)]
 pub enum Heading {
     North,
     South,
@@ -56,7 +56,12 @@ pub enum Heading {
     West,
 }
 
-#[derive(PartialEq, Eq, Debug)]
+pub fn explode_step(starting_heading: &Heading, step: &Step) -> Vec<Heading> {
+    let new_heading = turn_heading(starting_heading, &step.turn);
+    (0..step.blocks).map(|_| new_heading.clone()).collect()
+}
+
+#[derive(PartialEq, Eq, Debug, Hash, Clone)]
 pub struct State {
     heading: Heading,
     offset: Offset,
@@ -114,8 +119,22 @@ fn test_turn_state() {
 
     let turn = Turn::Right;
 
-    let new_state = starting_state.apply_turn(turn);
+    let new_state = starting_state.apply_turn(&turn);
 
     assert_eq!(new_state.offset, starting_state.offset);
     assert_eq!(new_state.heading, Heading::South);
+}
+
+#[test]
+fn test_explode_step() {
+    let step = Step {
+        turn: Turn::Left,
+        blocks: 4,
+    };
+
+    let hs = explode_step(&Heading::North, &step);
+
+    assert_eq!(hs.len(), 4);
+    assert_eq!(hs,
+               [Heading::West, Heading::West, Heading::West, Heading::West]);
 }
