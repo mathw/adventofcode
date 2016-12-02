@@ -1,3 +1,5 @@
+pub mod keypad;
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum Turn {
     Left,
