@@ -3,14 +3,10 @@ extern crate regex;
 extern crate lazy_static;
 
 mod instructions;
-mod parse;
-mod taxicabgeometry;
 mod keypadgeometry;
 
-use std::collections::HashMap;
-use taxicabgeometry::{Heading, Offset, explode_step};
 use keypadgeometry::Keypad;
-use instructions::keypad::{Move, instructions_from_string};
+use instructions::keypad::instructions_from_string;
 
 fn main() {
     let input: Vec<&str> = vec!["LURLDDLDULRURDUDLRULRDLLRURDUDRLLRLRURDRULDLRLRRDDULUDULURULLURLURRRLLDURURLLUURDLLDUUDRRDLDLLRUUDURURRULURUURLDLLLUDDUUDRULLRUDURRLRLLDRRUDULLDUUUDLDLRLLRLULDLRLUDLRRULDDDURLUULRDLRULRDURDURUUUDDRRDRRUDULDUUULLLLURRDDUULDRDRLULRRRUUDUURDULDDRLDRDLLDDLRDLDULUDDLULUDRLULRRRRUUUDULULDLUDUUUUDURLUDRDLLDDRULUURDRRRDRLDLLURLULDULRUDRDDUDDLRLRRDUDDRULRULULRDDDDRDLLLRURDDDDRDRUDUDUUDRUDLDULRUULLRRLURRRRUUDRDLDUDDLUDRRURLRDDLUUDUDUUDRLUURURRURDRRRURULUUDUUDURUUURDDDURUDLRLLULRULRDURLLDDULLDULULDDDRUDDDUUDDUDDRRRURRUURRRRURUDRRDLRDUUULLRRRUDD",
@@ -20,15 +16,16 @@ fn main() {
                                 "DRRDRRURURUDDDRULRUDLDLDULRLDURURUUURURLURURDDDDRULUDLDDRDDUDULRUUULRDUDULURLRULRDDLDUDLDLULRULDRRLUDLLLLURUDUDLLDLDRLRUUULRDDLUURDRRDLUDUDRULRRDDRRLDUDLLDLURLRDLRUUDLDULURDDUUDDLRDLUURLDLRLRDLLRUDRDUURDDLDDLURRDDRDRURULURRLRLDURLRRUUUDDUUDRDRULRDLURLDDDRURUDRULDURUUUUDULURUDDDDUURULULDRURRDRDURUUURURLLDRDLDLRDDULDRLLDUDUDDLRLLRLRUUDLUDDULRLDLLRLUUDLLLUUDULRDULDLRRLDDDDUDDRRRDDRDDUDRLLLDLLDLLRDLDRDLUDRRRLDDRLUDLRLDRUURUDURDLRDDULRLDUUUDRLLDRLDLLDLDRRRLLULLUDDDLRUDULDDDLDRRLLRDDLDUULRDLRRLRLLRUUULLRDUDLRURRRUULLULLLRRURLRDULLLRLDUUUDDRLRLUURRLUUUDURLRDURRDUDDUDDRDDRUD   \
                                  "];
 
-    let moves = input.iter().map(|i| instructions_from_string(i)).collect::<Vec<Vec<Move>>>();
-
-    let mut digits = vec![];
-    let mut current_position = Keypad::new();
-
-    for line in moves.into_iter() {
-        current_position = current_position.apply_moves(line.into_iter());
-        digits.push(current_position.position);
-    }
+    let digits = input.iter()
+        // parse instructions
+        .map(|i| instructions_from_string(i))
+        // starting from 5, follow the instructions
+        .scan(Keypad::new(), |curr, line| {
+            let new_position = curr.apply_moves(line.iter());
+            *curr = new_position.clone();
+            Some(new_position.position)
+        })
+        .collect::<Vec<char>>();
 
     println!("{:?}", digits);
 }
