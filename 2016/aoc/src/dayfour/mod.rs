@@ -30,18 +30,9 @@ impl<'a> RoomIdentifier<'a> {
 }
 
 fn shift_char(c: char, amount: u32) -> char {
-    fn char_to_letternum(c: char) -> u8 {
-        c as u8 - 'a' as u8
-    }
-    fn letternum_to_char(n: u8) -> char {
-        char::from(n + 'a' as u8)
-    }
-    let actual_shift = amount % 26;
-    let lowercase = c.to_lowercase().next().unwrap();
-    let numeric = char_to_letternum(lowercase) as u32;
-    let shifted = numeric + actual_shift;
-    let new_number = shifted % 26;
-    letternum_to_char(new_number as u8)
+    let a = 'a' as u8;
+    let i = (((c as u8 - a) as u32 + amount) % 26) as u8 + a;
+    i as char
 }
 
 fn name_sort(a: &str, b: &str) -> Ordering {
