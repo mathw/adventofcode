@@ -6,8 +6,10 @@ extern crate itertools;
 extern crate md5;
 extern crate rustc_serialize;
 
-mod day7;
+mod day8;
 
 fn main() {
-    day7::do_day7(include_str!("day7_input.txt"));
+    let input = include_str!("day8_input.txt");
+
+    day8::do_day8(input);
 }
