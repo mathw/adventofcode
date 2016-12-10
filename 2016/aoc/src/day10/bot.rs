@@ -12,20 +12,6 @@ impl Bot {
         }
     }
 
-    pub fn new_holding(holding: u32) -> Bot {
-        Bot {
-            holds1: Some(holding),
-            holds2: None,
-        }
-    }
-
-    pub fn new_holding2(holding: u32, holding2: u32) -> Bot {
-        Bot {
-            holds1: Some(holding),
-            holds2: Some(holding2),
-        }
-    }
-
     pub fn is_holding(&self, what: u32) -> bool {
         self.holds1.map(|h| h == what).unwrap_or(false) ||
         self.holds2.map(|h| h == what).unwrap_or(false)

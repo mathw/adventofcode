@@ -15,10 +15,15 @@ fn count_valid_triangles<'a, I>(input: I) -> usize
         .len()
 }
 /// How many triples in the day three input are valid triangles?
-pub fn do_daythree() {
+pub fn do_day3() {
     let valid_triangles = count_valid_triangles(get_input().iter());
 
-    println!("part one: {}", valid_triangles);
+    println!("valid triangles: {}", valid_triangles);
+
+    let rotated_input = rotate_input(&get_input());
+    let valid_triangles = count_valid_triangles(rotated_input.iter());
+
+    println!("valid triangles in rotated input: {}", valid_triangles);
 }
 
 /// Rotate 3-by-3 chunks, by column
@@ -39,11 +44,4 @@ fn rotate_input<'a, T>(input: &'a [(T, T, T)]) -> Vec<(T, T, T)>
         })
         .flat_map(|v| v.into_iter())
         .collect()
-}
-
-pub fn do_daythree_parttwo() {
-    let rotated_input = rotate_input(&get_input());
-    let valid_triangles = count_valid_triangles(rotated_input.iter());
-
-    println!("part two: {}", valid_triangles);
 }

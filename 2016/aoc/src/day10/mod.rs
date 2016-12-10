@@ -30,7 +30,6 @@ fn run_all(input: &str) -> State {
 pub fn do_day10(input: &str) {
     let botnum = run_until_bot_holds(input, (61, 17));
 
-    println!("\n\n\n==============");
     let p2state = run_all(input);
     let bin0 = p2state.get_output_bin(0)[0];
     let bin1 = p2state.get_output_bin(1)[0];

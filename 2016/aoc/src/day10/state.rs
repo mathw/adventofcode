@@ -27,16 +27,10 @@ impl State {
 
     /// run instructions until there is a bot holding the two specified values
     pub fn run_until_bot_holds(&mut self, values: (u32, u32)) -> Option<u32> {
-        let mut count = 0;
         for (botnum, (low_to, high_to)) in self.decisions.clone() {
-            count += 1;
             // first check to see if a bot is now holding those values
             let botholding = self.find_bot_holding(values.0, values.1);
             if botholding.is_some() {
-                println!("run_until_bot_holds ran {} decisions", count);
-                println!("FOUND bot holding {:?}, it is {}",
-                         values,
-                         botholding.unwrap());
                 return botholding;
             }
 
@@ -50,11 +44,9 @@ impl State {
 
     /// Run the decisions until no changes happen
     pub fn run_all_decisions(&mut self) {
-        let mut count = 0;
         loop {
             let mut changed_this_loop = false;
             for (botnum, (low_to, high_to)) in self.decisions.clone() {
-                count += 1;
                 let changed = self.run_decision(botnum, low_to, high_to);
                 changed_this_loop = changed_this_loop || changed;
             }
@@ -75,14 +67,6 @@ impl State {
         let result = bot.give_value(value);
         if !result {
             panic!("Unable to give value to bot");
-        }
-    }
-
-    fn take_value_from_bot(&mut self, value: u32, bot_number: u32) {
-        let mut bot = self.bots.entry(bot_number).or_insert(Bot::new());
-        let result = bot.take_value(value);
-        if !result {
-            panic!("Unable to take value from bot");
         }
     }
 
@@ -112,13 +96,6 @@ impl State {
             bot.take_value(lower);
             bot.take_value(higher);
         }
-
-        println!("FROM bot {} giving low value {} to {:?} and high value {} to {:?}",
-                 bot_number,
-                 lower,
-                 low_to,
-                 higher,
-                 high_to);
 
         self.give_value_to(lower, low_to);
         self.give_value_to(higher, high_to);

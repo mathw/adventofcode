@@ -60,7 +60,7 @@ fn calculate_checksum(name: &str) -> String {
 }
 
 /// Parse a room identifier of format encrypted_name-sector_id[checksum]
-pub fn parse_room(input: &str) -> Option<RoomIdentifier> {
+fn parse_room(input: &str) -> Option<RoomIdentifier> {
     lazy_static! {
         static ref ROOM_REGEX: Regex = Regex::new(r"^(.+)-(\d+)\[(.+)\]").unwrap();
     }
@@ -93,7 +93,7 @@ pub fn parse_room(input: &str) -> Option<RoomIdentifier> {
     }
 }
 
-pub fn do_dayfour() {
+pub fn do_day4() {
     let rooms = get_input().into_iter().filter_map(|i| parse_room(i));
 
     let valid_rooms = rooms.filter(|r| r.validate()).collect::<Vec<_>>();

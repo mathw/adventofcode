@@ -3,7 +3,7 @@ use md5;
 
 const PASSCODE_LENGTH: usize = 8;
 
-pub fn do_dayfive() {
+pub fn do_day5() {
     let key = "abbhdwsy".to_owned();
 
     let mut found_positions = Vec::new();
@@ -21,7 +21,6 @@ pub fn do_dayfive() {
                     .unwrap();
                 let digit = interesting.next().unwrap();
 
-                println!("{} {} {}", hex, pos, digit);
                 if pos >= PASSCODE_LENGTH {
                     return None;
                 } else {
@@ -41,13 +40,14 @@ pub fn do_dayfive() {
     let mut seenpos = Vec::new();
 
     for (pos, digit) in digits {
-        println!("Processing position {} digit is {}", pos, digit);
         if seenpos.contains(&pos) {
             continue;
         }
 
         seenpos.push(pos);
         result[pos] = digit;
+
+        println!("{}", render_result(&result));
 
         if seenpos.len() >= PASSCODE_LENGTH {
             break;
@@ -56,4 +56,10 @@ pub fn do_dayfive() {
 
     println!("Found digits {:?}",
              result.iter().cloned().collect::<String>());
+}
+
+fn render_result<'a, I: IntoIterator<Item = &'a char>>(result: I) -> String {
+    result.into_iter()
+        .map(|&c| if c == '\0' { '*' } else { c })
+        .collect()
 }
