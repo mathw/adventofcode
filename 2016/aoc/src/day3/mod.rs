@@ -1,7 +1,8 @@
 mod input;
+mod triangle;
 
 use self::input::get_input;
-use geometry::triangle::sides_can_form_triangle;
+use self::triangle::sides_can_form_triangle;
 
 fn count_valid_triangles<'a, I>(input: I) -> usize
     where I: Iterator<Item = &'a (u32, u32, u32)>

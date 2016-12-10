@@ -1,4 +1,4 @@
-use instructions::{Turn, Step};
+use super::instructions::{Turn, Step};
 
 #[derive(PartialEq, Eq, Debug, Clone, Hash)]
 pub struct Offset {

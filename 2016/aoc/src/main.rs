@@ -10,8 +10,8 @@ extern crate nom;
 #[macro_use]
 extern crate nom_test_helpers;
 
-mod geometry;
-
+mod day1;
+mod day2;
 mod day3;
 mod day4;
 mod day5;
@@ -31,6 +31,15 @@ fn main() {
         .expect("Unable to parse the provided argument - is it a number?");
 
     match desired_daynum {
+        1 => {
+            print_day_header(1, false);
+            day1::do_day1();
+        }
+        2 => {
+            print_day_header(2, false);
+            let input = include_str!("inputs/day2_input.txt");
+            day2::do_day2(input);
+        }
         3 => {
             print_day_header(3, false);
 
@@ -48,31 +57,31 @@ fn main() {
         }
         6 => {
             print_day_header(6, false);
-            let input = include_str!("day6_input.txt");
+            let input = include_str!("inputs/day6_input.txt");
 
             day6::do_day6(input);
         }
         7 => {
             print_day_header(7, false);
-            let input = include_str!("day7_input.txt");
+            let input = include_str!("inputs/day7_input.txt");
 
             day7::do_day7(input);
         }
         8 => {
             print_day_header(8, false);
-            let input = include_str!("day8_input.txt");
+            let input = include_str!("inputs/day8_input.txt");
 
             day8::do_day8(input);
         }
         9 => {
             print_day_header(9, false);
-            let input = include_str!("day9_input.txt");
+            let input = include_str!("inputs/day9_input.txt");
 
             day9::do_day9(input);
         }
         10 => {
             print_day_header(10, false);
-            let input = include_str!("day10_input.txt");
+            let input = include_str!("inputs/day10_input.txt");
 
             day10::do_day10(input);
         }

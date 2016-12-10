@@ -1,5 +1,5 @@
 use regex::Regex;
-use instructions::{Step, Turn};
+use super::instructions::{Step, Turn};
 
 pub fn parse(input: &str) -> Vec<Step> {
     input.split(|c| c == ',' || c == ' ')
