@@ -108,33 +108,3 @@ fn test_parse() {
                          },
                          Segment::Data(b"ab")]));
 }
-
-
-#[test]
-fn test_expand() {
-    assert_eq!(Segment::Data(b"ab").expand(),
-               String::from_str("ab").unwrap());
-    assert_eq!(Segment::Expand {
-                       times: 2,
-                       source: b"ab",
-                   }
-                   .expand(),
-               String::from_str("abab").unwrap());
-}
-
-#[test]
-fn test_expand_segments() {
-    assert_eq!(expand_segments(&[Segment::Data(b"ab"), Segment::Data(b"cd")]),
-               "abcd".to_owned());
-}
-
-#[test]
-fn test_uncompress() {
-    assert_eq!(uncompress("ADVENT"), "ADVENT".to_owned());
-    assert_eq!(uncompress("A(1x5)BC"), "ABBBBBC".to_owned());
-    assert_eq!(uncompress("(3x3)XYZ"), "XYZXYZXYZ".to_owned());
-    assert_eq!(uncompress("A(2x2)BCD(2x2)EFC"), "ABCBCDEFEFC".to_owned());
-    assert_eq!(uncompress("(6x1)(1x3)A"), "(1x3)A".to_owned());
-    assert_eq!(uncompress("X(8x2)(3x3)ABCY"),
-               "X(3x3)ABC(3x3)ABCY".to_owned());
-}

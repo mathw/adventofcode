@@ -20,6 +20,7 @@ mod day7;
 mod day8;
 mod day9;
 mod day10;
+mod day11;
 
 use std::env;
 
@@ -84,6 +85,12 @@ fn main() {
             let input = include_str!("inputs/day10_input.txt");
 
             day10::do_day10(input);
+        }
+        11 => {
+            print_day_header(11, true);
+            let input = include_str!("inputs/day11_input.txt");
+
+            day11::do_day11(input);
         }
         _ => println!("I'm sorry, I can't handle day {} yet", desired_daynum),
     }

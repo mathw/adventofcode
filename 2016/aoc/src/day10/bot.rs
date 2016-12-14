@@ -67,8 +67,11 @@ impl Bot {
 
 #[test]
 fn test_bot_is_holding() {
-    let bot = Bot::new_holding(5);
-    let bot2 = Bot::new_holding2(5, 6);
+    let mut bot = Bot::new();
+    bot.give_value(5);
+    let mut bot2 = Bot::new();
+    bot2.give_value(5);
+    bot2.give_value(6);
 
     assert!(bot.is_holding(5));
     assert!(!bot.is_holding(2));
