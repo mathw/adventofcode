@@ -22,6 +22,7 @@ mod day9;
 mod day10;
 // mod day11;
 mod day12;
+mod day13;
 
 mod nom_helpers;
 
@@ -101,6 +102,10 @@ fn main() {
             let input = include_str!("inputs/day12_input.txt");
 
             day12::do_day12(input);
+        }
+        13 => {
+            print_day_header(13, false);
+            day13::do_day13();
         }
         _ => println!("I'm sorry, I can't handle day {} yet", desired_daynum),
     }
