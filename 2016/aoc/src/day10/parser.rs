@@ -1,10 +1,8 @@
-use nom::digit;
 use nom::IResult;
 use std::str;
-use std::str::FromStr;
 use super::instructions::{Instruction, Target};
+use nom_helpers::as_u32;
 
-named!(as_u32<u32>, map_res!(map_res!(digit, str::from_utf8), FromStr::from_str));
 named!(bot<Target>,
        ws!(do_parse!(tag!("bot") >> num: as_u32 >> (Target::Bot(num)))));
 named!(output<Target>,
