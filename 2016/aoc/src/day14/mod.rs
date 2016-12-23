@@ -143,7 +143,7 @@ fn test_example_stuff() {
     // we know index 18 will produce a hash containing "cc38887a5"
     assert!(salted_hash(18, &salt, false).find("cc38887a5").is_some());
 
-    let mut space = SearchSpace::new("abc");
+    let mut space = SearchSpace::new("abc", false);
     // we also know that's the first triple
     let (first_index, first_char) = space.first_triple_from(0);
     assert_eq!(first_index, 18);

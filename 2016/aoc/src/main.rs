@@ -24,6 +24,8 @@ extern crate nom_test_helpers;
 // mod day12;
 // mod day13;
 mod day14;
+mod day15;
+mod day16;
 
 // mod nom_helpers;
 
@@ -111,6 +113,14 @@ fn main() {
         14 => {
             print_day_header(14, true);
             day14::do_day14();
+        }
+        15 => {
+            print_day_header(15, false);
+            day15::do_day15();
+        }
+        16 => {
+            print_day_header(16, false);
+            day16::do_day16();
         }
         _ => println!("I'm sorry, I can't handle day {} yet", desired_daynum),
     }
