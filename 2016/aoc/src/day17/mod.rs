@@ -89,12 +89,6 @@ impl Point {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Mode {
-    Shortest,
-    Longest,
-}
-
 #[derive(Debug)]
 struct Maze {
     width: usize,
@@ -102,18 +96,16 @@ struct Maze {
     destination: Point,
     calculated: HashMap<Point, HashMap<Vec<Dir>, Vec<Dir>>>,
     passcode: String,
-    mode: Mode,
 }
 
 impl Maze {
-    fn new(passcode: String, mode: Mode) -> Maze {
+    fn new(passcode: String) -> Maze {
         Maze {
             width: 4,
             height: 4,
             destination: Point { x: 3, y: 3 },
             calculated: HashMap::new(),
             passcode: passcode,
-            mode: mode,
         }
     }
 
@@ -163,6 +155,9 @@ impl Maze {
     }
 
     fn follow_all_routes(&mut self) {
+        // this turns out to be completely specialised for short route finding and is
+        // absolutely not finding all routes at all because it doesn't
+        // search exhaustively
         let mut current_room = Point { x: 0, y: 0 };
         let mut current_path = Vec::new();
 
@@ -201,7 +196,6 @@ impl Maze {
             }
 
             let next_room = doors_to_follow.pop();
-
             match next_room {
                 None => break, // we're done!
                 Some((room, path, door)) => {
@@ -232,6 +226,57 @@ impl Maze {
             Some(r) => r.keys().cloned().collect(),
         }
     }
+
+    fn find_longest_route(&self, pos: Point, path: &Vec<Dir>, steps: usize) -> usize {
+        // based on the nicely elegant C solution by GitHub user rhardih
+        let doors = open_doors_here(&self.passcode, path);
+        let mut longest = 0;
+
+        let can_up = doors.contains(&Dir::Up) && !self.is_wall(pos.clone(), Dir::Up);
+        let can_down = doors.contains(&Dir::Down) && !self.is_wall(pos.clone(), Dir::Down);
+        let can_left = doors.contains(&Dir::Left) && !self.is_wall(pos.clone(), Dir::Left);
+        let can_right = doors.contains(&Dir::Right) && !self.is_wall(pos.clone(), Dir::Right);
+
+        // can only go down and we're above the destination
+        if pos.x == self.destination.x && pos.y == self.destination.y - 1 && can_down &&
+           !can_up && !can_left && !can_right {
+            return steps + 1;
+        }
+
+        // can only go right and we're left of the destination
+        if pos.x == self.destination.x - 1 && pos.y == self.destination.y && can_right &&
+           !can_up && !can_left && !can_down {
+            return steps + 1;
+        }
+
+        // more generally
+        for &(can, dir) in [(can_up, Dir::Up),
+                            (can_down && pos.go(Dir::Down) != self.destination, Dir::Down),
+                            (can_left, Dir::Left),
+                            (can_right && pos.go(Dir::Right) != self.destination, Dir::Right)]
+            .into_iter() {
+            if can {
+                let mut try_route = path.clone();
+                try_route.push(dir);
+                let r = self.find_longest_route(pos.go(dir), &try_route, steps + 1);
+                if r > longest {
+                    longest = r;
+                }
+            }
+        }
+
+        if longest > 0 {
+            return longest;
+        }
+
+        if pos.go(Dir::Down) == self.destination && can_down {
+            return steps + 1;
+        } else if pos.go(Dir::Right) == self.destination && can_right {
+            return steps + 1;
+        }
+        // or there is no path at all
+        return 0;
+    }
 }
 
 fn shortest_vec(vecs: &Vec<Vec<Dir>>) -> Option<Vec<Dir>> {
@@ -247,62 +292,8 @@ fn shortest_vec(vecs: &Vec<Vec<Dir>>) -> Option<Vec<Dir>> {
     shortest_so_far.map(|v| v.clone())
 }
 
-fn longest_vec(vecs: &Vec<Vec<Dir>>) -> Option<Vec<Dir>> {
-    let mut longest_so_far = None;
-    let mut longest_size = 0;
-    for v in vecs {
-        if v.len() > longest_size {
-            longest_so_far = Some(v);
-            longest_size = v.len();
-        }
-    }
-
-    longest_so_far.map(|v| v.clone())
-}
-
-// fn normalise_path(path: &Vec<Dir>) -> Vec<Dir> {
-//     if path.len() == 0 {
-//         return Vec::new();
-//     }
-//
-//     if path.len() == 1 {
-//         return path.clone();
-//     }
-//
-//     let mut normalised = Vec::new();
-//     let mut i = 0;
-//
-//     loop {
-//         if i > path.len() - 2 {
-//             // can't do a pair comp as there's no pair Left
-//             normalised.push(path[i]);
-//             break;
-//         }
-//
-//         match (path[i], path[i + 1]) {
-//             (Dir::Down, Dir::Up) |
-//             (Dir::Up, Dir::Down) |
-//             (Dir::Left, Dir::Right) |
-//             (Dir::Right, Dir::Left) => {
-//                 // totally useless movement, skip it!
-//                 i += 2;
-//             }
-//             _ => {
-//                 // valid movement
-//                 normalised.push(path[i]);
-//                 i += 1;
-//             }
-//         }
-//
-//         if i > path.len() - 1 {
-//             break;
-//         }
-//     }
-//     normalised
-// }
-
 fn find_shortest_route_with_key(key: &str) -> String {
-    let mut maze = Maze::new(key.to_owned(), Mode::Shortest);
+    let mut maze = Maze::new(key.to_owned());
     maze.follow_all_routes();
 
     let routes = maze.get_routes_for_destination();
@@ -312,16 +303,8 @@ fn find_shortest_route_with_key(key: &str) -> String {
 }
 
 fn find_longest_route_length_with_key(key: &str) -> usize {
-    let mut maze = Maze::new(key.to_owned(), Mode::Longest);
-    maze.follow_all_routes();
-
-    let routes = maze.get_routes_for_destination();
-    let longest = longest_vec(&routes);
-
-    match longest {
-        lo @ Some(_) => format_route(&lo).len(),
-        None => 0,
-    }
+    let maze = Maze::new(key.to_owned());
+    maze.find_longest_route(Point { x: 0, y: 0 }, &Vec::new(), 0)
 }
 
 fn format_route(route: &Option<Vec<Dir>>) -> String {
@@ -336,6 +319,8 @@ pub fn do_day17() {
     let shortest = find_shortest_route_with_key(key);
 
     println!("Shortest: {}", shortest);
+
+    println!("Longest: {}", find_longest_route_length_with_key(key));
 }
 
 #[test]
@@ -361,11 +346,20 @@ fn test_it_2_shortest() {
 }
 
 #[test]
+fn test_it_2_longest() {
+    assert_eq!(find_longest_route_length_with_key("kglvqrro"), 492);
+}
+
+#[test]
 fn test_it_3_shortest() {
     let shortest = find_shortest_route_with_key("ulqzkmiv");
 
     assert_eq!(shortest, "DRURDRUDDLLDLUURRDULRLDUUDDDRR".to_owned());
-    // assert_eq!(longest.len(), 830);
+}
+
+#[test]
+fn test_it_3_longest() {
+    assert_eq!(find_longest_route_length_with_key("ulqzkmiv"), 830);
 }
 
 #[test]
@@ -379,7 +373,7 @@ fn test_open_doors_here() {
 
 #[test]
 fn test_get_doors_for() {
-    let mut maze = Maze::new("hijkl".to_owned(), Mode::Shortest);
+    let mut maze = Maze::new("hijkl".to_owned());
 
     assert_eq!(maze.get_doors_for(Point { x: 0, y: 0 }, vec![]),
                vec![Dir::Up, Dir::Down, Dir::Left]);
@@ -388,12 +382,3 @@ fn test_get_doors_for() {
     assert_eq!(*maze.calculated.get(&Point { x: 0, y: 0 }).unwrap().get(&vec![]).unwrap(),
                vec![Dir::Up, Dir::Down, Dir::Left]);
 }
-
-// #[test]
-// fn test_normalise_path() {
-//     let path = vec![Dir::Down];
-//     assert_eq!(path, normalise_path(&path));
-//
-//     let path = vec![Dir::Down, Dir::Up, Dir::Down];
-//     assert_eq!(normalise_path(&path), vec![Dir::Down]);
-// }
