@@ -51,6 +51,7 @@ fn discs_for_part_two() -> Vec<Disc> {
     d
 }
 
+#[cfg(test)]
 fn discs_for_sample() -> Vec<Disc> {
     vec![Disc::new(5, 4), Disc::new(2, 1)]
 }
