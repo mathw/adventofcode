@@ -28,6 +28,7 @@ mod day15;
 mod day16;
 mod day17;
 mod day18;
+mod day19;
 
 mod nom_helpers;
 
@@ -131,6 +132,10 @@ fn main() {
         18 => {
             print_day_header(18, false);
             day18::do_day18();
+        }
+        19 => {
+            print_day_header(19, false);
+            day19::do_day19();
         }
         _ => println!("I'm sorry, I can't handle day {} yet", desired_daynum),
     }
