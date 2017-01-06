@@ -2,7 +2,8 @@ use std::collections::BTreeMap;
 
 /// count letters in each column in the input lines
 /// the input should be producing an iterator of lines
-/// the output is a string of the most frequent letter in each column and a string of the least frequent
+/// the output is a string of the most frequent letter in each column and a string of the least
+/// frequent
 fn most_and_least_frequent_letter_in_columns<'a, I>(input: I) -> (String, String)
     where I: IntoIterator<Item = &'a str>
 {

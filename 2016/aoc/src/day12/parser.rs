@@ -90,8 +90,12 @@ fn test_register_parsers() {
 fn test_instruction_parsers() {
     assert_done_and_eq!(instruction(b"inc d"), Instruction::Inc(Register::D));
     assert_done_and_eq!(instruction(b"dec a"), Instruction::Dec(Register::A));
-    assert_done_and_eq!(instruction(b"cpy 3 d"), Instruction::Copy { from: RegOrInt::Int(3), to: Register::D});
-    assert_done_and_eq!(instruction(b"cpy a d"), Instruction::Copy { from: RegOrInt::Reg(Register::A), to: Register::D});
-    assert_done_and_eq!(instruction(b"jnz a 7"), Instruction::Jump { test: RegOrInt::Reg(Register::A), offset: 7});
-    assert_done_and_eq!(instruction(b"jnz 6 6"), Instruction::Jump { test: RegOrInt::Int(6), offset: 6});
+    assert_done_and_eq!(instruction(b"cpy 3 d"),
+     Instruction::Copy { from: RegOrInt::Int(3), to: Register::D});
+    assert_done_and_eq!(instruction(b"cpy a d"),
+     Instruction::Copy { from: RegOrInt::Reg(Register::A), to: Register::D});
+    assert_done_and_eq!(instruction(b"jnz a 7"),
+     Instruction::Jump { test: RegOrInt::Reg(Register::A), offset: 7});
+    assert_done_and_eq!(instruction(b"jnz 6 6"),
+     Instruction::Jump { test: RegOrInt::Int(6), offset: 6});
 }

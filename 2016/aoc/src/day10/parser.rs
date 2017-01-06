@@ -83,5 +83,6 @@ fn test_give() {
 fn test_decide() {
     let src = b"bot 3 gives low to output 3 and high to bot 2";
 
-    assert_done_and_eq!(decide(src), Instruction::Decide { bot: 3, low: Target::Output(3), high: Target::Bot(2) });
+    assert_done_and_eq!(decide(src),
+     Instruction::Decide { bot: 3, low: Target::Output(3), high: Target::Bot(2) });
 }
