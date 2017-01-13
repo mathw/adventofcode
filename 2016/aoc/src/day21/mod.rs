@@ -1,18 +1,22 @@
 use regex::Regex;
 use std::str::FromStr;
 use std::fmt::Debug;
-use std::collections::HashMap;
+use std::collections::HashSet;
+use std::hash::Hash;
 
 pub fn do_day21(input: &str) {
     let clear = "abcdefgh";
     let instructions = input.lines().collect();
     let scrambled = scramble(clear, &instructions);
 
-    println!("{} {}", scrambled, unscramble(&scrambled, &instructions));
+    println!("Scrambled version of {} is {}", clear, scrambled);
 
     let unscrambled = unscramble("fbgdceah", &instructions);
-
-    println!("{}", unscrambled);
+    if let Ok(unscrambled) = unscrambled {
+        println!("Unscrambled version of {} is {}", "fbgdceah", unscrambled);
+    } else {
+        println!("Couldn't find an unscrambled version of fbgdceah by the given instructions");
+    }
 }
 
 fn scramble(src: &str, instructions: &Vec<&str>) -> String {
@@ -29,35 +33,6 @@ fn scramble(src: &str, instructions: &Vec<&str>) -> String {
     src.into_iter().collect()
 }
 
-fn unscramble(src: &str, instructions: &Vec<&str>) -> String {
-    // unscrambling only appears reversible for input strings of length 8
-    // because of the rule about indexes >= 4 on the "reverse based on letter"
-    // operation. Therefore we can't unscramble the sample.
-    // But we can be deterministic about where the instructions send each
-    // letter from an 8-letter string.
-    // So, build a map of how that works, and we can use that map to rebuild the original
-    let sample = "abcdefgh";
-    let scrambled = scramble(sample, instructions);
-    let scrambled_vec = scrambled.chars().collect::<Vec<_>>();
-
-    // build a permutation map of scrambled location -> original location
-    let mut permutation_map = HashMap::new();
-
-    for (i, c) in sample.chars().enumerate() {
-        permutation_map.insert(index_of(&scrambled_vec, &c).unwrap(), i);
-    }
-
-    // apply the permutations to fix up the string
-    let mut unscrambled_vec = vec!['z'; 8];
-    for (i, c) in src.chars().enumerate() {
-        let target_index = permutation_map.get(&i).unwrap();
-        let t = unscrambled_vec.get_mut(*target_index).unwrap();
-        *t = c;
-    }
-
-    unscrambled_vec.into_iter().collect()
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Command<Letter> {
     SwapPosition(usize, usize),
@@ -70,7 +45,7 @@ enum Command<Letter> {
 }
 
 impl<Letter> Command<Letter>
-    where Letter: Eq + Copy + Debug
+    where Letter: Eq + Copy + Debug + Hash
 {
     fn apply_to(&self, src: &mut Vec<Letter>) {
         #[cfg(test)]
@@ -83,6 +58,52 @@ impl<Letter> Command<Letter>
             Command::RotateOnPosition(letter) => apply_rotate_on_position(src, letter),
             Command::Reverse(from, to) => apply_reverse_from_to(src, from, to),
             Command::Move(from, to) => apply_move(src, from, to),
+        }
+    }
+
+    // apply the command backwards
+    // some commands apply non-deterministically, so this function may
+    // add multiple alternatives to src
+    fn apply_to_reversed(&self, src: &mut HashSet<Vec<Letter>>) {
+        #[cfg(test)]
+        println!("Reverse-applying {:?} to {:?}", self, src);
+
+        let sources = src.iter().cloned().collect::<Vec<Vec<Letter>>>();
+
+        for s in sources {
+            let mut s = s.clone();
+
+            match *self {
+                Command::SwapPosition(a, b) => {
+                    apply_swap_position(&mut s, b, a);
+                    src.insert(s);
+                }
+                Command::SwapLetter(a, b) => {
+                    apply_swap_letter(&mut s, b, a);
+                    src.insert(s);
+                }
+                Command::RotateLeft(steps) => {
+                    apply_rotate_right(&mut s, steps);
+                    src.insert(s);
+                }
+                Command::RotateRight(steps) => {
+                    apply_rotate_left(&mut s, steps);
+                    src.insert(s);
+                }
+                Command::RotateOnPosition(_) => {
+                    for s in generate_all_rotations_of(&s) {
+                        src.insert(s);
+                    }
+                }
+                Command::Reverse(from, to) => {
+                    apply_reverse_from_to(&mut s, from, to);
+                    src.insert(s);
+                }
+                Command::Move(from, to) => {
+                    apply_move(&mut s, to, from);
+                    src.insert(s);
+                }
+            }
         }
     }
 }
@@ -178,11 +199,6 @@ fn apply_swap_letter<T: Eq>(src: &mut Vec<T>, a: T, b: T) {
 fn apply_rotate_left<T>(src: &mut Vec<T>, steps: usize) {
     // to rotate left, fake it by rotating right!
     let right_steps = src.len() - steps;
-    #[cfg(test)]
-    println!("Rotating left by {} on length {} means rotate right by {}",
-             steps,
-             src.len(),
-             right_steps);
     rotate_vec_right(src, right_steps);
 }
 
@@ -191,15 +207,9 @@ fn apply_rotate_right<T>(src: &mut Vec<T>, steps: usize) {
 }
 
 fn reverse_vec_segment<T>(src: &mut Vec<T>, start: usize, length: usize) {
-    #[cfg(test)]
-    println!("Reversing from {} for {}", start, length);
-
     for i in 0..length / 2 {
         let j = i + start;
         let k = (length - 1 - i) + start;
-
-        #[test]
-        println!("Swapping indexes {} and {}", j, k);
 
         src.swap(j, k);
     }
@@ -246,6 +256,49 @@ fn apply_move<T>(src: &mut Vec<T>, from: usize, to: usize) {
     src.insert(to, removed);
 }
 
+fn generate_all_rotations_of<T: Clone>(src: &Vec<T>) -> Vec<Vec<T>> {
+    let mut res = Vec::new();
+    for steps in 0..src.len() {
+        let mut new = src.clone();
+        rotate_vec_right(&mut new, steps + 1);
+        res.push(new);
+    }
+    res
+}
+
+fn unscramble(src: &str, instructions: &Vec<&str>) -> Result<String, String> {
+    #[cfg(test)]    println!("Attempting to unscramble {:?}", src);
+
+    let mut parsed_instructions = instructions.iter()
+        .map(|&i| match Command::from_str(i) {
+            Ok(c) => c,
+            Err(e) => panic!(e),
+        })
+        .collect::<Vec<_>>();
+    parsed_instructions.reverse();
+    let mut current = HashSet::new();
+    current.insert(src.chars().collect::<Vec<char>>());
+
+    for i in parsed_instructions {
+        i.apply_to_reversed(&mut current);
+    }
+
+    #[cfg(test)]    println!("I have the options {:?}", current);
+
+    let current = current.iter().map(|x| x.iter().cloned().collect::<String>()).collect::<Vec<_>>();
+
+    for o in current {
+        let s = scramble(o.as_ref(), &instructions);
+
+        #[cfg(test)]        println!("Is {:?} equal to {:?}?", o, s);
+
+        if s == src {
+            return Ok(o);
+        }
+    }
+
+    Err("Unable to find an unscrambled string that scrambles to the source string".to_owned())
+}
 
 #[test]
 fn test_apply_swap_position() {
@@ -359,4 +412,39 @@ fn test_scramble() {
     let result = scramble(source, &instructions);
 
     assert_eq!(result, "decab");
+}
+
+#[test]
+fn test_generate_all_rotations() {
+    let src = vec![1, 2, 3, 4];
+
+    let res = generate_all_rotations_of(&src);
+
+    assert_eq!(res.len(), 4);
+    assert_eq!(res[0], vec![4, 1, 2, 3]);
+    assert_eq!(res[1], vec![3, 4, 1, 2]);
+    assert_eq!(res[2], vec![2, 3, 4, 1]);
+    assert_eq!(res[3], vec![1, 2, 3, 4]);
+}
+
+#[test]
+fn test_unscramble() {
+    let instructions = vec!["swap position 4 with position 0",
+                            "swap letter d with letter b",
+                            "reverse positions 0 through 4",
+                            "rotate left 1 step",
+                            "move position 1 to position 4",
+                            "move position 3 to position 0",
+                            "rotate based on position of letter b",
+                            "rotate based on position of letter d"];
+    let source = "decab";
+
+    let result = unscramble(source, &instructions);
+
+
+    if let Ok(clear) = result {
+        assert_eq!(clear, "abcde".to_owned());
+    } else {
+        assert!(false);
+    }
 }

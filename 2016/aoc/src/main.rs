@@ -145,7 +145,7 @@ fn main() {
             day20::do_day20(input);
         }
         21 => {
-            print_day_header(21, false);
+            print_day_header(21, true);
             let input = include_str!("inputs/day21.txt");
             day21::do_day21(input);
         }
