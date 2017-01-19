@@ -27,7 +27,5 @@ pub fn do_day22(input: &str) {
 
     let empty_node = grid.get_empty_node().unwrap();
 
-    let mut current_location = Point::new(empty_node.x, empty_node.y);
-
     println!("{}", grid.render_grid_symbolic(&target));
 }

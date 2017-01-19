@@ -31,7 +31,10 @@ mod day18;
 mod day19;
 mod day20;
 mod day21;
-mod day22;
+// mod day22;
+mod day23;
+
+mod assembunny;
 
 mod nom_helpers;
 
@@ -152,8 +155,13 @@ fn main() {
         }
         22 => {
             print_day_header(22, false);
-            let input = include_str!("inputs/day22.txt");
-            day22::do_day22(input);
+            // let input = include_str!("inputs/day22.txt");
+            // day22::do_day22(input);
+        }
+        23 => {
+            print_day_header(23, true);
+            let input = include_str!("inputs/day23.txt");
+            day23::do_day23(input);
         }
         _ => println!("I'm sorry, I can't handle day {} yet", desired_daynum),
     }

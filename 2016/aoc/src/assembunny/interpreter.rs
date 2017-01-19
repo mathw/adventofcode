@@ -23,9 +23,10 @@ impl Interpreter {
         }
     }
 
-    // pub fn enable_trace(&mut self) {
-    //     self.trace = true;
-    // }
+    #[cfg(test)]
+    pub fn enable_trace(&mut self) {
+        self.trace = true;
+    }
 
     pub fn value_of(&self, register: Register) -> i32 {
         match register {
@@ -42,6 +43,13 @@ impl Interpreter {
             Register::B => self.b = value,
             Register::C => self.c = value,
             Register::D => self.d = value,
+        }
+    }
+
+    fn value_from(&self, roi: &RegOrInt) -> i32 {
+        match *roi {
+            RegOrInt::Reg(r) => self.value_of(r),
+            RegOrInt::Int(i) => i,
         }
     }
 
@@ -128,13 +136,13 @@ impl Interpreter {
                 match test {
                     RegOrInt::Int(i) => {
                         if i != 0 {
-                            self.pc = ((self.pc as i32) + o) as u32;
+                            self.pc = ((self.pc as i32) + self.value_from(&o)) as u32;
                             if self.trace {
                                 println!("Integer {} is not zero, shifting program counter {} by \
                                           {} to {}",
                                          i,
                                          old_pc,
-                                         o,
+                                         self.value_from(&o),
                                          self.pc);
                             }
                         } else {
@@ -146,13 +154,13 @@ impl Interpreter {
                     }
                     RegOrInt::Reg(register) => {
                         if self.value_of(register) != 0 {
-                            self.pc = ((self.pc as i32) + o) as u32;
+                            self.pc = ((self.pc as i32) + self.value_from(&o)) as u32;
                             if self.trace {
                                 println!("Register {:?} is not zero, shifting program counter {} \
                                           by {} to {}",
                                          register,
                                          old_pc,
-                                         o,
+                                         self.value_from(&o),
                                          self.pc);
                             }
                         } else {
@@ -164,6 +172,69 @@ impl Interpreter {
                     }
                 }
             }
+            Instruction::Toggle(offset) => {
+                let offset = match offset {
+                    RegOrInt::Reg(r) => self.value_of(r),
+                    RegOrInt::Int(i) => i,
+                };
+
+                if self.trace {
+                    println!("  Toggling offset {}", offset);
+                }
+
+                let target_instruction = self.program.get_mut((self.pc as i32 + offset) as usize);
+                if let Some(target_instruction) = target_instruction {
+                    if self.trace {
+                        println!("  Target instruction is {:?}", target_instruction);
+                    }
+                    match target_instruction.clone() {
+                        Instruction::Inc(r) => *target_instruction = Instruction::Dec(r),
+                        Instruction::Dec(r) => *target_instruction = Instruction::Inc(r),
+                        Instruction::Toggle(RegOrInt::Reg(r)) => {
+                            *target_instruction = Instruction::Inc(r)
+                        }
+                        Instruction::Toggle(RegOrInt::Int(o)) => {
+                            *target_instruction = Instruction::InvalidInc(o)
+                        }
+                        Instruction::Copy { from, to } => {
+                            *target_instruction = Instruction::Jump {
+                                test: from,
+                                offset: RegOrInt::Reg(to),
+                            }
+                        }
+                        Instruction::Jump { test, offset: RegOrInt::Int(offset) } => {
+                            *target_instruction = Instruction::InvalidCopy {
+                                test: test,
+                                offset: offset,
+                            }
+                        }
+                        Instruction::Jump { test, offset: RegOrInt::Reg(r) } => {
+                            *target_instruction = Instruction::Copy {
+                                from: test,
+                                to: r,
+                            }
+                        }
+                        Instruction::InvalidCopy { test, offset } => {
+                            *target_instruction = Instruction::Jump {
+                                test: test,
+                                offset: RegOrInt::Int(offset),
+                            }
+                        }
+                        Instruction::InvalidInc(o) => {
+                            *target_instruction = Instruction::InvalidDec(o)
+                        }
+                        Instruction::InvalidDec(o) => {
+                            *target_instruction = Instruction::InvalidInc(o)
+                        }
+                    }
+                    if self.trace {
+                        println!("  Target instruction is now {:?}", target_instruction);
+                    }
+                }
+                self.pc += 1;
+            }
+            // skip all invalid instructions
+            _ => self.pc += 1,
         }
 
         return true;
@@ -225,7 +296,7 @@ fn test_jump() {
                        Instruction::Dec(Register::A),
                        Instruction::Jump {
                            test: RegOrInt::Reg(Register::A),
-                           offset: -1,
+                           offset: RegOrInt::Int(-1),
                        },
                        Instruction::Copy {
                            from: RegOrInt::Int(3),
@@ -250,7 +321,7 @@ fn test_jump_int() {
                        Instruction::Dec(Register::A),
                        Instruction::Jump {
                            test: RegOrInt::Int(0),
-                           offset: -1,
+                           offset: RegOrInt::Int(-1),
                        },
                        Instruction::Copy {
                            from: RegOrInt::Int(3),

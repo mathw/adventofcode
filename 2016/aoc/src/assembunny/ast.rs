@@ -17,5 +17,9 @@ pub enum Instruction {
     Copy { from: RegOrInt, to: Register },
     Inc(Register),
     Dec(Register),
-    Jump { test: RegOrInt, offset: i32 },
+    Jump { test: RegOrInt, offset: RegOrInt },
+    Toggle(RegOrInt),
+    InvalidInc(i32),
+    InvalidCopy { test: RegOrInt, offset: i32 },
+    InvalidDec(i32),
 }

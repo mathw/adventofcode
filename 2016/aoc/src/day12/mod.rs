@@ -1,9 +1,6 @@
-mod ast;
-mod parser;
-mod interpreter;
-
-use self::interpreter::Interpreter;
-use self::ast::Register;
+use super::assembunny::interpreter::Interpreter;
+use super::assembunny::ast::Register;
+use super::assembunny::parser;
 
 pub fn do_day12(input: &str) {
     let instructions =

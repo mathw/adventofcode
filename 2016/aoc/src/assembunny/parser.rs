@@ -62,12 +62,18 @@ named!(copy<Instruction>, ws!(do_parse!(
 named!(jnz<Instruction>, ws!(do_parse!(
     tag!("jnz") >>
     r: regorint >>
-    o: as_i32 >>
+    o: regorint >>
     (Instruction::Jump { test: r, offset: o })
 )));
 
+named!(tgl<Instruction>, ws!(do_parse!(
+    tag!("tgl") >>
+    o: regorint >>
+    (Instruction::Toggle(o))
+)));
+
 named!(instruction<Instruction>, alt!(
-    inc | dec | copy | jnz
+    inc | dec | copy | jnz | tgl
 ));
 
 pub fn parse_line(line: &str) -> Option<Instruction> {
@@ -95,7 +101,8 @@ fn test_instruction_parsers() {
     assert_done_and_eq!(instruction(b"cpy a d"),
      Instruction::Copy { from: RegOrInt::Reg(Register::A), to: Register::D});
     assert_done_and_eq!(instruction(b"jnz a 7"),
-     Instruction::Jump { test: RegOrInt::Reg(Register::A), offset: 7});
+     Instruction::Jump { test: RegOrInt::Reg(Register::A), offset: RegOrInt::Int(7)});
     assert_done_and_eq!(instruction(b"jnz 6 6"),
-     Instruction::Jump { test: RegOrInt::Int(6), offset: 6});
+     Instruction::Jump { test: RegOrInt::Int(6), offset: RegOrInt::Int(6)});
+    assert_done_and_eq!(instruction(b"tgl 5"), Instruction::Toggle(RegOrInt::Int(5)));
 }
