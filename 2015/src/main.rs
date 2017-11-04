@@ -1,8 +1,10 @@
 extern crate clap;
+extern crate md5;
 
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -26,6 +28,7 @@ fn main() {
         1 => day1::do_dayone(),
         2 => day2::run(),
         3 => day3::run(),
+        4 => day4::run(),
         _ => panic!("Unknown day"),
     }
 }
