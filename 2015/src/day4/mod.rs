@@ -11,24 +11,28 @@ pub fn run() {
     println!("{}", two);
 }
 
-fn partone(input: &str) -> u32 {
+fn partone<'a>(input: &'a str) -> u32 {
     let mut current = 0;
 
-    while !has_five_zeroes(md5_hex(format!("{}{}", input, current)).as_ref()) {
+    while !has_zeroes(5, calculate_hash(input, current).as_ref()) {
         current += 1;
     }
 
     current
 }
 
-fn parttwo(input: &str) -> u32 {
+fn parttwo<'a>(input: &'a str) -> u32 {
     let mut current = 0;
 
-    while !has_six_zeroes(md5_hex(format!("{}{}", input, current)).as_ref()) {
+    while !has_zeroes(6, calculate_hash(input, current).as_ref()) {
         current += 1;
     }
 
     current
+}
+
+fn calculate_hash<'a>(input: &'a str, current: u32) -> String {
+    md5_hex(format!("{}{}", input, current))
 }
 
 fn md5_hex<T: AsRef<[u8]>>(input: T) -> String {
@@ -43,28 +47,20 @@ fn has_zeroes(count: usize, input: &str) -> bool {
     }
 }
 
-fn has_five_zeroes(input: &str) -> bool {
-    has_zeroes(5, input)
-}
-
-fn has_six_zeroes(input: &str) -> bool {
-    has_zeroes(6, input)
-}
-
 #[test]
 fn has_five_zeroes_too_short() {
-    assert_eq!(has_five_zeroes("00"), false);
+    assert_eq!(has_zeroes(5, "00"), false);
 }
 
 #[test]
 fn has_five_zeroes_doesnt() {
-    assert_eq!(has_five_zeroes("000028324234872"), false);
+    assert_eq!(has_zeroes(5, "000028324234872"), false);
 }
 
 #[test]
 fn has_five_zeroes_does() {
-    assert!(has_five_zeroes("00000"));
-    assert!(has_five_zeroes("0000098324"));
+    assert!(has_zeroes(5, "00000"));
+    assert!(has_zeroes(5, "0000098324"));
 }
 
 #[test]
