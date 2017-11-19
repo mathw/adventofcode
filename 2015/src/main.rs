@@ -3,6 +3,9 @@ extern crate md5;
 #[macro_use]
 extern crate lazy_static;
 extern crate regex;
+extern crate pest;
+#[macro_use]
+extern crate pest_derive;
 
 mod day1;
 mod day2;
@@ -10,6 +13,7 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -36,6 +40,7 @@ fn main() {
         4 => day4::run(),
         5 => day5::run(),
         6 => day6::run(),
+        7 => day7::run(),
         _ => panic!("Unknown day"),
     }
 }

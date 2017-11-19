@@ -14,13 +14,13 @@ pub fn run() {
 
     println!("{} instructions parsed", instructions.len());
 
-    // let mut lights = HashSet::new();
+    let mut lights = HashSet::new();
 
-    // for instruction in instructions.clone() {
-    //     lights = instruction.apply_to(&lights);
-    // }
+    for instruction in instructions.clone() {
+        lights = instruction.apply_to(&lights);
+    }
 
-    // println!("{} lights are lit", lights.len());
+    println!("{} lights are lit", lights.len());
 
     let mut brightnesses = HashMap::new();
 

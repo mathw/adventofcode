@@ -1,0 +1,17 @@
+alpha = { 'a'..'z' }
+digit = { '0'..'9' }
+
+wire = { alpha+ }
+value = { digit+ }
+arrow = _{ "->" }
+
+signal = { value ~ arrow ~ wire }
+not = { "NOT" ~ wire ~ arrow ~ wire }
+and = { wire ~ "AND" ~ wire ~ arrow ~ wire }
+or = { wire ~ "OR" ~ wire ~ arrow ~ wire }
+lshift = { wire ~ "LSHIFT" ~ value ~ arrow ~ wire }
+rshift = { wire ~ "RSHIFT" ~ value ~ arrow ~ wire }
+
+instruction = { signal | not | and | or | lshift | rshift }
+
+whitespace = _{ " " }
