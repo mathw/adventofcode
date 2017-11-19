@@ -1,11 +1,15 @@
 extern crate clap;
 extern crate md5;
+#[macro_use]
+extern crate lazy_static;
+extern crate regex;
 
 mod day1;
 mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -31,6 +35,7 @@ fn main() {
         3 => day3::run(),
         4 => day4::run(),
         5 => day5::run(),
+        6 => day6::run(),
         _ => panic!("Unknown day"),
     }
 }
