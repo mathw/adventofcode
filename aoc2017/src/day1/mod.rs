@@ -1,7 +1,8 @@
 use std::time::Instant;
 use util::asmillis::AsMillis;
+use util;
 
-pub fn go(start: &Instant) {
+pub fn go(start: &Instant, count: usize) {
     // parse
     let input = include_str!("input.txt");
 
@@ -11,14 +12,14 @@ pub fn go(start: &Instant) {
     }
 
     // part one
-    let partone = sum_as_u32(&digits_matching_next(&digits));
+    let partone = util::repeatedly(count, || sum_as_u32(&items_matching_next(&digits)));
 
     println!("({}ms) The sum of all matching digits is {}",
              start.elapsed().as_millis(),
              partone);
 
     // part two
-    let parttwo = sum_as_u32(&items_matching_halfway_round(&digits));
+    let parttwo = util::repeatedly(count, || sum_as_u32(&items_matching_halfway_round(&digits)));
 
     println!("({}ms) The sum of all digits which match the digit halfway around the list is {}",
              start.elapsed().as_millis(),
@@ -30,7 +31,7 @@ fn sum_as_u32(items: &[u8]) -> u32 {
 }
 
 fn parse_digits(input: &str) -> Vec<u8> {
-    let digits = input.chars().map(char_to_digit);
+    let digits = input.chars().map(util::char_to_digit);
 
     digits.map(|x| {
             x.expect(&format!("The input string contained something which was not a digit. It \
@@ -40,7 +41,7 @@ fn parse_digits(input: &str) -> Vec<u8> {
         .collect::<Vec<_>>()
 }
 
-fn digits_matching_next<T: Eq + Clone>(items: &[T]) -> Vec<T> {
+fn items_matching_next<T: Eq + Clone>(items: &[T]) -> Vec<T> {
     get_items_matching(|index| &items[(index + 1) % items.len()], items)
 }
 
@@ -63,26 +64,9 @@ fn get_items_matching<'a, T: Clone + Eq + 'a, F>(get_other: F, items: &[T]) -> V
     matches
 }
 
-fn char_to_digit(c: char) -> Option<u8> {
-    match c {
-        '0' => Some(0),
-        '1' => Some(1),
-        '2' => Some(2),
-        '3' => Some(3),
-        '4' => Some(4),
-        '5' => Some(5),
-        '6' => Some(6),
-        '7' => Some(7),
-        '8' => Some(8),
-        '9' => Some(9),
-        _ => None,
-    }
-}
-
-
 #[cfg(test)]
 fn match_test_helper(digits: Vec<u8>, expected: Vec<u8>) {
-    let matches = digits_matching_next(&digits);
+    let matches = items_matching_next(&digits);
 
     assert_eq!(matches, expected);
 }

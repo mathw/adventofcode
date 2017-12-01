@@ -16,20 +16,30 @@ fn main() {
             .help("Chooses which day's problem to run")
             .required(true)
             .index(1))
+        .arg(Arg::with_name("REPS")
+            .help("How many repetitions to run each part through for timing purposes")
+            .required(false)
+            .index(2))
         .get_matches();
 
     let day = u8::from_str(matches.value_of("DAY").expect("Day must be specified"))
         .expect("Day must be a u8");
 
     if day < 1 || day > 25 {
-        println!("Day must be from 1 to 25 inclusive");
+        panic!("Day must be from 1 to 25 inclusive");
     }
 
-    print_day_header(day);
+    let reps = matches.value_of("REPS").and_then(|r| usize::from_str(r).ok()).unwrap_or(1);
+
+    if reps < 1 {
+        panic!("There's really no point doing anything 0 times you know.");
+    }
+
+    print_day_header(day, reps);
 
     let start = Instant::now();
     match day {
-        1 => day1::go(&start),
+        1 => day1::go(&start, reps),
         _ => println!("I don't know how to do that day yet"),
     }
 
@@ -38,6 +48,10 @@ fn main() {
     println!("Execution complete in {}ms", time_taken);
 }
 
-fn print_day_header(day: u8) {
-    println!("Day {} coming right up...\n", day);
+fn print_day_header(day: u8, count: usize) {
+    if count == 1 {
+        println!("Day {} coming right up...\n", day);
+    } else {
+        println!("Day {}, with {} repetitions...\n", day, count);
+    }
 }
