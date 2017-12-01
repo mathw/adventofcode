@@ -3,6 +3,7 @@ mod parse;
 
 use petgraph::Graph;
 use petgraph::algo::dijkstra;
+use std::collections::HashSet;
 
 pub fn do_day24(input: &str) {}
 
@@ -21,9 +22,30 @@ fn test_sample_preparsed() {
     graph.add_edge(two, three, 2.0);
     graph.add_edge(four, three, 8.0);
 
-    let r = dijkstra(&graph, zero, None, |w| *w.weight());
+    let mut visited = HashSet::new();
+    let mut current = zero;
+    // let mut paths = Vec::new();
 
-    println!("{:?}", r);
+    loop {
+        visited.insert(current);
+        let pathlengths = dijkstra(&graph, zero, None, |e| *e.weight());
+        let mut r =
+            pathlengths.iter().filter(|&(node, _)| !visited.contains(node)).collect::<Vec<_>>();
+
+        if r.len() == 0 {
+            break;
+        }
+
+        r.sort_by(|a, b| a.1.partial_cmp(b.1).unwrap());
+
+        println!("{:?}", r);
+
+        let next = r[0].0;
+        println!("Next node {:?}", next);
+
+        current = *next;
+    }
+
     assert!(false);
 }
 
