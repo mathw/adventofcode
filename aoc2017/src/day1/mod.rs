@@ -1,4 +1,7 @@
-pub fn go() {
+use std::time::Instant;
+use util::asmillis::AsMillis;
+
+pub fn go(start: &Instant) {
     // parse
     let input = include_str!("input.txt");
 
@@ -10,12 +13,15 @@ pub fn go() {
     // part one
     let partone = sum_as_u32(&digits_matching_next(&digits));
 
-    println!("The sum of all matching digits is {}", partone);
+    println!("({}ms) The sum of all matching digits is {}",
+             start.elapsed().as_millis(),
+             partone);
 
     // part two
     let parttwo = sum_as_u32(&items_matching_halfway_round(&digits));
 
-    println!("The sum of all digits which match the digit halfway around the list is {}",
+    println!("({}ms) The sum of all digits which match the digit halfway around the list is {}",
+             start.elapsed().as_millis(),
              parttwo);
 }
 
