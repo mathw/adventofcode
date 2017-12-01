@@ -87,6 +87,13 @@ fn match_test_helper(digits: Vec<u8>, expected: Vec<u8>) {
     assert_eq!(matches, expected);
 }
 
+#[cfg(test)]
+fn match_test_helper_2(digits: Vec<u8>, expected: Vec<u8>) {
+    let matches = items_matching_halfway_round(&digits);
+
+    assert_eq!(matches, expected);
+}
+
 #[test]
 fn test_digits_matching_next_none_match() {
     match_test_helper(vec![0, 1, 2, 3, 4], vec![]);
@@ -110,6 +117,16 @@ fn test_parse_digits() {
 }
 
 #[test]
-fn test_item_halfway_round() {
-    assert_eq!(get_item_halfway_round(&[0, 1, 2, 3, 4, 5], 1), 4);
+fn test_digits_matching_half_none_match() {
+    match_test_helper_2(vec![0, 1, 2, 3, 4], vec![]);
+}
+
+#[test]
+fn test_digits_matching_half_all_match() {
+    match_test_helper_2(vec![1, 2, 1, 2], vec![1, 2, 1, 2]);
+}
+
+#[test]
+fn test_digits_matching_half_some_match() {
+    match_test_helper_2(vec![1, 2, 3, 4, 2, 5], vec![2, 2]);
 }
