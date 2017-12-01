@@ -40,36 +40,27 @@ fn parse_digits(input: &str) -> Vec<u8> {
         .collect::<Vec<_>>()
 }
 
-fn digits_matching_next<T: Eq + Clone>(digits: &[T]) -> Vec<T> {
-    let mut matches_next = digits.windows(2)
-        .filter(|window| window[0] == window[1])
-        .map(|window| window[0].clone())
-        .collect::<Vec<_>>();
-
-    let last = digits[digits.len() - 1].clone();
-    if digits[0] == last {
-        matches_next.push(last);
-    }
-
-    matches_next
+fn digits_matching_next<T: Eq + Clone>(items: &[T]) -> Vec<T> {
+    get_items_matching(|index| &items[(index + 1) % items.len()], items)
 }
 
 fn items_matching_halfway_round<T: Clone + Eq>(items: &[T]) -> Vec<T> {
+    let half = items.len() / 2;
+    get_items_matching(|index| &items[(index + half) % items.len()], items)
+}
+
+fn get_items_matching<'a, T: Clone + Eq + 'a, F>(get_other: F, items: &[T]) -> Vec<T>
+    where F: Fn(usize) -> &'a T
+{
     let mut matches = Vec::new();
 
     for (index, item) in items.iter().enumerate() {
-        if get_item_halfway_round(items, index) == *item {
+        if get_other(index) == item {
             matches.push(item.clone());
         }
     }
 
     matches
-}
-
-fn get_item_halfway_round<T: Clone>(source: &[T], index: usize) -> T {
-    let steps = source.len() / 2;
-    let index = (index + steps) % source.len();
-    source[index].clone()
 }
 
 fn char_to_digit(c: char) -> Option<u8> {
