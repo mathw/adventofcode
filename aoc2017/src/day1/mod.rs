@@ -2,7 +2,7 @@ use std::time::Instant;
 use util::asmillis::AsMillis;
 use util;
 
-pub fn go(start: &Instant, count: usize) {
+pub fn go(count: usize) {
     // parse
     let input = include_str!("input.txt");
 
@@ -12,17 +12,19 @@ pub fn go(start: &Instant, count: usize) {
     }
 
     // part one
+    let timer1 = Instant::now();
     let partone = util::repeatedly(count, || sum_as_u32(&items_matching_next(&digits)));
 
-    println!("({}ms) The sum of all matching digits is {}",
-             start.elapsed().as_millis(),
+    println!("[{}ms] The sum of all matching digits is {}",
+             timer1.elapsed().as_millis(),
              partone);
 
     // part two
+    let timer2 = Instant::now();
     let parttwo = util::repeatedly(count, || sum_as_u32(&items_matching_halfway_round(&digits)));
 
-    println!("({}ms) The sum of all digits which match the digit halfway around the list is {}",
-             start.elapsed().as_millis(),
+    println!("[{}ms] The sum of all digits which match the digit halfway around the list is {}",
+             timer2.elapsed().as_millis(),
              parttwo);
 }
 
@@ -31,9 +33,9 @@ fn sum_as_u32(items: &[u8]) -> u32 {
 }
 
 fn parse_digits(input: &str) -> Vec<u8> {
-    let digits = input.chars().map(util::char_to_digit);
-
-    digits.map(|x| {
+    input.chars()
+        .map(util::char_to_digit)
+        .map(|x| {
             x.expect(&format!("The input string contained something which was not a digit. It \
                                was {}",
                               input))
@@ -53,15 +55,14 @@ fn items_matching_halfway_round<T: Clone + Eq>(items: &[T]) -> Vec<T> {
 fn get_items_matching<'a, T: Clone + Eq + 'a, F>(get_other: F, items: &[T]) -> Vec<T>
     where F: Fn(usize) -> &'a T
 {
-    let mut matches = Vec::new();
-
-    for (index, item) in items.iter().enumerate() {
-        if get_other(index) == item {
-            matches.push(item.clone());
-        }
-    }
-
-    matches
+    items.iter()
+        .enumerate()
+        .filter_map(|(index, item)| if get_other(index) == item {
+            Some(item.clone())
+        } else {
+            None
+        })
+        .collect()
 }
 
 #[cfg(test)]

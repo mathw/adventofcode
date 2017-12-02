@@ -1,4 +1,5 @@
 pub mod asmillis;
+pub mod pairs;
 
 pub fn char_to_digit(c: char) -> Option<u8> {
     match c {

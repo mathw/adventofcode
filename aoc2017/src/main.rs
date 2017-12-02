@@ -2,6 +2,7 @@ extern crate clap;
 
 mod util;
 mod day1;
+mod day2;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -39,7 +40,8 @@ fn main() {
 
     let start = Instant::now();
     match day {
-        1 => day1::go(&start, reps),
+        1 => day1::go(reps),
+        2 => day2::go(reps),
         _ => println!("I don't know how to do that day yet"),
     }
 
