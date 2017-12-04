@@ -38,6 +38,7 @@ pub fn repeatedly<F, R>(count: usize, what: F) -> R
     result
 }
 
+#[allow(unused)]
 pub fn timed<W, R>(work: W) -> (R, u64)
     where W: Fn() -> R
 {

@@ -4,6 +4,7 @@ mod util;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -44,6 +45,7 @@ fn main() {
         1 => day1::go(reps),
         2 => day2::go(reps),
         3 => day3::go(reps),
+        4 => day4::go(reps),
         _ => println!("I don't know how to do that day yet"),
     }
 
