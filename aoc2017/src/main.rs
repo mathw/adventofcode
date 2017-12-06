@@ -6,6 +6,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -13,7 +14,7 @@ use std::time::Instant;
 use util::asmillis::AsMillis;
 
 fn main() {
-    let matches = App::new("Advent of Code 2015")
+    let matches = App::new("Advent of Code 2017")
         .version("1.0")
         .author("Matthew Walton")
         .arg(Arg::with_name("DAY")
@@ -48,6 +49,7 @@ fn main() {
         3 => day3::go(reps),
         4 => day4::go(reps),
         5 => day5::go(reps),
+        6 => day6::go(reps),
         _ => println!("I don't know how to do that day yet"),
     }
 
