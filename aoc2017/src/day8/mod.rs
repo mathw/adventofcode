@@ -9,14 +9,17 @@ use util::timed;
 pub fn go() {
     let source_text = include_str!("input.txt");
 
-    let (result, time) = timed(|| part1(source_text));
-    println!("[{}ms] largest value in any register is {}", time, result);
+    let ((max, highest), time) = timed(|| evaluate(source_text));
+    println!("[{}ms] largest value in any register is {}, while highest seen is {}",
+             time,
+             max,
+             highest);
 }
 
-fn part1(source: &str) -> i32 {
+fn evaluate(source: &str) -> (i32, i32) {
     let program = parse_program(source).unwrap();
-    let registers = run(&program);
-    registers.values().max().unwrap().clone()
+    let (registers, highest) = run(&program);
+    (registers.values().max().unwrap().clone(), highest)
 }
 
 #[cfg(test)]
@@ -34,9 +37,10 @@ c inc -20 if c == 10";
             let parsed = parse_program(input);
             assert!(parsed.is_ok());
             let parsed = parsed.unwrap();
-            let registers = run(&parsed);
+            let (registers, highest) = run(&parsed);
             let largest = registers.values().max();
             assert_eq!(largest, Some(&1));
+            assert_eq!(highest, 10);
         }
     }
 }

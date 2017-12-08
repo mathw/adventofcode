@@ -1,16 +1,23 @@
 use super::ast::*;
 use std::collections::HashMap;
+use std::i32;
 
-pub fn run<'a>(program: &'a Program<'a>) -> HashMap<&'a str, i32> {
+pub fn run<'a>(program: &'a Program<'a>) -> (HashMap<&'a str, i32>, i32) {
     let mut registers = HashMap::new();
+    let mut highest = i32::MIN;
 
     for instruction in program.instructions.iter() {
         if run_conditional(&instruction.condition, &registers) {
             run_action(&instruction.action, &mut registers);
+
+            let h = registers.values().max().unwrap_or(&highest).clone();
+            if h > highest {
+                highest = h;
+            }
         }
     }
 
-    registers
+    (registers, highest)
 }
 
 fn run_conditional<'a>(condition: &'a Condition<'a>, registers: &HashMap<&'a str, i32>) -> bool {
