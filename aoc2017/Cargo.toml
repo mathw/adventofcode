@@ -7,4 +7,3 @@ authors = ["Matthew Walton <matthew@matthew-walton.co.uk>"]
 clap = "2.27.1"
 regex = "0.2.3"
 lazy_static = "1.0.0"
-llvm-sys = "40"

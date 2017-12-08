@@ -1,24 +1,18 @@
-use std::collections::HashSet;
-
 #[derive(Debug, PartialEq)]
 pub struct Program<'a> {
-    registers: HashSet<&'a str>,
-    instructions: Vec<Instruction<'a>>,
+    pub instructions: Vec<Instruction<'a>>,
 }
 
 impl<'a> Program<'a> {
-    pub fn new(instructions: Vec<Instruction<'a>>, registers: HashSet<&'a str>) -> Program<'a> {
-        Program {
-            registers: registers,
-            instructions: instructions,
-        }
+    pub fn new(instructions: Vec<Instruction<'a>>) -> Program<'a> {
+        Program { instructions: instructions }
     }
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Instruction<'a> {
-    condition: Condition<'a>,
-    action: Action<'a>,
+    pub condition: Condition<'a>,
+    pub action: Action<'a>,
 }
 
 impl<'a> Instruction<'a> {
@@ -32,9 +26,9 @@ impl<'a> Instruction<'a> {
 
 #[derive(Debug, PartialEq)]
 pub struct Condition<'a> {
-    register: &'a str,
-    op: Operator,
-    value: i32,
+    pub register: &'a str,
+    pub op: Operator,
+    pub value: i32,
 }
 
 impl<'a> Condition<'a> {
@@ -49,9 +43,9 @@ impl<'a> Condition<'a> {
 
 #[derive(Debug, PartialEq)]
 pub struct Action<'a> {
-    target: &'a str,
-    op: ActionOp,
-    value: i32,
+    pub target: &'a str,
+    pub op: ActionOp,
+    pub value: i32,
 }
 
 impl<'a> Action<'a> {

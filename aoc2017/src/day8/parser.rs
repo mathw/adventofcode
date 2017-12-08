@@ -1,32 +1,25 @@
 use super::ast;
 use regex;
-use std::collections::HashSet;
 use std::str::FromStr;
 
 pub fn parse_program<'a>(src: &'a str) -> Result<ast::Program<'a>, &'static str> {
     let parsed_instructions = src.lines().map(|line| parse_instruction(line));
 
-    let mut registers = HashSet::new();
     let mut instructions = Vec::new();
 
     for x in parsed_instructions {
         match x {
-            Ok((i, r)) => {
-                for register in r {
-                    registers.insert(register);
-                }
-
+            Ok(i) => {
                 instructions.push(i);
             }
             Err(e) => return Err(e),
         }
     }
 
-    Ok(ast::Program::new(instructions, registers))
+    Ok(ast::Program::new(instructions))
 }
 
-fn parse_instruction<'a>(src: &'a str)
-                         -> Result<(ast::Instruction<'a>, HashSet<&'a str>), &'static str> {
+fn parse_instruction<'a>(src: &'a str) -> Result<ast::Instruction<'a>, &'static str> {
     lazy_static! {
         static ref RE: regex::Regex =
             regex::Regex::new(r"(\w+) (\w+) (-?\d+) if (\w+) (\S+) (-?\d+)").unwrap();
@@ -40,18 +33,13 @@ fn parse_instruction<'a>(src: &'a str)
     }
 }
 
-fn make_instruction<'a>(m: regex::Captures<'a>)
-                        -> Result<(ast::Instruction<'a>, HashSet<&'a str>), &'static str> {
+fn make_instruction<'a>(m: regex::Captures<'a>) -> Result<ast::Instruction<'a>, &'static str> {
     let action_register = m.get(1).unwrap().as_str();
     let action_action_str = &m.get(2).unwrap().as_str();
     let action_value_str = &m.get(3).unwrap().as_str();
     let cond_register = m.get(4).unwrap().as_str();
     let cond_op_str = &m.get(5).unwrap().as_str();
     let cond_value_str = &m.get(6).unwrap().as_str();
-
-    let mut registers = HashSet::new();
-    registers.insert(action_register);
-    registers.insert(cond_register);
 
     let action_op = match *action_action_str {
         "inc" => ast::ActionOp::Inc,
@@ -73,7 +61,7 @@ fn make_instruction<'a>(m: regex::Captures<'a>)
     let cond_value = i32::from_str(cond_value_str).map_err(|_| "Unable to parse condition value")?;
     let condition = ast::Condition::new(cond_register, cond_op, cond_value);
 
-    Ok((ast::Instruction::new(condition, action), registers))
+    Ok(ast::Instruction::new(condition, action))
 }
 
 #[cfg(test)]
@@ -83,15 +71,12 @@ mod tests {
     #[test]
     fn parse_instruction_1() {
         match parse_instruction("ben inc 360 if sp >= -4777") {
-            Ok((instruction, registers)) => {
+            Ok(instruction) => {
                 assert_eq!(instruction,
                            ast::Instruction::new(ast::Condition::new("sp",
                                           ast::Operator::GreaterThanOrEqualTo,
                                                                      -4777),
                                                  ast::Action::new("ben", ast::ActionOp::Inc, 360)));
-                assert_eq!(registers.len(), 2);
-                assert!(registers.contains("ben"));
-                assert!(registers.contains("sp"));
             }
             _ => assert!(false, "Valid instruction must parse"),
         }
@@ -100,15 +85,12 @@ mod tests {
     #[test]
     fn parse_instruction_2() {
         match parse_instruction("jzm dec 594 if bwj != 1443") {
-            Ok((instruction, registers)) => {
+            Ok(instruction) => {
                 assert_eq!(instruction,
                            ast::Instruction::new(ast::Condition::new("bwj",
                                                                      ast::Operator::NotEqualTo,
                                                                      1443),
                                                  ast::Action::new("jzm", ast::ActionOp::Dec, 594)));
-                assert_eq!(registers.len(), 2);
-                assert!(registers.contains("jzm"));
-                assert!(registers.contains("bwj"));
             }
             _ => assert!(false, "Valid instruction must parse"),
         }
@@ -116,10 +98,6 @@ mod tests {
 
     #[test]
     fn parse_program_1() {
-        let mut registers = HashSet::new();
-        registers.insert("jzm");
-        registers.insert("bwj");
-        registers.insert("sp");
         match parse_program("jzm dec 594 if bwj != 1443\nbwj inc 360 if sp >= -4777") {
             Ok(program) => {
                 assert_eq!(program,
@@ -131,8 +109,7 @@ mod tests {
                                                  ast::Instruction::new(ast::Condition::new("sp",
                                           ast::Operator::GreaterThanOrEqualTo,
                                                                      -4777),
-                                                 ast::Action::new("bwj", ast::ActionOp::Inc, 360))],
-                                                 registers))
+                                                 ast::Action::new("bwj", ast::ActionOp::Inc, 360))]))
             }
             _ => assert!(false, "Valid program must parse"),
         }
