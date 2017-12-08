@@ -9,6 +9,10 @@ pub struct Fact {
 
 impl Fact {
     pub fn new(name: String, weight: u32, underneath: HashSet<String>) -> Fact {
-        Fact { name, weight, underneath }
+        Fact {
+            name: name,
+            weight: weight,
+            underneath: underneath,
+        }
     }
 }

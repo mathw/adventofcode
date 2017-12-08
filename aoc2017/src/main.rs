@@ -1,6 +1,8 @@
 extern crate clap;
 extern crate regex;
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
+extern crate llvm_sys;
 
 mod util;
 mod day1;
@@ -10,6 +12,7 @@ mod day4;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
 
 use clap::{Arg, App};
 use std::str::FromStr;
@@ -54,6 +57,7 @@ fn main() {
         5 => day5::go(reps),
         6 => day6::go(reps),
         7 => day7::go(reps),
+        8 => day8::go(),
         _ => println!("I don't know how to do that day yet"),
     }
 

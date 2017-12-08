@@ -29,14 +29,16 @@ pub fn parse(input: &str) -> Option<Fact> {
 fn test_parse_leaf() {
     let input = "pbga (66)";
     assert_eq!(parse(input),
-               Some(Fact::new("pbga".to_owned(), 66, Vec::new())));
+               Some(Fact::new("pbga".to_owned(), 66, HashSet::new())));
 }
 
 #[test]
 fn test_parse_branch() {
     let input = "pbga (66) -> huyk, wwie, isow";
-    assert_eq!(parse(input),
-               Some(Fact::new("pbga".to_owned(),
-                              66,
-                              vec!["huyk".to_owned(), "wwie".to_owned(), "isow".to_owned()])));
+    let mut set = HashSet::new();
+    set.insert("huyk".to_owned());
+    set.insert("wwie".to_owned());
+    set.insert("isow".to_owned());
+
+    assert_eq!(parse(input), Some(Fact::new("pbga".to_owned(), 66, set)));
 }

@@ -26,7 +26,9 @@ fn part2(facts: &Vec<Fact>, root_name: &str) {
     let mut nodes = HashMap::new();
 
     // leaf nodes
-    for node in facts.iter().filter(|fact| fact.underneath.len() == 0).map(|fact| Node::new(fact.name.clone(), fact.weight, Vec::new())) {
+    for node in facts.iter()
+        .filter(|fact| fact.underneath.len() == 0)
+        .map(|fact| Node::new(fact.name.clone(), fact.weight, Vec::new())) {
         nodes.insert(node.name.clone(), node);
     }
 
@@ -34,8 +36,10 @@ fn part2(facts: &Vec<Fact>, root_name: &str) {
     while !nodes.contains_key(root_name) {
         let keys = nodes.keys().cloned().collect::<HashSet<_>>();
         for fact in facts.iter().filter(|fact| fact.underneath.is_subset(&keys)) {
-            let child_nodes = fact.underneath.iter().map(|name| nodes.remove(name).unwrap()).collect();
-            nodes.insert(fact.name.clone(), Node::new(fact.name.clone(), fact.weight, child_nodes));
+            let child_nodes =
+                fact.underneath.iter().map(|name| nodes.remove(name).unwrap()).collect();
+            nodes.insert(fact.name.clone(),
+                         Node::new(fact.name.clone(), fact.weight, child_nodes));
         }
     }
 
@@ -53,7 +57,7 @@ fn part2(facts: &Vec<Fact>, root_name: &str) {
     }
 
 
-// TODO get the program to figure this out instead of requiring the user to do it by eye, but it's 00:25 and I need to go to bed
+    // TODO get the program to figure this out instead of requiring the user to do it by eye, but it's 00:25 and I need to go to bed
     println!("Child");
     for w in current_node.supporting.iter() {
         println!("{} total {}", w.self_weight, w.total_weight);
@@ -71,8 +75,7 @@ fn parse_line(line: &str) -> Option<Fact> {
 fn find_root_name(facts: &[Fact]) -> Option<String> {
     let mut all_supported_names = HashSet::new();
 
-    for name in facts.iter()
-    {
+    for name in facts.iter() {
         for n in name.underneath.iter() {
             all_supported_names.insert(n.clone());
         }
