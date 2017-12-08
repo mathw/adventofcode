@@ -96,7 +96,7 @@ fn test_digits_matching_next_some_match() {
 
 #[test]
 fn test_parse_digits() {
-    assert_eq!(parse_digits(""), vec![]);
+    assert_eq!(parse_digits(""), Vec::<u8>::new());
     assert_eq!(parse_digits("0"), vec![0]);
     assert_eq!(parse_digits("23288839"), vec![2, 3, 2, 8, 8, 8, 3, 9]);
 }
