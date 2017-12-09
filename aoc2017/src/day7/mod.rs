@@ -14,8 +14,8 @@ pub fn go(reps: usize) {
     let (result, time) = timed_repeatedly(reps, || part1(&input));
     println!("[{}ms] root name is {}", time, result);
 
-    let (result, time) = timed_repeatedly(reps, || part2(&input, &result));
-    println!("[{}ms] root name is {}", time, "foo");
+    let (_, time) = timed_repeatedly(reps, || part2(&input, &result));
+    println!("[{}ms]", time);
 }
 
 fn part1(facts: &Vec<Fact>) -> String {
@@ -46,11 +46,7 @@ fn part2(facts: &Vec<Fact>, root_name: &str) {
     // there's only one node in the map now, hopefully
     let root = nodes.remove(root_name).expect("No root!");
 
-    for w in root.supporting.iter().map(|x| x.total_weight) {
-        println!("{}", w);
-    }
-    // TODO find the single weight that's different, follow it to the end.
-
+    // find the single weight that's different, follow it to the end.
     let mut current_node = &root;
     while let Some(child) = current_node.get_unbalanced_child() {
         current_node = child;
