@@ -34,46 +34,141 @@ fn make_event_stream(input: &str) -> Vec<Event> {
     result
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 enum State {
-    InGroup {
-        group_level: u32,
-        score: u32,
-        garbage: u32,
-    },
-    InGarbage {
-        group_level: Option<u32>,
-        score: u32,
-        garbage: u32,
-    },
-    Base { score: u32, garbage: u32 },
+    Base(StateS<Base>),
+    InGroup(StateS<Group>),
+    InGarbage(StateS<Garbage>),
 }
 
 impl State {
     /// Create a new base state
     fn base() -> State {
-        State::Base {
+        State::Base(StateS {
             score: 0,
             garbage: 0,
-        }
+            state: Base {},
+        })
     }
 
     /// Return a state's score
     fn score(&self) -> u32 {
         match self {
-            &State::InGroup { group_level: _, score: s, garbage: _ } => s,
-            &State::InGarbage { group_level: _, score: s, garbage: _ } => s,
-            &State::Base { score: s, garbage: _ } => s,
+            &State::InGroup(StateS { score: s, garbage: _, state: _ }) => s,
+            &State::InGarbage(StateS { score: s, garbage: _, state: _ }) => s,
+            &State::Base(StateS { score: s, garbage: _, state: _ }) => s,
         }
     }
 
     /// Return a state's garbage count
     fn garbage(&self) -> u32 {
         match self {
-            &State::InGroup { group_level: _, score: _, garbage: g } => g,
-            &State::InGarbage { group_level: _, score: _, garbage: g } => g,
-            &State::Base { score: _, garbage: g } => g,
+            &State::InGroup(StateS { score: _, garbage: g, state: _ }) => g,
+            &State::InGarbage(StateS { score: _, garbage: g, state: _ }) => g,
+            &State::Base(StateS { score: _, garbage: g, state: _ }) => g,
         }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+struct StateS<S>
+    where S: Copy
+{
+    score: u32,
+    garbage: u32,
+    state: S,
+}
+
+impl<S> StateS<S>
+    where S: Copy
+{
+    fn move_to<T>(self, new_state: T) -> StateS<T>
+        where T: Copy
+    {
+        StateS {
+            score: self.score,
+            garbage: self.garbage,
+            state: new_state,
+        }
+    }
+
+    fn move_increase_score_by<T>(self, score_diff: u32, new_state: T) -> StateS<T>
+        where T: Copy
+    {
+        StateS {
+            score: self.score + score_diff,
+            garbage: self.garbage,
+            state: new_state,
+        }
+    }
+
+    fn increase_garbage(self) -> StateS<S> {
+        StateS {
+            score: self.score,
+            garbage: self.garbage + 1,
+            state: self.state,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+struct Base {
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+struct Garbage {
+    group_level: Option<u32>,
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
+struct Group {
+    group_level: u32,
+}
+
+impl From<StateS<Base>> for StateS<Garbage> {
+    fn from(base: StateS<Base>) -> StateS<Garbage> {
+        base.move_to(Garbage { group_level: None })
+    }
+}
+
+impl From<StateS<Group>> for StateS<Garbage> {
+    fn from(base: StateS<Group>) -> StateS<Garbage> {
+        base.move_to(Garbage { group_level: Some(base.state.group_level) })
+    }
+}
+
+impl From<StateS<Base>> for StateS<Group> {
+    fn from(base: StateS<Base>) -> StateS<Group> {
+        base.move_to(Group { group_level: 0 })
+    }
+}
+
+impl StateS<Group> {
+    fn deeper(self) -> StateS<Group> {
+        self.move_to(Group { group_level: self.state.group_level + 1 })
+    }
+
+    fn shallower(self) -> StateS<Group> {
+        self.move_increase_score_by(self.state.group_level + 1,
+                                    Group { group_level: self.state.group_level - 1 })
+    }
+}
+
+impl From<StateS<Group>> for StateS<Base> {
+    fn from(group: StateS<Group>) -> StateS<Base> {
+        group.move_increase_score_by(1, Base {})
+    }
+}
+
+impl From<StateS<Garbage>> for StateS<Base> {
+    fn from(garbage: StateS<Garbage>) -> StateS<Base> {
+        garbage.move_to(Base {})
+    }
+}
+
+impl From<StateS<Garbage>> for StateS<Group> {
+    fn from(garbage: StateS<Garbage>) -> StateS<Group> {
+        garbage.move_to(Group { group_level: garbage.state.group_level.unwrap() })
     }
 }
 
@@ -102,71 +197,22 @@ impl From<char> for Event {
 /// Always succeeds. If the event is invalid the same state is returned.
 fn transition(state: State, event: Event) -> State {
     match (&state, event) {
-        (&State::Base { score: s, garbage: g }, Event::OpenGroup) => {
-            State::InGroup {
-                group_level: 0,
-                score: s,
-                garbage: g,
-            }
-        }
-        (&State::Base { score: s, garbage: g }, Event::OpenGarbage) => {
-            State::InGarbage {
-                group_level: None,
-                score: s,
-                garbage: g,
-            }
-        }
-        (&State::Base { score: _, garbage: _ }, Event::CloseGroup) => state,
-        (&State::Base { score: _, garbage: _ }, Event::CloseGarbage) => state,
-        (&State::InGroup { group_level: gl, score: s, garbage: g }, Event::OpenGroup) => {
-            State::InGroup {
-                group_level: gl + 1,
-                score: s,
-                garbage: g,
-            }
-        }
-        (&State::InGroup { group_level: 0, score: s, garbage: g }, Event::CloseGroup) => {
-            State::Base {
-                score: s + 1,
-                garbage: g,
-            }
-        }
-        (&State::InGroup { group_level: gl, score: s, garbage: g }, Event::CloseGroup) => {
-            State::InGroup {
-                group_level: gl - 1,
-                score: s + 1 + gl,
-                garbage: g,
-            }
-        }
-        (&State::InGroup { group_level: gl, score: s, garbage: g }, Event::OpenGarbage) => {
-            State::InGarbage {
-                group_level: Some(gl),
-                score: s,
-                garbage: g,
-            }
-        }
-        (&State::InGroup { group_level: _, score: _, garbage: _ }, Event::CloseGarbage) => state,
-        (&State::InGarbage { group_level: None, score: s, garbage: g }, Event::CloseGarbage) => {
-            State::Base {
-                score: s,
-                garbage: g,
-            }
-        }
-        (&State::InGarbage { group_level: Some(gl), score: s, garbage: g },
-         Event::CloseGarbage) => {
-            State::InGroup {
-                group_level: gl,
-                score: s,
-                garbage: g,
-            }
-        }
-        (&State::InGarbage { group_level: gl, score: s, garbage: g }, _) => {
-            State::InGarbage {
-                group_level: gl,
-                score: s,
-                garbage: g + 1,
-            }
-        }
+        (&State::Base(base), Event::OpenGroup) => State::InGroup(base.into()),
+        (&State::Base(base), Event::OpenGarbage) => State::InGarbage(base.into()),
+        (&State::Base(_), Event::CloseGroup) => state,
+        (&State::Base(_), Event::CloseGarbage) => state,
+        (&State::InGroup(group), Event::OpenGroup) => State::InGroup(group.deeper()),
+        (&State::InGroup(s @ StateS { state: Group { group_level: 0 }, .. }),
+         Event::CloseGroup) => State::Base(s.into()),
+        (&State::InGroup(s @ StateS { state: Group { group_level: _ }, .. }),
+         Event::CloseGroup) => State::InGroup(s.shallower()),
+        (&State::InGroup(group), Event::OpenGarbage) => State::InGarbage(group.into()),
+        (&State::InGroup(_), Event::CloseGarbage) => state,
+        (&State::InGarbage(s @ StateS { state: Garbage { group_level: None }, .. }),
+         Event::CloseGarbage) => State::Base(s.into()),
+        (&State::InGarbage(s @ StateS { state: Garbage { group_level: Some(_) }, .. }),
+         Event::CloseGarbage) => State::InGroup(s.into()),
+        (&State::InGarbage(s), _) => State::InGarbage(s.increase_garbage()),
         (_, Event::NoEvent) => state,
     }
 }
