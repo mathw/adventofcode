@@ -62,6 +62,7 @@ fn main() {
         8 => day8::go(),
         9 => day9::go(),
         10 => day10::go(),
+        11 => day11::go(),
         _ => println!("I don't know how to do that day yet"),
     }
 
