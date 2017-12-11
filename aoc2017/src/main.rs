@@ -14,6 +14,7 @@ mod day7;
 mod day8;
 mod day9;
 mod day10;
+mod day11;
 
 use clap::{Arg, App};
 use std::str::FromStr;
