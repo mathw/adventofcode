@@ -68,6 +68,23 @@ impl HexCoordinate {
         directions.into_iter().fold(*self, |r, d| r.follow_direction(d))
     }
 
+    pub fn follow_directions_tracking_distance<I>(&self, directions: I) -> (HexCoordinate, usize)
+        where I: IntoIterator<Item = Direction>
+    {
+        let mut max_distance = 0;
+        let mut current_location = self.clone();
+
+        for direction in directions {
+            current_location = current_location.follow_direction(direction);
+            let current_distance = current_location.distance_from(self);
+            if current_distance > max_distance {
+                max_distance = current_distance;
+            }
+        }
+
+        (current_location, max_distance)
+    }
+
     /// Manhattan distance from the origin
     pub fn distance_from_origin(&self) -> usize {
         self.distance_from(&HexCoordinate::new(0, 0))

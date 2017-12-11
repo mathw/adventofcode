@@ -10,17 +10,22 @@ pub fn go() {
 
     let directions = parse_input(input);
 
-    let (result, time) = timed(|| part1(directions.clone()));
+    let ((distance, max_distance), time) = timed(|| run(directions.clone()));
 
-    println!("[{}ms] Distance is {}", time, result);
+    println!("[{}ms] Distance is {} and the maximum distance ever was {}",
+             time,
+             distance,
+             max_distance);
 }
 
 fn parse_input(input: &str) -> Vec<Direction> {
     input.trim().split(',').filter_map(|d| Direction::from_str(d.trim()).ok()).collect()
 }
 
-fn part1<I>(input: I) -> usize
+fn run<I>(input: I) -> (usize, usize)
     where I: IntoIterator<Item = Direction>
 {
-    HexCoordinate::new(0, 0).follow_directions(input).distance_from_origin()
+    let (endpoint, max_distance) = HexCoordinate::new(0, 0)
+        .follow_directions_tracking_distance(input);
+    (endpoint.distance_from_origin(), max_distance)
 }
