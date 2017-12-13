@@ -6,10 +6,13 @@ pub fn go() {
     let input = "120,93,0,90,5,80,129,74,1,165,204,255,254,2,50,113";
 
     let (result, time) = timed(|| {
-        part1(input.split(',')
-            .filter_map(|x| usize::from_str(x).ok())
-            .collect::<Vec<_>>()
-            .as_slice())
+        part1(
+            input
+                .split(',')
+                .filter_map(|x| usize::from_str(x).ok())
+                .collect::<Vec<_>>()
+                .as_slice(),
+        )
     });
 
     println!("[{}ms] hash is {}", time, result);
@@ -26,20 +29,24 @@ fn part1(input: &[usize]) -> u16 {
 }
 
 fn part2<I>(input: I) -> String
-    where I: IntoIterator<Item = u8>
+where
+    I: IntoIterator<Item = u8>,
 {
     fullhash(input)
 }
 
 fn fullhash<I>(input: I) -> String
-    where I: IntoIterator<Item = u8>
+where
+    I: IntoIterator<Item = u8>,
 {
-    render_hash(dense_hash(sparse_hash(input.into_iter().map(|i| i as usize)).as_slice())
-        .as_slice())
+    render_hash(
+        dense_hash(sparse_hash(input.into_iter().map(|i| i as usize)).as_slice()).as_slice(),
+    )
 }
 
 fn sparse_hash<I>(input: I) -> Vec<u8>
-    where I: IntoIterator<Item = usize>
+where
+    I: IntoIterator<Item = usize>,
 {
     let mut lengths = input.into_iter().collect::<Vec<_>>();
     lengths.push(17);
@@ -60,7 +67,10 @@ fn sparse_hash<I>(input: I) -> Vec<u8>
 }
 
 fn dense_hash(sparse_hash: &[u8]) -> Vec<u8> {
-    sparse_hash.chunks(16).map(|chunk| chunk.iter().fold(0, |acc, item| acc ^ item)).collect()
+    sparse_hash
+        .chunks(16)
+        .map(|chunk| chunk.iter().fold(0, |acc, item| acc ^ item))
+        .collect()
 }
 
 fn render_hash(dense_hash: &[u8]) -> String {
@@ -68,7 +78,8 @@ fn render_hash(dense_hash: &[u8]) -> String {
 }
 
 fn hash_round<T>(list: &mut [T], lengths: &[usize], start: &mut usize, skip: &mut usize)
-    where T: Copy + Mul<Output = T>
+where
+    T: Copy + Mul<Output = T>,
 {
     for &length in lengths {
         circular_reverse(list, *start, length);
@@ -78,7 +89,8 @@ fn hash_round<T>(list: &mut [T], lengths: &[usize], start: &mut usize, skip: &mu
 }
 
 fn hash<T>(list: &[T], lengths: &[usize]) -> T
-    where T: Copy + Mul<Output = T>
+where
+    T: Copy + Mul<Output = T>,
 {
     let mut result = list.iter().cloned().collect::<Vec<_>>();
     let mut start = 0;
@@ -156,8 +168,8 @@ mod tests {
 
         #[test]
         fn sample_hash() {
-            let mut list = vec![0, 1, 2, 3, 4];
-            let mut lengths = vec![3, 4, 1, 5];
+            let list = vec![0, 1, 2, 3, 4];
+            let lengths = vec![3, 4, 1, 5];
 
             let result = hash(&list, &lengths);
 
@@ -170,26 +182,34 @@ mod tests {
 
         #[test]
         fn sample_one() {
-            assert_eq!(fullhash("".chars().map(|c| c as u8)),
-                       "a2582a3a0e66e6e86e3812dcb672a272".to_owned());
+            assert_eq!(
+                fullhash("".chars().map(|c| c as u8)),
+                "a2582a3a0e66e6e86e3812dcb672a272".to_owned()
+            );
         }
 
         #[test]
         fn sample_two() {
-            assert_eq!(fullhash("AoC 2017".chars().map(|c| c as u8)),
-                       "33efeb34ea91902bb2f59c9920caa6cd".to_owned());
+            assert_eq!(
+                fullhash("AoC 2017".chars().map(|c| c as u8)),
+                "33efeb34ea91902bb2f59c9920caa6cd".to_owned()
+            );
         }
 
         #[test]
         fn sample_three() {
-            assert_eq!(fullhash("1,2,3".chars().map(|c| c as u8)),
-                       "3efbe78a8d82f29979031a4aa0b16a9d".to_owned());
+            assert_eq!(
+                fullhash("1,2,3".chars().map(|c| c as u8)),
+                "3efbe78a8d82f29979031a4aa0b16a9d".to_owned()
+            );
         }
 
         #[test]
         fn sample_four() {
-            assert_eq!(fullhash("1,2,4".chars().map(|c| c as u8)),
-                       "63960835bcdc130f0b66d7ff4f6a5a8e".to_owned());
+            assert_eq!(
+                fullhash("1,2,4".chars().map(|c| c as u8)),
+                "63960835bcdc130f0b66d7ff4f6a5a8e".to_owned()
+            );
         }
     }
 }

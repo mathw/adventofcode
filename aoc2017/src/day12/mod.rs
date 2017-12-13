@@ -97,22 +97,3 @@ fn parse_input_line(line: &str) -> Option<(u32, HashSet<u32>)> {
         None => None,
     }
 }
-
-
-#[cfg(test)]
-mod tests {
-    mod parse_input {
-        use super::super::parse_input_line;
-
-        #[test]
-        fn parse_single_connection() {
-            let input = "1 <-> 1";
-            if let Some((node, connections)) = parse_input_line(input) {
-                assert_eq!(node, 1);
-                assert_eq!(connections, vec![1]);
-            } else {
-                assert!(false);
-            }
-        }
-    }
-}
