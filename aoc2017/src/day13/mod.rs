@@ -20,6 +20,7 @@ pub fn go() {
 
 fn find_delay_for_zero_severity_passage(firewall_base: Firewall) -> usize {
     for delay in 0.. {
+        #[cfg(test)]
         println!("Try delay {}", delay);
         let mut firewall = firewall_base.clone();
         firewall.delay(delay);
@@ -54,20 +55,58 @@ struct Scanner {
 
 impl Scanner {
     fn step(&mut self) {
-        if self.advancing {
-            if self.position + 1 >= self.range {
-                self.advancing = false;
-                self.position -= 1;
-            } else {
-                self.position += 1;
-            }
+        #[cfg(test)]
+        println!(
+            "Scanner step: Range {} Position {}",
+            self.range,
+            self.position
+        );
+
+        if self.advancing && self.position == (self.range - 1) {
+            // at the end
+            // reverse
+            #[cfg(test)]
+            println!("Scanner at end, reversing");
+
+            self.advancing = false;
+        } else if !self.advancing && self.position == 0 {
+            // at the start
+            // reverse
+            #[cfg(test)]
+            println!("Scanner at start, reversing");
+
+            self.advancing = true;
+        }
+
+        self.position = if self.advancing {
+            self.position + 1
         } else {
-            if self.position <= 1 {
-                self.position = 0;
-                self.advancing = true;
-            } else {
-                self.position -= 1;
-            }
+            self.position - 1
+        };
+
+        #[cfg(test)]
+        println!("New scanner position is {}", self.position);
+    }
+
+    fn step_by(&mut self, steps: usize) {
+        let cycle_size = if self.range < 2 {
+            0
+        } else {
+            self.range + (self.range - 2)
+        };
+        let remaining_steps = steps % cycle_size;
+
+        #[cfg(test)]
+        println!(
+            "Asked to step {}, cycle {}, range is {}, so stepping {}",
+            steps,
+            cycle_size,
+            self.range,
+            remaining_steps
+        );
+
+        for _ in 0..remaining_steps {
+            self.step();
         }
     }
 }
@@ -98,9 +137,7 @@ impl Firewall {
     }
 
     fn delay(&mut self, count: usize) {
-        for _ in 0..count {
-            self.step_scanners();
-        }
+        self.step_scanners(count);
     }
 
     fn advance_santa(&mut self) -> Option<usize> {
@@ -110,6 +147,7 @@ impl Firewall {
             self.santa += 1;
             return Some(cost);
         }
+        #[cfg(test)]
         println!("Santa didn't get caught");
         self.santa += 1;
         None
@@ -117,13 +155,13 @@ impl Firewall {
 
     fn tick(&mut self) -> Option<usize> {
         let penalty = self.advance_santa();
-        self.step_scanners();
+        self.step_scanners(1);
         penalty
     }
 
-    fn step_scanners(&mut self) {
+    fn step_scanners(&mut self, count: usize) {
         for (_, scanner) in self.layers.iter_mut() {
-            scanner.step();
+            scanner.step_by(count);
         }
     }
 
@@ -192,15 +230,15 @@ impl fmt::Display for Firewall {
             match self.layers.get(&l) {
                 Some(scanner) => if self.santa == l {
                     if scanner.position == 0 {
-                        write!(f, "[!S]")?;
+                        write!(f, "(!!)")?;
                     } else {
-                        write!(f, "[ S]")?;
+                        write!(f, "(  )")?;
                     }
                 } else {
-                    write!(f, "[  ]")?;
+                    write!(f, "    ")?;
                 },
                 None => if self.santa == l {
-                    write!(f, "  S ")?
+                    write!(f, "(  )")?
                 } else {
                     write!(f, "    ")?
                 },
@@ -265,7 +303,27 @@ mod tests {
 4: 4
 6: 4";
         let mut firewall = parse_input(input);
-        firewall.delay(10);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
+        firewall.delay(1);
+        println!("{}", firewall);
         assert_eq!(firewall.run(), None);
     }
 
@@ -278,40 +336,34 @@ mod tests {
         };
 
         scanner.step();
-        assert_eq!(
-            scanner,
-            Scanner {
-                position: 1,
-                range: 3,
-                advancing: true,
-            }
-        );
+        assert_eq!(scanner.position, 1);
         scanner.step();
-        assert_eq!(
-            scanner,
-            Scanner {
-                position: 2,
-                range: 3,
-                advancing: true,
-            }
-        );
+        assert_eq!(scanner.position, 2);
         scanner.step();
-        assert_eq!(
-            scanner,
-            Scanner {
-                position: 1,
-                range: 3,
-                advancing: false,
-            }
-        );
+        assert_eq!(scanner.position, 1);
         scanner.step();
-        assert_eq!(
-            scanner,
-            Scanner {
-                position: 0,
-                range: 3,
-                advancing: true,
-            }
-        );
+        assert_eq!(scanner.position, 0);
+        scanner.step();
+        assert_eq!(scanner.position, 1);
+        scanner.step();
+        assert_eq!(scanner.position, 2);
+    }
+
+    #[test]
+    fn test_scanner_step_2() {
+        let mut scanner = Scanner {
+            position: 0,
+            range: 2,
+            advancing: true,
+        };
+
+        scanner.step();
+        assert_eq!(scanner.position, 1, "First step is to 1");
+        scanner.step();
+        assert_eq!(scanner.position, 0, "Second step is to 0");
+        scanner.step();
+        assert_eq!(scanner.position, 1, "Third step is to 1");
+        scanner.step();
+        assert_eq!(scanner.position, 0, "Fourth step is to 0");
     }
 }
