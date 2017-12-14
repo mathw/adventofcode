@@ -1,5 +1,8 @@
 pub mod asmillis;
 pub mod pairs;
+pub mod knothash;
+
+pub use self::knothash::knot_hash;
 
 use std::time::Instant;
 use self::asmillis::AsMillis;
@@ -21,7 +24,8 @@ pub fn char_to_digit(c: char) -> Option<u8> {
 }
 
 pub fn repeatedly<F, R>(count: usize, what: F) -> R
-    where F: Fn() -> R
+where
+    F: Fn() -> R,
 {
     if count < 1 {
         panic!();
@@ -40,14 +44,16 @@ pub fn repeatedly<F, R>(count: usize, what: F) -> R
 
 #[allow(unused)]
 pub fn timed<W, R>(work: W) -> (R, u64)
-    where W: Fn() -> R
+where
+    W: Fn() -> R,
 {
     let timer = Instant::now();
     (work(), timer.elapsed().as_millis())
 }
 
 pub fn timed_repeatedly<W, R>(count: usize, work: W) -> (R, u64)
-    where W: Fn() -> R
+where
+    W: Fn() -> R,
 {
     let timer = Instant::now();
     (repeatedly(count, || work()), timer.elapsed().as_millis())
