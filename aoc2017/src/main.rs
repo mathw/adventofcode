@@ -17,7 +17,7 @@ mod day10;
 mod day11;
 mod day12;
 mod day13;
-//mod day14;
+mod day14;
 mod day15;
 
 use clap::{App, Arg};
@@ -76,7 +76,7 @@ fn main() {
         11 => day11::go(),
         12 => day12::go(),
         13 => day13::go(),
-        14 => println!("This has been hidden for a while"), //day14::go(),
+        14 => day14::go(),
         15 => day15::go(),
         _ => println!("I don't know how to do that day yet"),
     }

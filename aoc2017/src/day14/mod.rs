@@ -10,8 +10,8 @@ pub fn go() {
 
     let (regions, time) = timed(|| {
         let rows = (0..128).map(|r| row(input, r));
-        let regions = rows.map(|r| get_regions_from_row(r)).collect::<Vec<_>>();
-        let connected_groups = find_connected_regions(regions);
+        let regions = rows.map(|r| get_regions_from_row(&r)).collect::<Vec<_>>();
+        let connected_groups = find_connected_regions(&regions);
         connected_groups.len()
     });
 
@@ -89,7 +89,7 @@ impl Region {
     }
 }
 
-fn get_regions_from_row<I>(row: I) -> Vec<Region>
+fn get_regions_from_row<I>(row: &I) -> Vec<Region>
 where
     I: IntoIterator<Item = bool> + Clone,
 {
@@ -117,17 +117,14 @@ where
 
     // at the end of the row we have to check if we're in a region we need to finish up
     if let Some(start) = current_start {
-        regions.push(Region::new(
-            start,
-            row.into_iter().count() - start,
-            region_label,
-        ));
+        let end = row.clone().into_iter().count() - start;
+        regions.push(Region::new(start, end, region_label));
     }
 
     regions
 }
 
-fn find_connected_regions<I>(rows: I) -> Vec<HashSet<u16>>
+fn find_connected_regions<I>(rows: &I) -> Vec<HashSet<u16>>
 where
     I: IntoIterator<Item = Vec<Region>> + Clone,
 {
@@ -135,30 +132,26 @@ where
 
     for (row_index, row) in rows.clone().into_iter().enumerate() {
         for region in row.iter() {
-            let mut merged_to_previous = false;
             let connected_here = find_connected_previous(region, row_index, rows.clone());
             for c in result.iter_mut() {
                 if c.intersection(&connected_here).count() > 0 {
-                    if !merged_to_previous {
-                        merged_to_previous = true;
-                        for x in connected_here.clone() {
-                            c.insert(x);
-                        }
-                    } else {
-                        // we've already merged in to a set, so we should empty this one
-                        // to avoid a duplicate
-                        // ick what a mess
-                        c.clear();
+                    for x in connected_here.clone() {
+                        c.insert(x);
                     }
                 }
             }
-            if !merged_to_previous {
-                result.push(connected_here);
-            }
+            result.push(connected_here);
         }
     }
 
-    result.iter().filter(|x| x.len() > 0).cloned().collect()
+    let mut unique = Vec::new();
+    for set in result.iter().filter(|x| x.len() > 0).cloned() {
+        if !unique.iter().any(|x| *x == set) {
+            unique.push(set);
+        }
+    }
+
+    unique
 }
 
 fn find_connected_previous<I>(region: &Region, row_index: usize, rows: I) -> HashSet<u16>
