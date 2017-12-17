@@ -4,15 +4,15 @@ use std::collections::HashSet;
 
 pub fn go() {
     let input = "hwlqcszp";
+    let input = "flqrgnkx";
 
     let (result, time) = timed(|| count_used_in_grid(input));
     println!("[{}ms] {} squares used in the grid", time, result);
 
     let (regions, time) = timed(|| {
-        let rows = (0..128).map(|r| row(input, r));
-        let regions = rows.map(|r| get_regions_from_row(&r)).collect::<Vec<_>>();
-        let connected_groups = find_connected_regions(&regions);
-        connected_groups.len()
+        let rows = (0..128).map(|r| row(input, r)).collect();
+        let regions = create_regions_from_grid(&rows);
+        count_unique_regions(&regions)
     });
 
     println!("[{}ms] {} regions", time, regions);
@@ -55,6 +55,27 @@ fn char_to_bits(c: char) -> Vec<bool> {
     }
 }
 
+fn render_grid(rows: &Vec<Vec<Region>>, grid_width: usize) {
+    for row in rows.iter() {
+        let mut current_position = 0;
+        for region in row {
+            while current_position < region.start_index {
+                current_position += 1;
+                print!(".. ");
+            }
+            for _ in 0..region.length {
+                current_position += 1;
+                print!("{:02} ", region.label);
+            }
+        }
+        while current_position < grid_width {
+            current_position += 1;
+            print!(".. ");
+        }
+        print!("\n");
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 struct Region {
     start_index: usize,
@@ -71,14 +92,6 @@ impl Region {
         }
     }
 
-    fn with_label(&self, label: u16) -> Region {
-        Region {
-            label: label,
-            start_index: self.start_index,
-            length: self.length,
-        }
-    }
-
     fn end_index(&self) -> usize {
         self.start_index + self.length
     }
@@ -87,93 +100,95 @@ impl Region {
         (self.start_index <= other.start_index && self.end_index() > other.start_index)
             || (self.start_index < other.end_index() && self.end_index() > other.start_index)
     }
+
+    fn with_label(&self, label: u16) -> Region {
+        Region {
+            start_index: self.start_index,
+            length: self.length,
+            label: label,
+        }
+    }
 }
 
-fn get_regions_from_row<I>(row: &I) -> Vec<Region>
-where
-    I: IntoIterator<Item = bool> + Clone,
-{
-    let mut current_start = None;
-    let mut regions = Vec::new();
-    let mut region_label = 0;
-
-    for (i, x) in row.clone().into_iter().enumerate() {
-        if let Some(start) = current_start {
-            // in a region
-            if !x {
-                // this is the end of the region
-                regions.push(Region::new(start, i - start, region_label));
-                region_label += 1;
-                current_start = None;
-            }
-        } else {
-            // not in a region
-            if x {
-                // a region has begun here
-                current_start = Some(i);
+fn unify_regions_to_label(rows: &mut Vec<Vec<Region>>, labels: &HashSet<u16>, new_label: u16) {
+    for row in rows {
+        for region in row {
+            if labels.contains(&region.label) {
+                region.label = new_label;
             }
         }
     }
-
-    // at the end of the row we have to check if we're in a region we need to finish up
-    if let Some(start) = current_start {
-        let end = row.clone().into_iter().count() - start;
-        regions.push(Region::new(start, end, region_label));
-    }
-
-    regions
 }
 
-fn find_connected_regions<I>(rows: &I) -> Vec<HashSet<u16>>
-where
-    I: IntoIterator<Item = Vec<Region>> + Clone,
-{
-    let mut result = Vec::<HashSet<u16>>::new();
+fn count_unique_regions(grid: &Vec<Vec<Region>>) -> usize {
+    let mut labels = HashSet::new();
 
-    for (row_index, row) in rows.clone().into_iter().enumerate() {
-        for region in row.iter() {
-            let connected_here = find_connected_previous(region, row_index, rows.clone());
-            for c in result.iter_mut() {
-                if c.intersection(&connected_here).count() > 0 {
-                    for x in connected_here.clone() {
-                        c.insert(x);
-                    }
+    for row in grid {
+        for region in row {
+            labels.insert(region.label);
+        }
+    }
+
+    labels.len()
+}
+
+fn create_regions_from_grid(grid: &Vec<Vec<bool>>) -> Vec<Vec<Region>> {
+    let mut rows = Vec::new();
+    let mut previous_row: Option<Vec<Region>> = None;
+    let mut next_region = 0;
+
+    for grid_row in grid {
+        let mut current_row = Vec::new();
+        let mut current_start = None;
+
+        for (i, x) in grid_row.iter().enumerate() {
+            if let Some(start) = current_start {
+                // in a region
+                if !x {
+                    // this is the end of the region
+                    let new_region = Region::new(start, i - start, 0);
+
+                    // check the previous row to find if we intersect with a region
+                    let intersecting_previous_regions = match &previous_row {
+                        &Some(ref p) => p.iter()
+                            .filter(|r| r.intersects_with(&new_region))
+                            .collect(),
+                        &None => Vec::new(),
+                    };
+                    let this_region = if intersecting_previous_regions.len() > 0 {
+                        // for now, we'll just use the first label. If there's more than one
+                        // we will need to unify the labels
+                        let this_label = intersecting_previous_regions[0].label;
+                        if intersecting_previous_regions.len() > 1 {
+                            let the_labels = intersecting_previous_regions
+                                .iter()
+                                .map(|r| r.label)
+                                .collect();
+                            unify_regions_to_label(&mut rows, &the_labels, this_label);
+                        }
+                        this_label
+                    } else {
+                        let r = next_region;
+                        next_region += 1;
+                        r
+                    };
+                    current_row.push(new_region.with_label(this_region));
+                    current_start = None;
+                }
+            } else {
+                // not in a region
+                if *x {
+                    // a region has begun here
+                    current_start = Some(i);
                 }
             }
-            result.push(connected_here);
         }
+
+        previous_row = Some(current_row.clone());
+        rows.push(current_row);
     }
 
-    let mut unique = Vec::new();
-    for set in result.iter().filter(|x| x.len() > 0).cloned() {
-        if !unique.iter().any(|x| *x == set) {
-            unique.push(set);
-        }
-    }
-
-    unique
-}
-
-fn find_connected_previous<I>(region: &Region, row_index: usize, rows: I) -> HashSet<u16>
-where
-    I: IntoIterator<Item = Vec<Region>>,
-{
-    let mut set = HashSet::new();
-    set.insert(region.label);
-
-    if row_index > 0 {
-        let previous_row_index = row_index - 1;
-        for r in rows.into_iter()
-            .nth(previous_row_index)
-            .unwrap()
-            .iter()
-            .filter(|r| r.intersects_with(region))
-        {
-            set.insert(r.label);
-        }
-    }
-
-    set
+    rows
 }
 
 #[cfg(test)]
