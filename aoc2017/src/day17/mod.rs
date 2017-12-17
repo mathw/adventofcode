@@ -26,9 +26,6 @@ fn part2(steps: usize) -> u32 {
     let mut buffer = CircularBuffer::new(0u32, 50000001);
 
     for n in 1..50000000 {
-        if n % 100000 == 0 {
-            println!("{}", n);
-        }
         buffer.step_insert_only_after_zero(steps, n);
     }
 
