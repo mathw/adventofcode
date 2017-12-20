@@ -21,7 +21,8 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
-mod day18;
+//mod day18;
+mod day19;
 
 use clap::{App, Arg};
 use std::str::FromStr;
@@ -83,7 +84,8 @@ fn main() {
         15 => day15::go(),
         16 => day16::go(),
         17 => day17::go(),
-        18 => day18::go(),
+        18 => {} //day18::go(),
+        19 => day19::go(),
         _ => println!("I don't know how to do that day yet"),
     }
 
