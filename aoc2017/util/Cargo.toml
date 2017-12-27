@@ -1,9 +1,6 @@
 [package]
-name = "aoc2017"
+name = "util"
 version = "0.1.0"
 authors = ["Matthew Walton <matthew@matthew-walton.co.uk>"]
 
 [dependencies]
-clap = "2.27.1"
-regex = "0.2.3"
-lazy_static = "1.0.0"
