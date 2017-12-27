@@ -1,7 +1,7 @@
 use regex::Regex;
 use std::str::FromStr;
 use util::timed;
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 pub fn go() {
     let input = include_str!("input.txt");
@@ -10,7 +10,7 @@ pub fn go() {
 
     println!("[{}ms] {}", time, result);
 
-    let (result, time) = timed(|| part2("abcdefghijklmnop", result.chars()));
+    let (result, time) = timed(|| part2("abcdefghijklmnop", input));
 
     println!("[{}ms] {}", time, result);
 }
@@ -21,64 +21,78 @@ fn part1(dancers: &str, moves: &str) -> String {
     };
     let moves = parse_moves(moves);
 
-    dancers.dance(moves).dancers.iter().collect()
+    dancers.dance(&moves).dancers.iter().collect()
 }
 
-fn part2<I>(dancers: &str, dancers_after_one_round: I) -> String
-where
-    I: Iterator<Item = char>,
-{
-    let map = find_final_positions(dancers_after_one_round);
+fn part2(dancers: &str, moves: &str) -> String {
+    let moves = parse_moves(moves);
 
-    let result = (0..1000000000).fold(
-        dancers.chars().collect(),
-        |acc, _| mutate_by_map(&acc, &map),
-    );
-
-    result.iter().collect()
-}
-
-fn mutate_by_map(dancers: &Vec<char>, map: &HashMap<usize, usize>) -> Vec<char> {
-    let mut result = vec!['a'; 16];
-    for (&source, &target) in map.iter() {
-        result[target] = dancers[source];
-    }
-
-    result
-}
-
-fn find_final_positions<I>(mutated: I) -> HashMap<usize, usize>
-where
-    I: Iterator<Item = char>,
-{
-    let mut map = HashMap::new();
-
-    for (i, c) in mutated.enumerate() {
-        map.insert(c.clone(), i);
-    }
-
-    map.iter()
-        .map(|(&c, &i)| match c {
-            'a' => (0, i),
-            'b' => (1, i),
-            'c' => (2, i),
-            'd' => (3, i),
-            'e' => (4, i),
-            'f' => (5, i),
-            'g' => (6, i),
-            'h' => (7, i),
-            'i' => (8, i),
-            'j' => (9, i),
-            'k' => (10, i),
-            'l' => (11, i),
-            'm' => (12, i),
-            'n' => (13, i),
-            'o' => (14, i),
-            'p' => (15, i),
-            _ => panic!("This should not be possible"),
-        })
+    dance_a_lot(&moves, &dancers.chars().collect(), 1_000_000_000)
+        .iter()
         .collect()
 }
+
+fn dance_a_lot(
+    moves: &Vec<DanceMove>,
+    original_dancers: &Vec<char>,
+    iterations: usize,
+) -> Vec<char> {
+    let mut dancers = Dancers {
+        dancers: (*original_dancers).clone(),
+    };
+
+    let mut seen_before = HashSet::new();
+    let mut previous_sequence = Vec::new();
+    let mut last_seen_index = None;
+    let mut sequence_size = None;
+
+    for iteration in 0..iterations {
+        dancers = dancers.dance(moves);
+        if !seen_before.contains(&dancers.dancers) {
+            seen_before.insert(dancers.dancers.clone());
+            previous_sequence.push(dancers.dancers.clone());
+        } else {
+            let index_of_previous_sighting = previous_sequence
+                .iter()
+                .enumerate()
+                .filter(|&(i, x)| x == &dancers.dancers)
+                .next()
+                .unwrap()
+                .0;
+
+            match last_seen_index {
+                None => last_seen_index = Some(index_of_previous_sighting),
+                Some(last_seen) => {
+                    // we've hit sequence mode!
+                    sequence_size = Some(previous_sequence.len());
+                    break;
+                }
+            }
+        }
+        if iteration % 1000 == 0 {
+            println!("After iteration {}: {:?}", iteration + 1, dancers.dancers);
+        }
+    }
+
+    if let Some(ss) = sequence_size {
+        println!("Detected a sequence of size {}", ss);
+
+        let actually_required_iterations = iterations % ss;
+        println!("Proceeding to dance {} times", actually_required_iterations);
+        dancers = Dancers {
+            dancers: (*original_dancers).clone(),
+        };
+
+        for _ in 0..actually_required_iterations {
+            dancers = dancers.dance(moves);
+        }
+    } else {
+        println!("No sequence detected");
+    }
+
+    dancers.dancers
+}
+
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 enum DanceMove {
@@ -126,11 +140,14 @@ fn parse_move(m: &str) -> Option<DanceMove> {
 }
 
 impl Dancers {
-    fn dance<I>(&self, moves: I) -> Dancers
+    fn dance<I>(&self, moves: &I) -> Dancers
     where
-        I: IntoIterator<Item = DanceMove>,
+        I: IntoIterator<Item = DanceMove> + Clone,
     {
-        moves.into_iter().fold(self.clone(), |d, m| d.apply_move(m))
+        (*moves)
+            .clone()
+            .into_iter()
+            .fold(self.clone(), |d, m| d.apply_move(m))
     }
 
     fn apply_move(&self, m: DanceMove) -> Dancers {
@@ -240,5 +257,16 @@ mod tests {
     fn test_parse_partner() {
         let r = parse_move("pf/i");
         assert_eq!(r, Some(DanceMove::Partner('f', 'i')));
+    }
+
+    #[test]
+    fn test_sample_part_two() {
+        let moves = parse_moves("s1,x3/4,pe/b");
+
+        let result = dance_a_lot(&moves, &vec!['a', 'b', 'c', 'd', 'e'], 2)
+            .iter()
+            .collect::<String>();
+
+        assert_eq!(result, "ceadb");
     }
 }

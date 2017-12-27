@@ -19,7 +19,7 @@ mod util;
 // mod day13;
 // mod day14;
 // mod day15;
-// mod day16;
+mod day16;
 // mod day17;
 //mod day18;
 // mod day19;
@@ -84,7 +84,7 @@ fn main() {
         // 13 => day13::go(),
         // 14 => day14::go(),
         // 15 => day15::go(),
-        // 16 => day16::go(),
+        16 => day16::go(),
         // 17 => day17::go(),
         // 18 => {} //day18::go(),
         // 19 => day19::go(),
