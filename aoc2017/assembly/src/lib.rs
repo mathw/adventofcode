@@ -4,18 +4,27 @@ use std::str::FromStr;
 use std::collections::HashMap;
 use std::time::Duration;
 use std::thread;
+use std::io;
+use std::io::BufRead;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum RunMode {
     Day18PartOne,
     Day18PartTwo,
     Day23PartOne,
+    Day23PartTwo,
 }
 
 pub fn run_for_day_23_part_one(source: &str) -> Result<usize, ()> {
     let program = parse_program(source)?;
     let (tx, rx) = channel();
-    run_program(&program, RunMode::Day23PartOne, rx, tx, 0).map(|x| x as usize)
+    run_program(&program, RunMode::Day23PartOne, rx, tx, 0, false).map(|x| x as usize)
+}
+
+pub fn run_for_day_23_part_two(source: &str) -> Result<i64, ()> {
+    let program = parse_program(source)?;
+    let (tx, rx) = channel();
+    run_program(&program, RunMode::Day23PartTwo, rx, tx, 0, true)
 }
 
 pub fn run_for_day_18_part2(source: &str) -> Result<i64, ()> {
@@ -26,10 +35,10 @@ pub fn run_for_day_18_part2(source: &str) -> Result<i64, ()> {
     let (tx1, rx0) = channel();
 
     let prog0 = thread::spawn(move || {
-        run_program(&program1, RunMode::Day18PartTwo, rx0, tx0, 0)
+        run_program(&program1, RunMode::Day18PartTwo, rx0, tx0, 0, false)
     });
     let prog1 = thread::spawn(move || {
-        run_program(&program2, RunMode::Day18PartTwo, rx1, tx1, 1)
+        run_program(&program2, RunMode::Day18PartTwo, rx1, tx1, 1, false)
     });
 
     let _ = prog0.join();
@@ -41,12 +50,20 @@ pub fn run_for_day_18_part2(source: &str) -> Result<i64, ()> {
     }
 }
 
+fn read_enter() {
+    let mut buffer = String::new();
+    let stdin = io::stdin();
+    let mut handle = stdin.lock();
+    let _ = handle.read_line(&mut buffer);
+}
+
 pub fn run_program(
     program: &Program,
     mode: RunMode,
     rx: Receiver<i64>,
     tx: Sender<i64>,
     prog_id: i64,
+    step_mode: bool,
 ) -> Result<i64, ()> {
     let mut instructionp: isize = 0;
     let mut registers = HashMap::new();
@@ -57,10 +74,23 @@ pub fn run_program(
         set_register_value('p', prog_id, &mut registers);
     }
 
+    if mode == RunMode::Day23PartTwo {
+        set_register_value('a', 1, &mut registers);
+    }
+
     let mut send_counter = 0;
     let mut multiply_counter = 0;
 
     while instructionp >= 0 && instructionp < program.0.len() as isize {
+        if step_mode {
+            println!("Registers: {:?}", registers);
+            println!(
+                "Execute [{}] {:?}?",
+                instructionp,
+                program.0[instructionp as usize]
+            );
+            //read_enter();
+        }
         match program.0[instructionp as usize] {
             Instruction::Set(target, value) => set_register_value(
                 target,
@@ -78,7 +108,6 @@ pub fn run_program(
                 set_register_value(target, new_value, &mut registers);
             }
             Instruction::Multiply(target, value) => {
-                println!("Multiply!");
                 let new_value =
                     get_register_value(target, &registers) * get_parameter_value(value, &registers);
                 set_register_value(target, new_value, &mut registers);
@@ -146,6 +175,7 @@ pub fn run_program(
         RunMode::Day18PartOne => Err(()),
         RunMode::Day18PartTwo => Ok(send_counter),
         RunMode::Day23PartOne => Ok(multiply_counter),
+        RunMode::Day23PartTwo => Ok(get_register_value('h', &registers)),
     }
 }
 
