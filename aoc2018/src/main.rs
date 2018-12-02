@@ -26,6 +26,7 @@ fn main() -> Result<(), String> {
 
         let (result, time) = match day {
             1 => timed(|| run_day(Arc::new(Mutex::new(day1::Day1::new())))),
+            2 => timed(|| run_day(Arc::new(Mutex::new(day2::Day2::new())))),
             _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
         };
 
