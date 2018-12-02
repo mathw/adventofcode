@@ -1,4 +1,4 @@
-use day::Day;
+use crate::day::Day;
 use std::collections::HashSet;
 use std::str::FromStr;
 use std::sync::mpsc::Sender;

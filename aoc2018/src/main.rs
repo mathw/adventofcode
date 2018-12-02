@@ -3,15 +3,15 @@ mod day1;
 mod day2;
 mod util;
 
-use day::Day;
+use crate::day::Day;
 use std::env::args;
 use std::str::FromStr;
 use std::sync::mpsc::channel;
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::thread;
-use util::timed;
-use util::ErrString;
+use crate::util::timed;
+use crate::util::ErrString;
 
 fn main() -> Result<(), String> {
     println!("Advent of Code 2018");

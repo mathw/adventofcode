@@ -1,4 +1,4 @@
-use day::Day;
+use crate::day::Day;
 use std::collections::HashMap;
 use std::sync::mpsc::Sender;
 
