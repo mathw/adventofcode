@@ -24,7 +24,15 @@ impl Day for Day2 {
             .unwrap();
     }
 
-    fn part2(&mut self, sender: &Sender<String>) {}
+    fn part2(&mut self, sender: &Sender<String>) {
+        let codes = parse_input(self.input).collect::<Vec<_>>();
+        match find_close_codes(&codes) {
+            Some(common_letters) => sender
+                .send(format!("Common letters are {}", common_letters))
+                .unwrap(),
+            None => sender.send(format!("No close codes found")).unwrap(),
+        }
+    }
 }
 
 fn parse_input(input: &str) -> impl Iterator<Item = &str> {
@@ -59,6 +67,49 @@ fn checksum<'a, Item: AsRef<str>, I: Iterator<Item = Item>>(codes: I) -> u32 {
     }
 
     twice * thrice
+}
+
+fn has_one_letter_different(first: &str, second: &str) -> bool {
+    if first.len() != second.len() {
+        return false;
+    }
+
+    let mut different = 0;
+
+    for (a, b) in first.chars().zip(second.chars()) {
+        if a != b {
+            different += 1;
+        }
+        if different > 1 {
+            return false;
+        }
+    }
+
+    different == 1
+}
+
+fn common_letters(first: &str, second: &str) -> Vec<char> {
+    let mut common = Vec::new();
+
+    for (a, b) in first.chars().zip(second.chars()) {
+        if a == b {
+            common.push(a);
+        }
+    }
+
+    common
+}
+
+fn find_close_codes(codes: &Vec<&str>) -> Option<String> {
+    for outer in codes {
+        for inner in codes {
+            if has_one_letter_different(outer, inner) {
+                return Some(common_letters(outer, inner).iter().collect());
+            }
+        }
+    }
+
+    None
 }
 
 #[cfg(test)]
@@ -100,5 +151,37 @@ mod tests {
         ];
         let cs = checksum(v.iter());
         assert_eq!(cs, 12);
+    }
+
+    #[test]
+    fn no_letters_different() {
+        assert_eq!(has_one_letter_different("a", "a"), false)
+    }
+
+    #[test]
+    fn one_letter_different() {
+        assert_eq!(has_one_letter_different("aaa", "aba"), true);
+    }
+
+    #[test]
+    fn two_letters_different() {
+        assert_eq!(has_one_letter_different("aaa", "bba"), false);
+    }
+
+    #[test]
+    fn common_letters() {
+        assert_eq!(super::common_letters("a", "a"), vec!['a']);
+        assert_eq!(super::common_letters("aa", "aa"), vec!['a', 'a']);
+        assert_eq!(super::common_letters("abc", "aac"), vec!['a', 'c']);
+    }
+
+    #[test]
+    fn close_codes_example() {
+        assert_eq!(
+            find_close_codes(&vec![
+                "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"
+            ]),
+            Some("fgij".to_owned())
+        );
     }
 }

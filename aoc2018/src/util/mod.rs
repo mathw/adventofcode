@@ -1,6 +1,7 @@
 mod asmillis;
 
 use std::fmt::Display;
+use std::time::Instant;
 
 pub trait ErrString {
     type Success;
@@ -18,13 +19,11 @@ where
     }
 }
 
-use self::asmillis::AsMillis;
-use std::time::Instant;
-
 pub fn timed<W, R>(work: W) -> (R, u64)
 where
     W: Fn() -> R,
 {
     let timer = Instant::now();
-    (work(), timer.elapsed().as_millis())
+    // awkward syntax to avoid the warning about as_millis being added to the standard library in the future
+    (work(), asmillis::AsMillis::as_millis(&timer.elapsed()))
 }
