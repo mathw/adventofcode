@@ -1,32 +1,40 @@
+use day::Day;
 use std::collections::HashSet;
 use std::str::FromStr;
+use std::sync::mpsc::Sender;
 
-pub fn run() -> Result<(), String> {
-    let input = include_str!("input.txt");
-    let parsed = parse_input(input)?;
+pub struct Day1 {
+    input: &'static str,
+}
 
-    println!(
-        "Part One
-========
-"
-    );
+impl Day1 {
+    pub fn new() -> Day1 {
+        Day1 {
+            input: include_str!("input.txt"),
+        }
+    }
+}
 
-    let result: i32 = parsed.iter().sum();
+impl Day for Day1 {
+    fn part1(&mut self, sender: &Sender<String>) {
+        let parsed = parse_input(self.input).expect("Unable to parse input");
 
-    println!("The final frequency is {}", result);
+        let result: i32 = parsed.iter().sum();
 
-    println!(
-        "
-Part Two
-=========
-"
-    );
+        sender
+            .send(format!("The final frequency is {}", result))
+            .expect("Unable to send result to sender");
+    }
 
-    let result = part_two(&parsed);
+    fn part2(&mut self, sender: &Sender<String>) {
+        let parsed = parse_input(self.input).expect("Unable to parse input");
 
-    println!("The first frequency reached twice is {}", result);
+        let result = part_two(&parsed);
 
-    Ok(())
+        sender
+            .send(format!("The first frequency reached twice is {}", result))
+            .expect("Unable to send result to sender");
+    }
 }
 
 fn parse_input(input: &str) -> Result<Vec<i32>, String> {
