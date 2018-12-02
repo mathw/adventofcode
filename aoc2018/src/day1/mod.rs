@@ -16,7 +16,8 @@ pub fn run() -> Result<(), String> {
     println!("The final frequency is {}", result);
 
     println!(
-        "Part Two
+        "
+Part Two
 =========
 "
     );

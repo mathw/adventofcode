@@ -1,8 +1,10 @@
 mod day1;
+mod day2;
 mod util;
 
 use std::env::args;
 use std::str::FromStr;
+use util::timed;
 use util::ErrString;
 
 fn main() -> Result<(), String> {
@@ -16,9 +18,13 @@ fn main() -> Result<(), String> {
         let day = usize::from_str(&args[1]).err_string()?;
         println!("You have requested day {}", day);
 
-        match day {
-            1 => day1::run(),
-            _ => Err(format!("I don't know how to be day {} yet", day)),
-        }
+        let (result, time) = match day {
+            1 => timed(|| day1::run()),
+            2 => timed(|| day2::run()),
+            _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
+        };
+
+        println!("{}ms", time);
+        result
     }
 }
