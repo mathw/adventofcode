@@ -1,4 +1,5 @@
 pub mod asmillis;
+pub mod powerset;
 
 use std::time::Instant;
 use self::asmillis::AsMillis;
