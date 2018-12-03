@@ -45,7 +45,7 @@ impl Day for Day3 {
             .send(format!("Max claimed X: {}, Y: {}", max_x, max_y))
             .unwrap();
 
-        let mut fabric = Fabric::new(1000, 1000);
+        let mut fabric = Fabric::new(max_x, max_y);
         for claim in claims {
             fabric.add_claim(&claim);
         }
@@ -54,7 +54,7 @@ impl Day for Day3 {
 
         sender
             .send(format!(
-                "{}sq in of fabric are claimed at least twice",
+                "{} sq in of fabric are claimed at least twice",
                 result
             ))
             .unwrap();
@@ -248,11 +248,6 @@ impl Range {
     }
 
     fn claim(&self, start: usize, end: usize, claim_id: u32) -> Option<Vec<Range>> {
-        #[cfg(test)]
-        println!(
-            "Range::claim(): {}, {} into {}, {}",
-            start, end, self.start, self.end
-        );
         if self.start > start || self.end < end {
             return None;
         }
@@ -268,8 +263,6 @@ impl Range {
                 claims: self.claims,
                 claimed_by: self.claimed_by.clone(),
             };
-            #[cfg(test)]
-            println!("Creating before range {:?}", new);
             ranges.push(new);
         }
 
@@ -279,8 +272,6 @@ impl Range {
             claims: self.claims + 1,
             claimed_by: new_claimed_by.clone(),
         };
-        #[cfg(test)]
-        println!("Creating mid range {:?}", new);
         ranges.push(new);
 
         if end < self.end {
@@ -290,8 +281,6 @@ impl Range {
                 claims: self.claims,
                 claimed_by: self.claimed_by.clone(),
             };
-            #[cfg(test)]
-            println!("Creating after range {:?}", new);
             ranges.push(new);
         }
 
@@ -352,14 +341,6 @@ impl Fabric {
     }
 
     fn add_claim<C: Positioned + Dimensioned + Debug + Identified<u32>>(&mut self, claim: &C) {
-        #[cfg(test)]
-        println!(
-            "\n\nAdding claim @ {},{}: {}x{}",
-            claim.left(),
-            claim.top(),
-            claim.width(),
-            claim.height()
-        );
         for (row_index, row) in self
             .rows
             .iter_mut()
@@ -367,15 +348,6 @@ impl Fabric {
             .skip(claim.top())
             .take(claim.height())
         {
-            #[cfg(test)]
-            {
-                println!("\n== Row {}: {:?}", row_index, row);
-                println!(
-                    "Find affected ranges overlapping {}, {}",
-                    claim.left(),
-                    claim.right()
-                );
-            }
             let affected_ranges = row
                 .iter()
                 .enumerate()
@@ -386,12 +358,7 @@ impl Fabric {
             let mut affected_index_start = usize::MAX;
             let mut affected_index_end = 0;
 
-            #[cfg(test)]
-            println!("{} affected ranges", affected_ranges.len());
-
             for (index, affected_range) in affected_ranges {
-                #[cfg(test)]
-                println!("\n= Affected range #{}: {:?}", index, affected_range);
                 affected_index_start = usize::min(index, affected_index_start);
                 affected_index_end = usize::max(index, affected_index_end);
 
@@ -402,12 +369,6 @@ impl Fabric {
                     // this was a bug before
                     panic!("Zero-length subrange can never happen");
                 }
-
-                #[cfg(test)]
-                println!(
-                    "Overlap start: {}, overlap end: {}",
-                    overlap_start, overlap_end
-                );
 
                 if let Some(mut ranges) =
                     affected_range.claim(overlap_start, overlap_end, claim.id())
@@ -422,9 +383,6 @@ impl Fabric {
                     new_ranges.into_iter(),
                 )
                 .collect();
-
-            #[cfg(test)]
-            println!("Modified row: {:?}", row);
         }
     }
 
