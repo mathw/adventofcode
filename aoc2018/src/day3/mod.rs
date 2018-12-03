@@ -1,6 +1,7 @@
 use crate::day::Day;
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::collections::HashSet;
 use std::fmt::Debug;
 use std::fmt::{self, Display};
 use std::str::FromStr;
@@ -59,7 +60,29 @@ impl Day for Day3 {
             .unwrap();
     }
 
-    fn part2(&mut self, sender: &Sender<String>) {}
+    fn part2(&mut self, sender: &Sender<String>) {
+        let claims = self
+            .input
+            .lines()
+            .map(|line| Claim::from_str(line))
+            .collect::<Vec<_>>();
+        if claims.iter().any(|c| c.is_err()) {
+            sender.send(format!("Error parsing claims")).unwrap();
+            return;
+        }
+
+        sender
+            .send(format!("Parsed {} claims", claims.len()))
+            .unwrap();
+
+        let claims = claims.into_iter().map(|m| m.unwrap()).collect::<Vec<_>>();
+
+        let result = find_non_overlapping_claims(&claims);
+
+        sender
+            .send(format!("Non-overlapping claims: {:?}", result))
+            .unwrap();
+    }
 }
 
 trait Dimensioned {
@@ -84,6 +107,23 @@ struct Rect {
     left: usize,
     width: usize,
     height: usize,
+}
+
+impl Rect {
+    fn intersects(&self, other: &Rect) -> bool {
+        !(self.is_above(other)
+            || self.is_left(other)
+            || other.is_above(self)
+            || other.is_left(self))
+    }
+
+    fn is_above(&self, other: &Rect) -> bool {
+        self.bottom() <= other.top
+    }
+
+    fn is_left(&self, other: &Rect) -> bool {
+        self.right() <= other.left
+    }
 }
 
 impl Positioned for Rect {
@@ -117,6 +157,12 @@ impl Dimensioned for Rect {
 struct Claim {
     id: u32,
     rect: Rect,
+}
+
+impl Claim {
+    fn intersects(&self, other: &Claim) -> bool {
+        self.rect.intersects(&other.rect)
+    }
 }
 
 impl Positioned for Claim {
@@ -188,6 +234,7 @@ struct Range {
     start: usize,
     end: usize,
     claims: usize,
+    claimed_by: Vec<u32>,
 }
 
 impl Range {
@@ -196,10 +243,11 @@ impl Range {
             start,
             end,
             claims: 0,
+            claimed_by: vec![],
         }
     }
 
-    fn claim(&self, start: usize, end: usize) -> Option<Vec<Range>> {
+    fn claim(&self, start: usize, end: usize, claim_id: u32) -> Option<Vec<Range>> {
         #[cfg(test)]
         println!(
             "Range::claim(): {}, {} into {}, {}",
@@ -209,12 +257,16 @@ impl Range {
             return None;
         }
 
+        let mut new_claimed_by = self.claimed_by.clone();
+        new_claimed_by.push(claim_id);
+
         let mut ranges = Vec::new();
         if start > self.start {
             let new = Range {
                 start: self.start,
                 end: start,
                 claims: self.claims,
+                claimed_by: self.claimed_by.clone(),
             };
             #[cfg(test)]
             println!("Creating before range {:?}", new);
@@ -225,6 +277,7 @@ impl Range {
             start: start,
             end: end,
             claims: self.claims + 1,
+            claimed_by: new_claimed_by.clone(),
         };
         #[cfg(test)]
         println!("Creating mid range {:?}", new);
@@ -235,6 +288,7 @@ impl Range {
                 start: end,
                 end: self.end,
                 claims: self.claims,
+                claimed_by: self.claimed_by.clone(),
             };
             #[cfg(test)]
             println!("Creating after range {:?}", new);
@@ -275,6 +329,10 @@ impl Range {
     fn claims(&self) -> usize {
         self.claims
     }
+
+    fn claimed_by(&self) -> Vec<u32> {
+        self.claimed_by.clone()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -293,7 +351,7 @@ impl Fabric {
         Fabric { rows }
     }
 
-    fn add_claim<C: Positioned + Dimensioned + Debug>(&mut self, claim: &C) {
+    fn add_claim<C: Positioned + Dimensioned + Debug + Identified<u32>>(&mut self, claim: &C) {
         #[cfg(test)]
         println!(
             "\n\nAdding claim @ {},{}: {}x{}",
@@ -351,7 +409,9 @@ impl Fabric {
                     overlap_start, overlap_end
                 );
 
-                if let Some(mut ranges) = affected_range.claim(overlap_start, overlap_end) {
+                if let Some(mut ranges) =
+                    affected_range.claim(overlap_start, overlap_end, claim.id())
+                {
                     new_ranges.append(&mut ranges);
                 }
             }
@@ -410,6 +470,25 @@ impl Display for Fabric {
     }
 }
 
+fn find_non_overlapping_claims(claims: &Vec<Claim>) -> Vec<u32> {
+    let mut candidates = HashSet::new();
+
+    for claim in claims {
+        candidates.insert(claim.id);
+    }
+
+    for outer in claims {
+        for inner in claims {
+            if outer != inner && outer.intersects(inner) {
+                candidates.remove(&outer.id());
+                candidates.remove(&inner.id());
+            }
+        }
+    }
+
+    candidates.into_iter().collect::<Vec<_>>()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -436,7 +515,7 @@ mod tests {
     fn claim_middle_of_range_get_three_ranges() {
         let range = Range::new(0, 6);
 
-        let ranges = range.claim(2, 4);
+        let ranges = range.claim(2, 4, 1);
 
         assert_eq!(
             ranges,
@@ -444,17 +523,20 @@ mod tests {
                 Range {
                     start: 0,
                     end: 2,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 2,
                     end: 4,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![1]
                 },
                 Range {
                     start: 4,
                     end: 6,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ])
         );
@@ -587,7 +669,8 @@ O...
             &vec![Range {
                 start: 0,
                 end: 8,
-                claims: 0
+                claims: 0,
+                claimed_by: vec![]
             }]
         );
         let second_row = (&fabric.rows).iter().nth(1).unwrap();
@@ -597,17 +680,20 @@ O...
                 Range {
                     start: 0,
                     end: 3,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 3,
                     end: 7,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![2]
                 },
                 Range {
                     start: 7,
                     end: 8,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ]
         );
@@ -618,17 +704,20 @@ O...
                 Range {
                     start: 0,
                     end: 3,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 3,
                     end: 7,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![2]
                 },
                 Range {
                     start: 7,
                     end: 8,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ]
         );
@@ -639,27 +728,32 @@ O...
                 Range {
                     start: 0,
                     end: 1,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 1,
                     end: 3,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![1]
                 },
                 Range {
                     start: 3,
                     end: 5,
-                    claims: 2
+                    claims: 2,
+                    claimed_by: vec![1, 2]
                 },
                 Range {
                     start: 5,
                     end: 7,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![2]
                 },
                 Range {
                     start: 7,
                     end: 8,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ]
         );
@@ -670,27 +764,32 @@ O...
                 Range {
                     start: 0,
                     end: 1,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 1,
                     end: 3,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![1]
                 },
                 Range {
                     start: 3,
                     end: 5,
-                    claims: 2
+                    claims: 2,
+                    claimed_by: vec![1, 2]
                 },
                 Range {
                     start: 5,
                     end: 7,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![2]
                 },
                 Range {
                     start: 7,
                     end: 8,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ],
             "fifth row"
@@ -702,22 +801,26 @@ O...
                 Range {
                     start: 0,
                     end: 1,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 1,
                     end: 5,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![1]
                 },
                 Range {
                     start: 5,
                     end: 7,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![3]
                 },
                 Range {
                     start: 7,
                     end: 8,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ],
             "sixth row"
@@ -729,22 +832,26 @@ O...
                 Range {
                     start: 0,
                     end: 1,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 },
                 Range {
                     start: 1,
                     end: 5,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![1]
                 },
                 Range {
                     start: 5,
                     end: 7,
-                    claims: 1
+                    claims: 1,
+                    claimed_by: vec![3]
                 },
                 Range {
                     start: 7,
                     end: 8,
-                    claims: 0
+                    claims: 0,
+                    claimed_by: vec![]
                 }
             ],
             "seventh row"
@@ -837,5 +944,15 @@ OXXXO...
             "After fifth range"
         );
         assert_eq!(9, fabric.area_over_claims(2), "After fifth range");
+    }
+    #[test]
+    fn part_two_example() {
+        let claims = vec![
+            Claim::from_str("#1 @ 1,3: 4x4").unwrap(),
+            Claim::from_str("#2 @ 3,1: 4x4").unwrap(),
+            Claim::from_str("#3 @ 5,5: 2x2").unwrap(),
+        ];
+
+        assert_eq!(find_non_overlapping_claims(&claims), vec![3]);
     }
 }
