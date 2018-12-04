@@ -30,7 +30,11 @@ fn main() -> Result<(), String> {
             1 => timed(|| run_day(Arc::new(Mutex::new(day1::Day1::new())))),
             2 => timed(|| run_day(Arc::new(Mutex::new(day2::Day2::new())))),
             3 => timed(|| run_day(Arc::new(Mutex::new(day3::Day3::new())))),
-            4 => timed(|| run_day(Arc::new(Mutex::new(day4::Day4::new())))),
+            4 => timed(|| {
+                run_day(Arc::new(Mutex::new(
+                    day4::Day4::new().expect("Day 4 could not parse input"),
+                )))
+            }),
             _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
         };
 

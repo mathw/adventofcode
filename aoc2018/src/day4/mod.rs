@@ -6,27 +6,23 @@ use std::str::FromStr;
 use std::sync::mpsc::Sender;
 
 pub struct Day4 {
-    input: &'static str,
+    guards: HashMap<u16, Guard>,
 }
 
 impl Day4 {
-    pub fn new() -> Day4 {
-        Day4 {
-            input: include_str!("input.txt"),
-        }
+    pub fn new() -> Option<Day4> {
+        let input = include_str!("input.txt");
+        let guards = Day4::prepare(input)?;
+        Some(Day4 { guards })
     }
-}
 
-impl Day for Day4 {
-    fn part1(&mut self, sender: &Sender<String>) {
-        let events = self
-            .input
+    fn prepare(input: &str) -> Option<HashMap<u16, Guard>> {
+        let events = input
             .lines()
             .map(|line| parse_entry(line))
             .collect::<Option<Vec<RawEntry>>>();
         if events.is_none() {
-            sender.send("Unable to parse entries".into()).unwrap();
-            return;
+            return None;
         }
 
         let events = events.unwrap();
@@ -56,8 +52,14 @@ impl Day for Day4 {
             }
         }
 
-        let mut sleepiest_guard = guards.values().nth(0).unwrap();
-        for guard in guards.values() {
+        Some(guards)
+    }
+}
+
+impl Day for Day4 {
+    fn part1(&mut self, sender: &Sender<String>) {
+        let mut sleepiest_guard = self.guards.values().nth(0).unwrap();
+        for guard in self.guards.values() {
             if guard.total_minutes_asleep > sleepiest_guard.total_minutes_asleep {
                 sleepiest_guard = guard;
             }
@@ -74,7 +76,30 @@ impl Day for Day4 {
             .unwrap();
     }
 
-    fn part2(&mut self, sender: &Sender<String>) {}
+    fn part2(&mut self, sender: &Sender<String>) {
+        let mut max_minute_count = 0;
+        let mut max_minute = 0;
+        let mut max_minute_count_guard_id = 0;
+
+        for guard in self.guards.values() {
+            let count = guard.minute_most_often_asleep_count();
+            if max_minute_count < count {
+                max_minute_count = count;
+                max_minute = guard.minute_most_often_asleep();
+                max_minute_count_guard_id = guard.id;
+            }
+        }
+
+        sender
+            .send(format!(
+                "Guard #{} was asleep {} times in minute {} ({})",
+                max_minute_count_guard_id,
+                max_minute_count,
+                max_minute,
+                max_minute_count_guard_id as usize * max_minute as usize
+            ))
+            .unwrap();
+    }
 }
 
 fn parse_entry(source: &str) -> Option<RawEntry> {
@@ -186,6 +211,10 @@ impl Guard {
         }
 
         minute
+    }
+
+    fn minute_most_often_asleep_count(&self) -> usize {
+        self.minutes_asleep[&self.minute_most_often_asleep()]
     }
 }
 
