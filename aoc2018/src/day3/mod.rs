@@ -26,17 +26,20 @@ impl Day for Day3 {
             .input
             .lines()
             .map(|line| Claim::from_str(line))
-            .collect::<Vec<_>>();
-        if claims.iter().any(|c| c.is_err()) {
-            sender.send(format!("Error parsing claims")).unwrap();
+            .collect::<Result<Vec<Claim>, String>>();
+
+        if claims.is_err() {
+            sender
+                .send(format!("Unable to parse claims: {}", claims.unwrap_err()))
+                .unwrap();
             return;
         }
+
+        let claims = claims.unwrap();
 
         sender
             .send(format!("Parsed {} claims", claims.len()))
             .unwrap();
-
-        let claims = claims.into_iter().map(|m| m.unwrap()).collect::<Vec<_>>();
 
         let max_x = claims.iter().map(|m| m.right()).max().unwrap_or(0);
         let max_y = claims.iter().map(|m| m.bottom()).max().unwrap_or(0);
@@ -318,10 +321,6 @@ impl Range {
     fn claims(&self) -> usize {
         self.claims
     }
-
-    fn claimed_by(&self) -> Vec<u32> {
-        self.claimed_by.clone()
-    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -341,13 +340,7 @@ impl Fabric {
     }
 
     fn add_claim<C: Positioned + Dimensioned + Debug + Identified<u32>>(&mut self, claim: &C) {
-        for (row_index, row) in self
-            .rows
-            .iter_mut()
-            .enumerate()
-            .skip(claim.top())
-            .take(claim.height())
-        {
+        for row in self.rows.iter_mut().skip(claim.top()).take(claim.height()) {
             let affected_ranges = row
                 .iter()
                 .enumerate()
