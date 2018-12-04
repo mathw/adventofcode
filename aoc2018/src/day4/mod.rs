@@ -1,6 +1,7 @@
 use crate::day::Day;
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::collections::HashMap;
 use std::str::FromStr;
 use std::sync::mpsc::Sender;
 
@@ -30,6 +31,47 @@ impl Day for Day4 {
 
         let events = events.unwrap();
         let sorted_events = sort_raw_entries(events);
+
+        let mut guards = HashMap::new();
+
+        let mut current_guard_id = 0;
+        let mut current_sleep_start_hour = 0;
+        let mut current_sleep_start_minute = 0;
+
+        for entry in sorted_events {
+            match entry.event {
+                RawEvent::BeginShift(guard_id) => current_guard_id = guard_id,
+                RawEvent::Sleep => {
+                    current_sleep_start_hour = entry.hour;
+                    current_sleep_start_minute = entry.minute
+                }
+                RawEvent::Wake => {
+                    let guard = guards
+                        .entry(current_guard_id)
+                        .or_insert(Guard::new(current_guard_id));
+                    let sleep_duration = (entry.hour * 60 + entry.minute)
+                        - (current_sleep_start_hour * 60 + current_sleep_start_minute);
+                    guard.add_sleeping_minutes(current_sleep_start_minute, sleep_duration);
+                }
+            }
+        }
+
+        let mut sleepiest_guard = guards.values().nth(0).unwrap();
+        for guard in guards.values() {
+            if guard.total_minutes_asleep > sleepiest_guard.total_minutes_asleep {
+                sleepiest_guard = guard;
+            }
+        }
+
+        sender
+            .send(format!(
+                "Sleepiest guard #{} for {} minutes most often at {} ({})",
+                sleepiest_guard.id,
+                sleepiest_guard.total_minutes_asleep,
+                sleepiest_guard.minute_most_often_asleep(),
+                sleepiest_guard.id * sleepiest_guard.minute_most_often_asleep() as u16
+            ))
+            .unwrap();
     }
 
     fn part2(&mut self, sender: &Sender<String>) {}
@@ -109,17 +151,41 @@ enum RawEvent {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-struct Minute {
-    day: u32,
-    hour: u8,
-    minute: u8,
-    guard: u16,
-    is_asleep: bool
+struct Guard {
+    id: u16,
+    total_minutes_asleep: u32,
+    minutes_asleep: HashMap<u8, usize>,
 }
 
-impl Minute {
-    fn new(day: u32, hour: u8, minute: u8, guard: u16, is_asleep: bool) -> Minute {
-        Minute { day, hour, minute, guard, is_asleep }
+impl Guard {
+    fn new(id: u16) -> Guard {
+        Guard {
+            id: id,
+            total_minutes_asleep: 0,
+            minutes_asleep: HashMap::new(),
+        }
+    }
+
+    fn add_sleeping_minutes(&mut self, start_minute: u8, duration: u8) {
+        self.total_minutes_asleep += duration as u32;
+        for minute in start_minute..(start_minute + duration) {
+            let entry = self.minutes_asleep.entry(minute % 60).or_insert(0);
+            *entry += 1;
+        }
+    }
+
+    fn minute_most_often_asleep(&self) -> u8 {
+        let mut minute = 0;
+        let mut minute_times = 0;
+
+        for (&m, &t) in self.minutes_asleep.iter() {
+            if t > minute_times {
+                minute_times = t;
+                minute = m;
+            }
+        }
+
+        minute
     }
 }
 
