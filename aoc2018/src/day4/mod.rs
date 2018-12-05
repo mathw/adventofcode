@@ -108,7 +108,7 @@ fn parse_entry(source: &str) -> Option<RawEntry> {
     }
 
     if let Some(cap) = ENTRY_RE.captures_iter(source).next() {
-        let mut entry = RawEntry::new(
+        let entry = RawEntry::new(
             u32::from_str(&cap[1]).ok()? * 10000
                 + u32::from_str(&cap[2]).ok()? * 100
                 + u32::from_str(&cap[3]).ok()?,
