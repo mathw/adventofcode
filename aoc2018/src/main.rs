@@ -4,6 +4,7 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
 mod util;
 
 use crate::day::Day;
@@ -41,6 +42,7 @@ fn main() -> Result<(), String> {
                     day5::Day5::new().expect("Day 5 could not parse input"),
                 )))
             }),
+            6 => timed(|| run_day(Arc::new(Mutex::new(day6::Day6::new())))),
             _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
         };
 
