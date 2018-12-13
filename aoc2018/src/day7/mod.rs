@@ -1,3 +1,10 @@
+mod dependencymap;
+mod task;
+mod timeline;
+
+use self::dependencymap::DependencyMap;
+use self::task::Task;
+use self::timeline::Timeline;
 use crate::day::Day;
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -160,261 +167,48 @@ fn determine_order(deps: &Vec<(char, char)>) -> Option<String> {
     Some(result)
 }
 
-fn build_prerequisite_maps(
-    deps: &Vec<(char, char)>,
-    map_prerequisite_to_target: &mut HashMap<char, Vec<char>>,
-    map_target_to_prerequisite: &mut HashMap<char, Vec<char>>,
-    all_nodes: &mut HashSet<char>,
-    all_with_prerequisites: &mut HashSet<char>,
-    all_prerequisites: &mut HashSet<char>,
-) -> Option<char> {
-    for (prerequisite, wanted) in deps.iter() {
-        all_nodes.insert(*prerequisite);
-        all_nodes.insert(*wanted);
-
-        all_prerequisites.insert(*prerequisite);
-        all_with_prerequisites.insert(*wanted);
-
-        #[cfg(test)]
-        println!("{} is a prerequisite for {}", prerequisite, wanted);
-        let entry = map_prerequisite_to_target
-            .entry(*prerequisite)
-            .or_insert(Vec::new());
-        entry.push(*wanted);
-
-        let entry = map_target_to_prerequisite
-            .entry(*wanted)
-            .or_insert(Vec::new());
-        entry.push(*prerequisite);
-    }
-
-    for (_, val) in map_prerequisite_to_target.iter_mut() {
-        val.sort();
-    }
-
-    #[cfg(test)]
-    println!(
-        "Nodes with prerequisites: {:?}\nNodes which are prerequisites: {:?}",
-        all_with_prerequisites, all_prerequisites
-    );
-
-    let terminal_node = all_nodes.difference(&all_prerequisites).cloned().next();
-    #[cfg(test)]
-    println!("Terminal node is {}", terminal_node.unwrap_or('0'));
-
-    return terminal_node;
-}
-
-fn get_starting_nodes(
-    all_nodes: &HashSet<char>,
-    all_with_prerequisites: &HashSet<char>,
-) -> Vec<char> {
-    let mut starting_nodes: Vec<char> = all_nodes
-        .difference(&all_with_prerequisites)
-        .cloned()
-        .collect();
-    starting_nodes.sort();
-
-    starting_nodes
-}
-
 fn determine_time(deps: &Vec<(char, char)>, step_time_factor: u32, workers: usize) -> Option<u32> {
-    let mut map_prerequisite_to_target: HashMap<char, Vec<char>> = HashMap::new();
-    let mut map_target_to_prerequisite: HashMap<char, Vec<char>> = HashMap::new();
-    let mut all_nodes: HashSet<char> = HashSet::new();
-    let mut all_prerequisites: HashSet<char> = HashSet::new();
-    let mut all_with_prerequisites: HashSet<char> = HashSet::new();
-
-    let terminal_node = build_prerequisite_maps(
-        deps,
-        &mut map_prerequisite_to_target,
-        &mut map_target_to_prerequisite,
-        &mut all_nodes,
-        &mut all_with_prerequisites,
-        &mut all_prerequisites,
-    )?;
-
-    let starting_nodes = get_starting_nodes(&all_nodes, &all_with_prerequisites);
-
-    let mut completed: HashSet<char> = HashSet::new();
-    completed.extend(starting_nodes.iter().cloned());
-
     let time_for_step = |c| time_for_letter(c) + step_time_factor;
 
-    let mut time_taken = 0;
+    let mut dependency_map = DependencyMap::new(deps.clone());
 
-    let mut available: HashSet<char> = starting_nodes.iter().skip(workers).cloned().collect();
+    let mut timeline = Timeline::new(workers);
 
-    let mut tasks: Vec<Task> = starting_nodes
-        .into_iter()
-        .take(workers)
-        .map(|c| Task::new(c, time_for_step(c)))
-        .collect();
-    #[cfg(test)]
-    println!("Starting tasks are {:?}", tasks);
+    let mut time = 0;
 
-    while !completed.contains(&terminal_node) {
-        time_taken += 1;
+    let mut waiting_for = HashSet::new();
+
+    while !dependency_map.is_finished() {
         #[cfg(test)]
-        println!("Time {}", time_taken);
-        step(
-            &mut tasks,
-            &mut completed,
-            &mut map_prerequisite_to_target,
-            &mut available,
-            &mut map_target_to_prerequisite,
-            workers,
-            time_for_step,
-        );
-    }
+        println!("Time is {}", time);
 
-    Some(time_taken)
-}
-
-fn remove_newly_completed_tasks<'a>(
-    newly_completed: impl Iterator<Item = &'a Task>,
-    tasks: &mut Vec<Task>,
-) {
-    for c in newly_completed {
-        if let Some(idx) = tasks
-            .iter()
-            .enumerate()
-            .filter(|(_, t)| *t == c)
-            .map(|(i, _)| i)
-            .next()
-        {
-            tasks.remove(idx);
+        for completed in timeline.completed_at(time) {
+            dependency_map.complete(completed);
         }
-    }
-}
 
-fn get_candidates(
-    newly_completed: &HashSet<Task>,
-    map_prerequisite_to_target: &HashMap<char, Vec<char>>,
-) -> Vec<char> {
-    newly_completed
-        .iter()
-        .filter_map(|t| map_prerequisite_to_target.get(&t.name))
-        .flat_map(|x| x)
-        .cloned()
-        .collect()
-}
+        let inserting_now = dependency_map
+            .next_available()
+            .into_iter()
+            .filter(|c| !waiting_for.contains(c))
+            .take(timeline.free_workers_at(time))
+            .map(|c| Task::new(c, time_for_step(c)))
+            .collect::<Vec<Task>>();
 
-fn available_candidates<'a>(
-    candidates: &'a std::vec::Vec<char>,
-    map_target_to_prerequisite: &'a HashMap<char, Vec<char>>,
-    completed: &'a HashSet<char>,
-) -> impl Iterator<Item = &'a char> {
-    candidates.iter().filter_map(move |c| {
-        let prerequisites: HashSet<char> = map_target_to_prerequisite
-            .get(c)?
-            .iter()
-            .filter(|p| !completed.contains(*p))
-            .cloned()
-            .collect();
-        if prerequisites.is_empty() {
-            Some(c)
-        } else {
-            None
+        for task in inserting_now {
+            #[cfg(test)]
+            println!("Adding {} at/after {}", task.name(), time);
+
+            waiting_for.insert(task.name());
+            timeline.add_task_after(time, task);
         }
-    })
-}
 
-fn step<F>(
-    tasks: &mut Vec<Task>,
-    completed: &mut HashSet<char>,
-    map_prerequisite_to_target: &mut HashMap<char, Vec<char>>,
-    available: &mut HashSet<char>,
-    map_target_to_prerequisite: &mut HashMap<char, Vec<char>>,
-    workers: usize,
-    time_for_step: F,
-) where
-    F: Fn(char) -> u32,
-{
-    let mut newly_completed = HashSet::<Task>::new();
-    for t in tasks.iter_mut() {
-        if t.tick() {
-            newly_completed.insert(t.clone());
-        }
-    }
-
-    if newly_completed.is_empty() {
-        return;
+        time += 1;
     }
 
     #[cfg(test)]
-    println!("Completed: {:?}", newly_completed);
+    println!("Dependency map is complete.\n\n{}", timeline);
 
-    remove_newly_completed_tasks(newly_completed.iter(), tasks);
-
-    completed.extend(newly_completed.iter().map(|t| t.name));
-
-    let candidates: Vec<char> = get_candidates(&newly_completed, map_prerequisite_to_target);
-
-    #[cfg(test)]
-    println!(
-        "Candidates {:?}, completed {:?}, available: {:?}, free workers: {}",
-        candidates,
-        completed,
-        available,
-        workers - tasks.len()
-    );
-
-    available.extend(available_candidates(
-        &candidates,
-        map_target_to_prerequisite,
-        completed,
-    ));
-
-    let mut possible_moves: Vec<char> = available.iter().cloned().collect();
-    possible_moves.sort();
-
-    let next_moves: Vec<char> = possible_moves
-        .iter()
-        .take(workers - tasks.len())
-        .cloned()
-        .collect();
-
-    for m in next_moves.iter() {
-        available.remove(m);
-    }
-
-    #[cfg(test)]
-    println!(
-        "Possible moves: {:?}, next moves: {:?}",
-        possible_moves, next_moves
-    );
-
-    if next_moves.is_empty() {
-        return;
-    }
-
-    tasks.extend(next_moves.iter().map(|c| Task::new(*c, time_for_step(*c))));
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Hash)]
-struct Task {
-    name: char,
-    time_remaining: u32,
-}
-
-impl Task {
-    fn new(name: char, time: u32) -> Task {
-        Task {
-            name,
-            time_remaining: time,
-        }
-    }
-
-    fn tick(&mut self) -> bool {
-        if self.time_remaining == 1 {
-            self.time_remaining = 0;
-            return true;
-        } else {
-            self.time_remaining -= 1;
-            return false;
-        }
-    }
+    Some(timeline.total_time_required())
 }
 
 fn time_for_letter(c: char) -> u32 {
@@ -510,4 +304,5 @@ Step F must be finished before step E can begin."
 
         assert_eq!(time, Some(15));
     }
+
 }
