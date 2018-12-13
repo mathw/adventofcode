@@ -23,18 +23,28 @@ impl Node {
         Ok(Node { children, metadata })
     }
 
-    pub fn children(&self) -> &Vec<Node> {
-        &self.children
-    }
-
-    pub fn metadata(&self) -> &Vec<u8> {
-        &self.metadata
-    }
-
     pub fn sum_metadata(&self) -> u16 {
         let me = self.metadata.iter().fold(0, |acc, x| acc + *x as u16);
         let children: u16 = self.children.iter().map(|c| c.sum_metadata()).sum();
         me + children
+    }
+
+    pub fn value(&self) -> u16 {
+        if self.children.is_empty() {
+            self.metadata.iter().fold(0, |acc, x| acc + *x as u16)
+        } else {
+            self.metadata.iter().fold(0, |acc, index| {
+                if *index == 0 {
+                    0
+                } else {
+                    acc + self
+                        .children
+                        .get((*index - 1) as usize) // indexes are 1-based!!
+                        .map(|n| n.value())
+                        .unwrap_or(0)
+                }
+            })
+        }
     }
 }
 
@@ -139,4 +149,26 @@ fn part_one_example() {
     let sum = root.sum_metadata();
 
     assert_eq!(sum, 138);
+}
+
+#[test]
+fn node_value_no_children() {
+    let nums = vec![0, 2, 5, 6];
+
+    let root = Node::from_u8(&mut nums.into_iter());
+
+    let value = root.map(|n| n.value());
+
+    assert_eq!(value, Ok(11));
+}
+
+#[test]
+fn node_value_children() {
+    let nums = vec![2, 2, 0, 1, 4, 0, 1, 1, 1, 6];
+
+    let root = Node::from_u8(&mut nums.into_iter());
+
+    let value = root.map(|n| n.value());
+
+    assert_eq!(value, Ok(4));
 }
