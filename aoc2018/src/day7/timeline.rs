@@ -248,41 +248,6 @@ fn example_tasks_in_order() {
 }
 
 #[test]
-fn example_tasks_add_after() {
-    let mut timeline = Timeline::new(2);
-    let task_a = Task::new('A', 1);
-    let task_b = Task::new('B', 2);
-    let task_c = Task::new('C', 3);
-    let task_d = Task::new('D', 4);
-    let task_f = Task::new('F', 6);
-
-    timeline.add_task(task_c.clone());
-    assert_eq!(timeline.total_time_required(), 3);
-
-    let after = timeline.next_free_after_all(vec!['C']);
-    assert_eq!(after, Some(3), "C should take 3 to complete");
-    timeline.add_task_after(after.unwrap(), task_a.clone());
-    timeline.add_task_after(after.unwrap(), task_f.clone());
-
-    let after = timeline.next_free_after_all(vec!['A']);
-    assert_eq!(after, Some(4), "A should be complete after 4 ticks");
-
-    timeline.add_task_after(after.unwrap(), task_b.clone());
-
-    let after = timeline.next_free_after_all(vec!['B']);
-    assert_eq!(after, Some(6), "B should be complete after 6 ticks");
-
-    timeline.add_task_after(after.unwrap(), task_d.clone());
-
-    let after = timeline.next_free_after_all(vec!['D', 'F']);
-    assert_eq!(
-        after,
-        Some(10),
-        "D and F should both be complete after 10 ticks"
-    );
-}
-
-#[test]
 fn free_workers_at() {
     let mut timeline = Timeline::new(3);
 
