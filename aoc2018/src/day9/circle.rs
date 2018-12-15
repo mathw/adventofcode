@@ -1,12 +1,13 @@
-use slab::Slab;
 use std::fmt;
 use std::ops::{Index, IndexMut};
 use std::usize;
 
 // based very heavily on https://www.reddit.com/r/rust/comments/7zsy72/writing_a_doubly_linked_list_in_rust_is_easy/
+// but I'm not using the slab crate because I can handle the memory wastage and not using it saves me
+// 100ms
 
 pub struct Circle {
-    slab: Slab<Marble>,
+    vec: Vec<Marble>,
     current_marble: Pointer,
     next_value: u32,
 }
@@ -35,31 +36,32 @@ impl Pointer {
 impl Index<Pointer> for Circle {
     type Output = Marble;
 
-    fn index(&self, index: Pointer) -> &Marble {
-        &self.slab[index.0]
+    fn index(&self, index: Pointer) -> &Self::Output {
+        &self.vec[index.0]
     }
 }
 
 impl IndexMut<Pointer> for Circle {
-    fn index_mut(&mut self, index: Pointer) -> &mut Marble {
-        &mut self.slab[index.0]
+    fn index_mut(&mut self, index: Pointer) -> &mut Self::Output {
+        &mut self.vec[index.0]
     }
 }
 
 impl Circle {
     pub fn new(marbles: usize) -> Circle {
         let mut circle = Circle {
-            slab: Slab::with_capacity(marbles),
+            vec: Vec::with_capacity(marbles),
             current_marble: Pointer::null(),
             next_value: 1,
         };
 
-        let n = Pointer(circle.slab.insert(Marble {
+        circle.vec.push(Marble {
             value: 0,
             prev: Pointer::null(),
             next: Pointer::null(),
-        }));
+        });
 
+        let n = Pointer(0);
         circle[n].prev = n;
         circle[n].next = n;
         circle.current_marble = n;
@@ -69,11 +71,12 @@ impl Circle {
 
     fn insert_before(&mut self, node: Pointer) -> Pointer {
         let prev = self[node].prev;
-        let n = Pointer(self.slab.insert(Marble {
+        self.vec.push(Marble {
             value: self.next_value,
             prev: prev,
             next: node,
-        }));
+        });
+        let n = Pointer(self.vec.len() - 1);
 
         self[prev].next = n;
         self[node].prev = n;
@@ -97,7 +100,9 @@ impl Circle {
 
         self.current_marble = next;
 
-        let removed_value = self.slab.remove(node.0).value;
+        let removed_value = self.vec[node.0].value;
+        // yes it leaves the value in place, but nobody's ever going to point to it again
+        // in this puzzle scenario it doesn't matter much anyway
 
         removed_value
     }
@@ -111,7 +116,6 @@ impl Circle {
     }
 
     fn insert_two_right(&mut self) {
-        let new_value = self.next_value;
         let mut new_location = self.current_marble;
         for _ in 0..2 {
             new_location = self[new_location].next;
