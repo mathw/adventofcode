@@ -23,7 +23,7 @@ impl Circle {
         target
     }
 
-    pub fn with_new_marble(&self) -> (Circle, u32) {
+    pub fn add_new_marble(&mut self) -> u32 {
         let new_marble_value = self.highest_marble_value + 1;
 
         if new_marble_value % 23 == 0 {
@@ -42,35 +42,27 @@ impl Circle {
 
             let removed_marble_value = self.marbles[removed_marble_index];
 
-            let mut new_marbles = self.marbles.clone();
-            let _: Vec<_> = new_marbles
+            let _: Vec<_> = self
+                .marbles
                 .splice(removed_marble_index..removed_marble_index + 1, vec![])
                 .collect();
 
-            (
-                Circle {
-                    marbles: new_marbles,
-                    current_marble_index: removed_marble_index,
-                    highest_marble_value: new_marble_value,
-                },
-                new_marble_value + removed_marble_value,
-            )
+            self.current_marble_index = removed_marble_index;
+            self.highest_marble_value = new_marble_value;
+
+            new_marble_value + removed_marble_value
         } else {
             let location = self.find_insert_location();
 
-            let mut new_marbles = self.marbles.clone();
-            let _: Vec<_> = new_marbles
+            let _: Vec<_> = self
+                .marbles
                 .splice(location..location, vec![new_marble_value])
                 .collect();
 
-            (
-                Circle {
-                    marbles: new_marbles,
-                    current_marble_index: location,
-                    highest_marble_value: new_marble_value,
-                },
-                0,
-            )
+            self.current_marble_index = location;
+            self.highest_marble_value = new_marble_value;
+
+            0
         }
     }
 }
@@ -132,14 +124,14 @@ fn find_insert_location_circle_of_four() {
 
 #[test]
 fn add_marbles() {
-    let starting = Circle::new();
-    let (first, _) = starting.with_new_marble();
-    let (second, _) = first.with_new_marble();
-    let (third, _) = second.with_new_marble();
-    let (fourth, _) = third.with_new_marble();
+    let mut circle = Circle::new();
+    circle.add_new_marble();
+    circle.add_new_marble();
+    circle.add_new_marble();
+    circle.add_new_marble();
 
-    assert_eq!(fourth.marbles, vec![0, 4, 2, 1, 3]);
-    assert_eq!(fourth.current_marble_index, 1);
+    assert_eq!(circle.marbles, vec![0, 4, 2, 1, 3]);
+    assert_eq!(circle.current_marble_index, 1);
 }
 
 #[test]
@@ -150,9 +142,7 @@ fn add_twenty_three_marbles() {
     println!("{}", circle);
 
     for _ in 0..23 {
-        let (new_circle, new_score) = circle.with_new_marble();
-        circle = new_circle;
-        score = new_score;
+        score = circle.add_new_marble();
 
         println!("{}", circle);
     }

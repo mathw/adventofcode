@@ -52,7 +52,7 @@ fn run_until_marble(elves: usize, marble: u32) -> u32 {
     let mut current_elf = 0;
 
     for _ in 0..marble {
-        let (new_circle, move_score) = circle.with_new_marble();
+        let move_score = circle.add_new_marble();
 
         increase_elf_score(current_elf, move_score);
 
@@ -60,7 +60,6 @@ fn run_until_marble(elves: usize, marble: u32) -> u32 {
         // println!("Elf {} gains {} points", current_elf, move_score);
 
         current_elf = (current_elf + 1) % elves;
-        circle = new_circle;
     }
 
     elf_scores.values().max().map(|x| *x).unwrap_or(0)
