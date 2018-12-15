@@ -1,142 +1,184 @@
+use slab::Slab;
+use std::fmt;
+use std::ops::{Index, IndexMut};
+use std::usize;
+
+// based very heavily on https://www.reddit.com/r/rust/comments/7zsy72/writing_a_doubly_linked_list_in_rust_is_easy/
+
 pub struct Circle {
-    marbles: Vec<u32>,
-    current_marble_index: usize,
-    highest_marble_value: u32,
+    slab: Slab<Marble>,
+    current_marble: Pointer,
+    next_value: u32,
+}
+
+struct Marble {
+    value: u32,
+    next: Pointer,
+    prev: Pointer,
+}
+
+#[derive(Eq, PartialEq, Copy, Clone)]
+struct Pointer(usize);
+
+impl Pointer {
+    #[inline]
+    fn null() -> Pointer {
+        Pointer(usize::MAX)
+    }
+
+    #[inline]
+    fn is_null(&self) -> bool {
+        *self == Pointer::null()
+    }
+}
+
+impl Index<Pointer> for Circle {
+    type Output = Marble;
+
+    fn index(&self, index: Pointer) -> &Marble {
+        &self.slab[index.0]
+    }
+}
+
+impl IndexMut<Pointer> for Circle {
+    fn index_mut(&mut self, index: Pointer) -> &mut Marble {
+        &mut self.slab[index.0]
+    }
 }
 
 impl Circle {
-    pub fn new() -> Circle {
-        Circle {
-            marbles: vec![0],
-            current_marble_index: 0,
-            highest_marble_value: 0,
-        }
+    pub fn new(marbles: usize) -> Circle {
+        let mut circle = Circle {
+            slab: Slab::with_capacity(marbles),
+            current_marble: Pointer::null(),
+            next_value: 1,
+        };
+
+        let n = Pointer(circle.slab.insert(Marble {
+            value: 0,
+            prev: Pointer::null(),
+            next: Pointer::null(),
+        }));
+
+        circle[n].prev = n;
+        circle[n].next = n;
+        circle.current_marble = n;
+
+        circle
     }
 
-    fn find_insert_location(&self) -> usize {
-        let mut target = self.current_marble_index + 2;
+    fn insert_before(&mut self, node: Pointer) -> Pointer {
+        let prev = self[node].prev;
+        let n = Pointer(self.slab.insert(Marble {
+            value: self.next_value,
+            prev: prev,
+            next: node,
+        }));
 
-        if target > self.marbles.len() {
-            target -= self.marbles.len();
+        self[prev].next = n;
+        self[node].prev = n;
+        self.current_marble = n;
+
+        self.next_value += 1;
+
+        n
+    }
+
+    fn remove(&mut self, node: Pointer) -> u32 {
+        let prev = self[node].prev;
+        let next = self[node].next;
+
+        if prev == node {
+            panic!("Can't remove! Circle will become empty!");
         }
 
-        target
+        self[prev].next = next;
+        self[next].prev = prev;
+
+        self.current_marble = next;
+
+        let removed_value = self.slab.remove(node.0).value;
+
+        removed_value
+    }
+
+    fn remove_seven_left(&mut self) -> u32 {
+        let mut to_remove = self.current_marble;
+        for _ in 0..7 {
+            to_remove = self[to_remove].prev;
+        }
+        self.remove(to_remove)
+    }
+
+    fn insert_two_right(&mut self) {
+        let new_value = self.next_value;
+        let mut new_location = self.current_marble;
+        for _ in 0..2 {
+            new_location = self[new_location].next;
+        }
+
+        self.insert_before(new_location);
     }
 
     pub fn add_new_marble(&mut self) -> u32 {
-        let new_marble_value = self.highest_marble_value + 1;
-
-        if new_marble_value % 23 == 0 {
-            // crazy stuff now happens
-
-            // the marble 7 marbles counter-clockwise is removed
-
-            // #[cfg(test)]
-            // println!("New marble value is {}! Fancy things!", new_marble_value);
-
-            let removed_marble_index = if self.current_marble_index >= 7 {
-                self.current_marble_index - 7
-            } else {
-                self.marbles.len() - (7 - self.current_marble_index)
-            };
-
-            let removed_marble_value = self.marbles[removed_marble_index];
-
-            let _: Vec<_> = self
-                .marbles
-                .splice(removed_marble_index..removed_marble_index + 1, vec![])
-                .collect();
-
-            self.current_marble_index = removed_marble_index;
-            self.highest_marble_value = new_marble_value;
-
-            new_marble_value + removed_marble_value
+        let new_value = self.next_value;
+        if new_value % 23 == 0 {
+            // craziness!
+            let removed_score = self.remove_seven_left();
+            self.next_value += 1;
+            removed_score + new_value
         } else {
-            let location = self.find_insert_location();
-
-            let _: Vec<_> = self
-                .marbles
-                .splice(location..location, vec![new_marble_value])
-                .collect();
-
-            self.current_marble_index = location;
-            self.highest_marble_value = new_marble_value;
-
+            self.insert_two_right();
             0
         }
     }
+
+    #[cfg(test)]
+    fn all_marbles(&self) -> Vec<u32> {
+        let mut result = Vec::new();
+
+        let mut n = self.current_marble;
+        result.push(self[n].value);
+        n = self[n].next;
+
+        while n != self.current_marble {
+            result.push(self[n].value);
+            n = self[n].next;
+        }
+
+        result
+    }
 }
 
-use std::fmt;
 impl fmt::Display for Circle {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        for (index, marble) in self.marbles.iter().enumerate() {
-            if index == self.current_marble_index {
-                write!(fmt, " ({}) ", marble)?;
-            } else {
-                write!(fmt, " {} ", marble)?;
-            }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut n = self.current_marble;
+        write!(f, " ({}) ", self[n].value)?;
+        n = self[n].next;
+
+        while n != self.current_marble {
+            write!(f, " {} ", self[n].value)?;
+            n = self[n].next;
         }
-        writeln!(fmt, "")?;
+
         Ok(())
     }
 }
 
 #[test]
-fn find_insert_location_new_circle() {
-    let circle = Circle::new();
-
-    assert_eq!(circle.find_insert_location(), 1);
-}
-
-#[test]
-fn find_insert_location_circle_of_two() {
-    let circle = Circle {
-        marbles: vec![0, 1],
-        current_marble_index: 1,
-        highest_marble_value: 1,
-    };
-
-    assert_eq!(circle.find_insert_location(), 1);
-}
-
-#[test]
-fn find_insert_location_circle_of_three() {
-    let circle = Circle {
-        marbles: vec![0, 2, 1],
-        current_marble_index: 1,
-        highest_marble_value: 2,
-    };
-
-    assert_eq!(circle.find_insert_location(), 3);
-}
-
-#[test]
-fn find_insert_location_circle_of_four() {
-    let circle = Circle {
-        marbles: vec![0, 2, 1, 3],
-        current_marble_index: 3,
-        highest_marble_value: 3,
-    };
-
-    assert_eq!(circle.find_insert_location(), 1);
-}
-
-#[test]
 fn add_marbles() {
-    let mut circle = Circle::new();
+    let mut circle = Circle::new(5);
     circle.add_new_marble();
     circle.add_new_marble();
     circle.add_new_marble();
     circle.add_new_marble();
 
-    assert_eq!(circle.marbles, vec![0, 4, 2, 1, 3]);
-    assert_eq!(circle.current_marble_index, 1);
+    assert_eq!(circle.all_marbles(), vec![4, 2, 1, 3, 0]);
 }
 
 #[test]
 fn add_twenty_three_marbles() {
-    let mut circle = Circle::new();
+    let mut circle = Circle::new(23);
     let mut score: u32 = 0;
 
     println!("{}", circle);

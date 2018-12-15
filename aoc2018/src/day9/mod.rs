@@ -33,7 +33,19 @@ impl Day for Day9 {
             .unwrap();
     }
 
-    fn part2(&mut self, sender: &Sender<String>) {}
+    fn part2(&mut self, sender: &Sender<String>) {
+        sender
+            .send(format!(
+                "{} elves until marble {}",
+                self.players,
+                self.last_marble_score * 100
+            ))
+            .unwrap();
+        let result = run_until_marble(self.players, self.last_marble_score * 100);
+        sender
+            .send(format!("The winning elf's score is {}", result))
+            .unwrap();
+    }
 }
 
 fn run_until_marble(elves: usize, marble: u32) -> u32 {
@@ -43,15 +55,15 @@ fn run_until_marble(elves: usize, marble: u32) -> u32 {
     // println!("{} elves until marble {}", elves, marble);
 
     let mut elf_scores = HashMap::new();
-    let mut increase_elf_score = |elf, score| {
+    let mut increase_elf_score = |elf: usize, score: u32| {
         let entry = elf_scores.entry(elf).or_insert(0);
         *entry += score;
     };
 
-    let mut circle = Circle::new();
+    let mut circle = Circle::new(marble as usize);
     let mut current_elf = 0;
 
-    for _ in 0..marble {
+    for iteration in 0..marble {
         let move_score = circle.add_new_marble();
 
         increase_elf_score(current_elf, move_score);
