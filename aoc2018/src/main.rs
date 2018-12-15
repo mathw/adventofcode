@@ -7,6 +7,7 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day9;
 mod util;
 
 use crate::day::Day;
@@ -51,6 +52,7 @@ fn main() -> Result<(), String> {
                 )))
             }),
             8 => timed(|| run_day(Arc::new(Mutex::new(day8::Day8::new())))),
+            9 => timed(|| run_day(Arc::new(Mutex::new(day9::Day9::new())))),
             _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
         };
 
