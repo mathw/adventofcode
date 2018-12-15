@@ -63,13 +63,10 @@ fn run_until_marble(elves: usize, marble: u32) -> u32 {
     let mut circle = Circle::new(marble as usize);
     let mut current_elf = 0;
 
-    for iteration in 0..marble {
+    for _ in 0..marble {
         let move_score = circle.add_new_marble();
 
         increase_elf_score(current_elf, move_score);
-
-        // #[cfg(test)]
-        // println!("Elf {} gains {} points", current_elf, move_score);
 
         current_elf = (current_elf + 1) % elves;
     }

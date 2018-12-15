@@ -6,14 +6,14 @@ use std::fmt;
 use std::i32;
 use std::str::FromStr;
 use std::sync::mpsc::Sender;
-use std::thread;
-use std::time::Duration;
 
-pub struct Day10;
+pub struct Day10 {
+    iteration: usize,
+}
 
 impl Default for Day10 {
     fn default() -> Self {
-        Day10 {}
+        Day10 { iteration: 0 }
     }
 }
 
@@ -46,12 +46,14 @@ impl Day for Day10 {
             last_width = points.width();
         }
 
-        sender
-            .send(format!("Iteration {}\n{}", iteration, last_render))
-            .unwrap();
+        sender.send(format!("{}", last_render)).unwrap();
+
+        self.iteration = iteration;
     }
 
-    fn part2(&mut self, sender: &Sender<String>) {}
+    fn part2(&mut self, sender: &Sender<String>) {
+        sender.send(format!("{} seconds", self.iteration)).unwrap();
+    }
 }
 
 #[derive(PartialEq, Eq, Debug, Clone)]
@@ -175,10 +177,6 @@ impl Points {
 
     fn width(&self) -> i32 {
         (self.max_x - self.min_x).abs()
-    }
-
-    fn height(&self) -> i32 {
-        (self.max_y - self.min_y).abs()
     }
 
     fn has_point_at(&self, x: i32, y: i32) -> bool {

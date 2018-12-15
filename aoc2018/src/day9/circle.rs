@@ -26,11 +26,6 @@ impl Pointer {
     fn null() -> Pointer {
         Pointer(usize::MAX)
     }
-
-    #[inline]
-    fn is_null(&self) -> bool {
-        *self == Pointer::null()
-    }
 }
 
 impl Index<Pointer> for Circle {

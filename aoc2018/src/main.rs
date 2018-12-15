@@ -64,20 +64,28 @@ fn main() -> Result<(), String> {
 }
 
 fn run_day<D: 'static + Day + Send>(day: Arc<Mutex<D>>) -> Result<(), String> {
-    let (sender1, receiver1) = channel();
-    let (sender2, receiver2) = channel();
+    let (sender1, receiver1) = channel::<String>();
+    let (sender2, receiver2) = channel::<String>();
 
     let receive_thread1 = thread::spawn(move || loop {
         let received = receiver1.recv();
         match received {
-            Ok(msg) => println!("[1] {}", msg),
+            Ok(msg) => {
+                for l in msg.lines() {
+                    println!("[1] {}", l);
+                }
+            }
             Err(_) => return,
         }
     });
     let receive_thread2 = thread::spawn(move || loop {
         let received = receiver2.recv();
         match received {
-            Ok(msg) => println!("[2] {}", msg),
+            Ok(msg) => {
+                for l in msg.lines() {
+                    println!("[2] {}", l);
+                }
+            }
             Err(_) => return,
         }
     });
@@ -91,12 +99,16 @@ fn run_day<D: 'static + Day + Send>(day: Arc<Mutex<D>>) -> Result<(), String> {
     part1.join().unwrap();
     receive_thread1.join().unwrap();
 
+    println!("");
+
     let part2 = thread::spawn(move || {
         let (_, time) = timed(|| day.lock().unwrap().part2(&sender2));
         sender2.send(format!("Part two: {}ms", time)).unwrap();
     });
     part2.join().unwrap();
     receive_thread2.join().unwrap();
+
+    println!("");
 
     Ok(())
 }
