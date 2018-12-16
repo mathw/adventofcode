@@ -62,7 +62,7 @@ fn run_until_generation(
     generation: usize,
     sender: &Sender<String>,
 ) -> Plants {
-    let mut seen_at_generation: HashMap<String, usize> = HashMap::new();
+    let mut seen_at_generation: HashMap<String, (usize, Option<i64>)> = HashMap::new();
     let mut new_plants: Plants = plants.clone();
     let mut g: usize = 0;
 
@@ -70,30 +70,35 @@ fn run_until_generation(
         new_plants = new_plants.apply_rules(rules);
 
         let new_plants_str = new_plants.to_string();
+        let lowest_pot = new_plants.lowest_pot_with_plant();
         if seen_at_generation.contains_key(&new_plants_str) {
-            let last_seen = seen_at_generation[&new_plants_str];
+            let (last_seen, last_lowest_pot) = seen_at_generation[&new_plants_str];
             let distance = g - last_seen;
             let skip = usize::max(((generation - g) / distance) * distance, 1);
-
-            if distance == 1 {
-                sender
-                    .send(format!("Pattern has become constant at generation {}.", g))
-                    .unwrap();
-                return new_plants;
-            }
+            let shift = lowest_pot.unwrap_or(0) - last_lowest_pot.unwrap_or(0);
+            let total_shift = (shift * skip as i64) - 1;
 
             sender
                 .send(format!(
                     "Hey! I've seen this (generation {}) before! It was back in generation {}
-I speculate that there's a {}-generation cycle
-Skipping forward {} generations",
-                    g, last_seen, distance, skip
+Then it started at {} but now it starts at {}
+I speculate that there's a {}-generation cycle with a {}-pot shift
+Skipping forward {} generations and shifting {}",
+                    g,
+                    last_seen,
+                    last_lowest_pot.unwrap_or(0),
+                    lowest_pot.unwrap_or(0),
+                    distance,
+                    shift,
+                    skip,
+                    total_shift
                 ))
                 .unwrap();
 
             g += skip;
+            new_plants = new_plants.shift(total_shift);
         } else {
-            seen_at_generation.insert(new_plants_str, g);
+            seen_at_generation.insert(new_plants_str, (g, lowest_pot));
             g += 1;
         }
 

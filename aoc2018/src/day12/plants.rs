@@ -4,12 +4,16 @@ use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Plants {
-    plants: HashSet<i32>,
+    plants: HashSet<i64>,
 }
 
 impl Plants {
-    pub fn sum_all_pots_with_plant(&self) -> i32 {
+    pub fn sum_all_pots_with_plant(&self) -> i64 {
         self.plants.iter().sum()
+    }
+
+    pub fn lowest_pot_with_plant(&self) -> Option<i64> {
+        self.plants.iter().min().map(|x| *x)
     }
 
     pub fn apply_rules(&self, rules: &HashMap<Vec<bool>, bool>) -> Plants {
@@ -27,7 +31,17 @@ impl Plants {
         Plants { plants: new_plants }
     }
 
-    fn get_pot_surround(&self, pot: i32) -> Vec<bool> {
+    pub fn shift(&self, shift: i64) -> Plants {
+        let mut new_plants = HashSet::new();
+
+        for pot in self.plants.iter() {
+            new_plants.insert(pot + shift);
+        }
+
+        Plants { plants: new_plants }
+    }
+
+    fn get_pot_surround(&self, pot: i64) -> Vec<bool> {
         let mut result = vec![];
         for pot_number in pot - 2..=pot + 2 {
             result.push(self.plants.contains(&pot_number));
@@ -45,7 +59,7 @@ impl FromStr for Plants {
 
         for (pot, c) in input.chars().enumerate() {
             if c == '#' {
-                plants.insert(pot as i32);
+                plants.insert(pot as i64);
             }
         }
 
