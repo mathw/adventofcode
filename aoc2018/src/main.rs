@@ -1,6 +1,7 @@
 mod day;
 mod day1;
 mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -55,6 +56,7 @@ fn main() -> Result<(), String> {
             8 => timed(|| run_day(Arc::new(Mutex::new(day8::Day8::new())))),
             9 => timed(|| run_day(Arc::new(Mutex::new(day9::Day9::new())))),
             10 => timed(|| run_day(Arc::new(Mutex::new(day10::Day10::default())))),
+            11 => timed(|| run_day(Arc::new(Mutex::new(day11::Day11::default())))),
             _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
         };
 
