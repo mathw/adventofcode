@@ -58,6 +58,7 @@ fn main() -> Result<(), String> {
             9 => timed(|| run_day(Arc::new(Mutex::new(day9::Day9::new())))),
             10 => timed(|| run_day(Arc::new(Mutex::new(day10::Day10::default())))),
             11 => timed(|| run_day(Arc::new(Mutex::new(day11::Day11::default())))),
+            12 => timed(|| run_day(Arc::new(Mutex::new(day12::Day12::default())))),
             _ => (Err(format!("I don't know how to be day {} yet", day)), 0),
         };
 

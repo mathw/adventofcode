@@ -3,9 +3,19 @@ use regex::Regex;
 use std::str::FromStr;
 
 #[derive(Debug, PartialEq, Eq)]
-struct Rule {
+pub struct Rule {
     pattern: Vec<bool>,
     plant: bool,
+}
+
+impl Rule {
+    pub fn pattern(&self) -> Vec<bool> {
+        self.pattern.clone()
+    }
+
+    pub fn plant(&self) -> bool {
+        self.plant.clone()
+    }
 }
 
 impl FromStr for Rule {
