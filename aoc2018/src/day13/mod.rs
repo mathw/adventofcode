@@ -122,10 +122,6 @@ impl ParsedRailway {
     fn track_at(&self, pos: (usize, usize)) -> Option<ParsedTrack> {
         self.track.get(&pos).map(|x| x.clone())
     }
-
-    fn cart_at(&self, pos: (usize, usize)) -> Option<Direction> {
-        self.carts.get(&pos).map(|x| x.clone())
-    }
 }
 
 impl FromStr for ParsedRailway {
@@ -339,11 +335,15 @@ impl Railway {
     }
 
     fn first_collision(&mut self) -> (usize, usize) {
+        #[cfg(test)]
         let mut step = 0;
         loop {
-            step += 1;
             #[cfg(test)]
-            println!("Starting step {}", step);
+            {
+                step += 1;
+                println!("Starting step {}", step);
+            }
+
             match self.step(false) {
                 Some(pos) => return pos,
                 None => (),
@@ -352,11 +352,15 @@ impl Railway {
     }
 
     fn last_cart_left(&mut self) -> (usize, usize) {
+        #[cfg(test)]
         let mut step = 0;
         loop {
-            step += 1;
             #[cfg(test)]
-            println!("Starting step {}", step);
+            {
+                step += 1;
+                println!("Starting step {}", step);
+            }
+
             self.step(true);
 
             if self.carts.len() == 1 {
