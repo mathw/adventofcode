@@ -33,7 +33,21 @@ impl Day for Day13 {
         }
     }
 
-    fn part2(&mut self, sender: &Sender<String>) {}
+    fn part2(&mut self, sender: &Sender<String>) {
+        let input = include_str!("input.txt");
+
+        let track = ParsedRailway::from_str(input);
+        match track {
+            Err(msg) => sender.send(msg).unwrap(),
+            Ok(pr) => {
+                let mut railway = Railway::from(pr);
+                let pos = railway.last_cart_left();
+                sender
+                    .send(format!("Last cart left at {},{}", pos.0, pos.1))
+                    .unwrap();
+            }
+        }
+    }
 }
 
 // a not as good track representation for all we can have from the first phase parser
@@ -186,16 +200,19 @@ impl Railway {
 
     /// All carts move one tick
     /// Returns first collision location if there is one
-    fn step(&mut self) -> Option<(usize, usize)> {
+    fn step(&mut self, remove_on_collision: bool) -> Option<(usize, usize)> {
         #[cfg(test)]
         println!("Starting new step");
 
         let carts = self.carts_in_order();
 
         for cart_pos in carts {
-            let cart_record = self
-                .cart_at(cart_pos)
-                .expect("There really should be a cart here!");
+            let cart_record = self.cart_at(cart_pos);
+            if cart_record.is_none() {
+                // this cart was removed in a collision already
+                continue;
+            }
+            let cart_record = cart_record.expect("There really should be a cart here");
 
             let (new_pos, new_direction, new_state) =
                 self.advance_position(cart_pos, cart_record.facing, cart_record.state);
@@ -214,7 +231,11 @@ impl Railway {
                 .is_some()
             {
                 // COLLISION!!!!
-                return Some(new_pos);
+                if remove_on_collision {
+                    self.carts.remove(&new_pos);
+                } else {
+                    return Some(new_pos);
+                }
             }
         }
 
@@ -238,7 +259,7 @@ impl Railway {
         dir: Direction,
         state: IntersectionState,
     ) -> ((usize, usize), Direction, IntersectionState) {
-        // #[cfg(test)]
+        #[cfg(test)]
         println!(
             "Advance cart at ({}, {}) facing {:?} state {:?}",
             pos.0, pos.1, dir, state
@@ -321,11 +342,26 @@ impl Railway {
         let mut step = 0;
         loop {
             step += 1;
+            #[cfg(test)]
             println!("Starting step {}", step);
-            match self.step() {
+            match self.step(false) {
                 Some(pos) => return pos,
                 None => (),
             };
+        }
+    }
+
+    fn last_cart_left(&mut self) -> (usize, usize) {
+        let mut step = 0;
+        loop {
+            step += 1;
+            #[cfg(test)]
+            println!("Starting step {}", step);
+            self.step(true);
+
+            if self.carts.len() == 1 {
+                return self.carts.keys().cloned().next().unwrap();
+            }
         }
     }
 }
@@ -450,7 +486,7 @@ v    |
     let track = ParsedRailway::from_str(track).expect("Track should parse");
     let mut track = Railway::from(track);
 
-    track.step();
+    track.step(false);
     assert_eq!(track.cart_at((0, 2)), None);
     assert_eq!(
         track.cart_at((0, 3)),
@@ -460,7 +496,7 @@ v    |
         })
     );
 
-    track.step();
+    track.step(false);
     assert_eq!(
         track.cart_at((0, 4)),
         Some(Cart {
@@ -469,7 +505,7 @@ v    |
         })
     );
 
-    track.step();
+    track.step(false);
     assert_eq!(
         track.cart_at((0, 5)),
         Some(Cart {
@@ -478,7 +514,7 @@ v    |
         })
     );
 
-    track.step();
+    track.step(false);
     assert_eq!(
         track.cart_at((1, 5)),
         Some(Cart {
@@ -496,8 +532,8 @@ fn simple_intersection() {
     |";
     let mut railway = Railway::from(ParsedRailway::from_str(track).expect("Track should parse"));
 
-    railway.step();
-    railway.step();
+    railway.step(false);
+    railway.step(false);
     assert_eq!(
         railway.cart_at((3, 1)),
         Some(Cart {
@@ -519,10 +555,10 @@ fn simple_collision() {
     let track = r"->--<-";
     let mut railway = Railway::from(ParsedRailway::from_str(track).expect("Track should parse"));
 
-    let step = railway.step();
+    let step = railway.step(false);
     assert_eq!(step, None);
 
-    let step = railway.step();
+    let step = railway.step(false);
     assert_eq!(step, Some((3, 0)));
 }
 
@@ -542,7 +578,7 @@ fn test_first_failure() {
 
     let mut railway = Railway::from(ParsedRailway::from_str(track).expect("Track should parse"));
 
-    let _step = railway.step();
+    let _step = railway.step(false);
     assert_eq!(
         railway.cart_at((2, 1)),
         Some(Cart {
@@ -550,7 +586,7 @@ fn test_first_failure() {
             state: IntersectionState::Left
         })
     );
-    let _step = railway.step();
+    let _step = railway.step(false);
     assert_eq!(
         railway.cart_at((3, 1)),
         Some(Cart {
@@ -558,7 +594,7 @@ fn test_first_failure() {
             state: IntersectionState::Forward
         })
     );
-    let _step = railway.step();
+    let _step = railway.step(false);
     assert_eq!(
         railway.cart_at((3, 0)),
         Some(Cart {
