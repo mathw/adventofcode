@@ -1,5 +1,6 @@
 mod asmillis;
 
+use std::fmt::Debug;
 use std::fmt::Display;
 use std::time::Instant;
 
@@ -26,4 +27,19 @@ where
     let timer = Instant::now();
     // awkward syntax to avoid the warning about as_millis being added to the standard library in the future
     (work(), asmillis::AsMillis::as_millis(&timer.elapsed()))
+}
+
+pub trait Trace {
+    fn trace(self) -> Self;
+}
+
+impl<T> Trace for T
+where
+    T: Sized + Debug,
+{
+    fn trace(self) -> Self {
+        #[cfg(test)]
+        println!("{:?}", self);
+        self
+    }
 }
