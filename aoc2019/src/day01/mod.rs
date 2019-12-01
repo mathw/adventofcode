@@ -1,3 +1,4 @@
+use itertools::unfold;
 use std::str::FromStr;
 
 pub fn run() -> Result<(), String> {
@@ -8,26 +9,27 @@ pub fn run() -> Result<(), String> {
     Ok(())
 }
 
-fn fuel(mass: u32) -> i32 {
-    ((mass as f64 / 3.0).floor() as i32) - 2
+fn fuel(mass: i32) -> i32 {
+    i32::max(0, ((mass as f64 / 3.0).floor() as i32) - 2)
 }
 
-fn fuel_recursive(mass: u32) -> i32 {
-    let mut f = fuel(mass);
-    if f < 0 {
-        f = 0
-    }
-    if fuel(f as u32) > 0 {
-        f + fuel_recursive(f as u32)
-    } else {
-        f
-    }
+fn fuel_recursive(mass: i32) -> i32 {
+    unfold(mass, |state| {
+        if *state > 0 {
+            let new_state = fuel(*state);
+            *state = new_state;
+            Some(new_state)
+        } else {
+            None
+        }
+    })
+    .sum()
 }
 
-fn parse_input(input: &str) -> impl Iterator<Item = u32> + '_ {
+fn parse_input(input: &str) -> impl Iterator<Item = i32> + '_ {
     input
         .lines()
-        .map(|line| u32::from_str(line).expect("Should have been a u32. Your input sucks."))
+        .map(|line| i32::from_str(line).expect("Should have been an i32. Your input sucks."))
 }
 
 #[test]
