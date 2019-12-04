@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::str::FromStr;
 
 const INPUT: &'static str = include_str!("input.txt");
@@ -11,7 +11,13 @@ pub fn run() -> Result<(), String> {
     let closest_distance = closest.map(|p| p.distance_from_origin());
     println!(
         "Part 1: Closest crossing to origin is {:?} away",
-        closest_distance
+        closest_distance.unwrap()
+    );
+    let crossings = combine_wires2(&wires[0], &wires[1]);
+    let chosen = intersection_with_shortest_steps(&crossings).map(|(_, d)| d);
+    println!(
+        "Part 2: Shortest steps to a crossing is {}",
+        chosen.unwrap()
     );
     Ok(())
 }
@@ -65,49 +71,42 @@ impl Pos {
 
     fn to(&self, segment: &Segment) -> Vec<Pos> {
         match segment {
-            Segment::Up(distance) => self.iterate_y(*distance as i32),
-            Segment::Down(distance) => self.iterate_y(*distance as i32 * -1),
-            Segment::Left(distance) => self.iterate_x(*distance as i32 * -1),
-            Segment::Right(distance) => self.iterate_x(*distance as i32),
+            Segment::Up(distance) => self.points_up(*distance),
+            Segment::Down(distance) => self.points_down(*distance),
+            Segment::Left(distance) => self.points_left(*distance),
+            Segment::Right(distance) => self.points_right(*distance),
         }
     }
-    fn iterate_x(&self, distance: i32) -> Vec<Pos> {
-        let start = self.x;
-        let end = self.x + distance;
-        let result = if start < end {
-            (start..=end)
-        } else {
-            (end..=start)
-        }
-        .map(|x| Pos { x: x, y: self.y });
-
-        if end < start {
-            result.rev().collect()
-        } else {
-            result.collect()
-        }
+    fn points_left(&self, distance: usize) -> Vec<Pos> {
+        (1..=distance)
+            .map(|d| Pos::new(self.x - d as i32, self.y))
+            .collect()
     }
-    fn iterate_y(&self, distance: i32) -> Vec<Pos> {
-        let start = self.y;
-        let end = self.y + distance;
-
-        let result = if start < end {
-            (start..=end)
-        } else {
-            (end..=start)
-        }
-        .map(|y| Pos { x: self.x, y: y });
-
-        if end < start {
-            result.rev().collect()
-        } else {
-            result.collect()
-        }
+    fn points_right(&self, distance: usize) -> Vec<Pos> {
+        (1..=distance)
+            .map(|d| Pos::new(self.x + d as i32, self.y))
+            .collect()
+    }
+    fn points_up(&self, distance: usize) -> Vec<Pos> {
+        (1..=distance)
+            .map(|d| Pos::new(self.x, self.y + d as i32))
+            .collect()
+    }
+    fn points_down(&self, distance: usize) -> Vec<Pos> {
+        (1..=distance)
+            .map(|d| Pos::new(self.x, self.y - d as i32))
+            .collect()
     }
 
     fn distance_from_origin(&self) -> usize {
         self.x.abs() as usize + self.y.abs() as usize
     }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+struct Stepped<T> {
+    steps: usize,
+    value: T,
 }
 
 fn wire_to_coords(wire: &Wire) -> HashSet<Pos> {
@@ -125,6 +124,38 @@ fn wire_to_coords(wire: &Wire) -> HashSet<Pos> {
     positions
 }
 
+fn wire_to_coords2(wire: &Wire) -> HashMap<Pos, usize> {
+    let mut result = HashMap::new();
+
+    let mut current_position = Pos::new(0, 0);
+    let mut current_step = 0;
+    result.insert(current_position, current_step);
+
+    for segment in &wire.0 {
+        for new in current_position.to(segment) {
+            current_position = new;
+            current_step += 1;
+            result.insert(new, current_step);
+        }
+    }
+
+    result
+}
+
+fn combine_wires2(wire1: &Wire, wire2: &Wire) -> HashMap<Pos, usize> {
+    let mut result = HashMap::new();
+    let wire1positions = wire_to_coords2(wire1);
+    let wire2positions = wire_to_coords2(wire2);
+
+    for w1p in wire1positions.keys() {
+        if wire2positions.contains_key(w1p) {
+            result.insert(*w1p, wire1positions[w1p] + wire2positions[w1p]);
+        }
+    }
+
+    result
+}
+
 fn wire_coords_cross(first: &HashSet<Pos>, second: &HashSet<Pos>) -> HashSet<Pos> {
     first.intersection(second).cloned().collect()
 }
@@ -137,6 +168,15 @@ where
         .into_iter()
         .sorted_by_key(|p| p.distance_from_origin())
         .filter(|p| p.distance_from_origin() > 0)
+        .next()
+}
+
+fn intersection_with_shortest_steps(poses: &HashMap<Pos, usize>) -> Option<(Pos, usize)> {
+    poses
+        .iter()
+        .sorted_by_key(|&(_, steps)| steps)
+        .filter(|&(_, s)| *s > 0)
+        .map(|(&a, &b)| (a, b))
         .next()
 }
 
@@ -177,4 +217,14 @@ U7,R6,D4,L4";
     let crossings = wire_coords_cross(&wire_to_coords(&wires[0]), &wire_to_coords(&wires[1]));
     let closest = closest_pos_to_origin(crossings);
     assert_eq!(closest, Some(Pos::new(3, 3)))
+}
+
+#[test]
+fn test_part_2_sample_1() {
+    let input = "R75,D30,R83,U83,L12,D49,R71,U7,L72
+U62,R66,U55,R34,D71,R55,D58,R83";
+    let wires = parse_input(input);
+    let crossings = combine_wires2(&wires[0], &wires[1]);
+    let chosen = intersection_with_shortest_steps(&crossings).map(|(_, d)| d);
+    assert_eq!(chosen, Some(610));
 }
