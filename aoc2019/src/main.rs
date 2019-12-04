@@ -1,5 +1,6 @@
 mod day01;
 mod day02;
+mod day03;
 
 use std::env::args;
 use std::str::FromStr;
@@ -21,6 +22,7 @@ fn main() -> Result<(), String> {
     match requested_day {
         1 => day01::run(),
         2 => day02::run(),
+        3 => day03::run(),
         _ => Err("I don't know what that day is".into()),
     }
 }
