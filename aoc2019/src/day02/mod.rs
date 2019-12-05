@@ -35,7 +35,7 @@ fn run_part_2(program: Program) -> Option<(usize, usize)> {
             program.run(&mut vec![]);
 
             if program[0] == 19690720 {
-                return Some((noun, verb));
+                return Some((noun as usize, verb as usize));
             }
         }
     }
