@@ -3,9 +3,9 @@ use std::str::FromStr;
 
 pub fn run() -> Result<(), String> {
     let result: i32 = parse_input(INPUT).map(fuel).sum();
-    println!("[1] Total fuel: {}", result);
+    println!("Part 1: Total fuel: {}", result);
     let result: i32 = parse_input(INPUT).map(fuel_recursive).sum();
-    println!("[2] Total fuel: {}", result);
+    println!("Part 2: Total fuel: {}", result);
     Ok(())
 }
 

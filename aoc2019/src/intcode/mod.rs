@@ -6,6 +6,10 @@ use std::str::FromStr;
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Program {
     locations: Vec<i32>,
+    program_counter: usize,
+    inputs: Vec<i32>,
+    outputs: Vec<i32>,
+    running: bool,
 }
 
 impl FromStr for Program {
@@ -14,19 +18,138 @@ impl FromStr for Program {
         s.split(',')
             .map(|n| i32::from_str(n.trim()))
             .collect::<Result<Vec<i32>, Self::Err>>()
-            .map(|v| Program { locations: v })
+            .map(|v| Program {
+                locations: v,
+                program_counter: 0,
+                inputs: vec![],
+                outputs: vec![],
+                running: false,
+            })
     }
 }
 
 impl Program {
     pub fn run(&mut self, inputs: &Vec<i32>) -> Vec<i32> {
-        let mut index = Some(0);
-        let mut inputs = inputs.iter().rev().cloned().collect();
-        let mut outputs = Vec::new();
-        while let Some(i) = index {
-            index = run_opcode(&mut self.locations, i, &mut inputs, &mut outputs);
+        self.inputs = inputs.iter().rev().cloned().collect();
+        self.program_counter = 0;
+        self.running = true;
+
+        while self.running {
+            self.opcode();
         }
-        outputs
+
+        self.outputs.clone()
+    }
+
+    fn current(&self) -> i32 {
+        self.locations[self.program_counter]
+    }
+
+    fn current_opcode(&self) -> usize {
+        (self.current() % 100) as usize
+    }
+
+    fn binary_parameter_modes(&self) -> (Mode, Mode) {
+        if self.current() > 100 {
+            str_to_binary_modes(&self.current().to_string())
+        } else {
+            (Mode::Position, Mode::Position)
+        }
+    }
+
+    fn unary_parameter_mode(&self) -> Mode {
+        if self.current() > 100 {
+            str_to_unary_mode(&self.current().to_string())
+        } else {
+            Mode::Position
+        }
+    }
+
+    fn opcode(&mut self) {
+        match self.current_opcode() {
+            99 => self.running = false,
+            1 => self.binary_operation(|a, b| a + b),
+            2 => self.binary_operation(|a, b| a * b),
+            3 => self.input(),
+            4 => self.output(),
+            5 => self.jump_if(true),
+            6 => self.jump_if(false),
+            7 => self.comparative(|a, b| a < b),
+            8 => self.comparative(|a, b| a == b),
+            op => panic!("Unknown opcode {}", op),
+        }
+    }
+
+    fn argument_value(&self, offset: usize, mode: Mode) -> i32 {
+        let location_value = self.at_offset(offset);
+        match mode {
+            Mode::Immediate => location_value,
+            Mode::Position => self.locations[location_value as usize],
+        }
+    }
+
+    fn at_offset(&self, offset: usize) -> i32 {
+        self.locations[self.program_counter + offset]
+    }
+
+    fn binary_operation<O>(&mut self, operation: O)
+    where
+        O: Fn(i32, i32) -> i32,
+    {
+        let (mode1, mode2) = self.binary_parameter_modes();
+        let result_position = self.at_offset(3) as usize;
+        let first_argument = self.argument_value(1, mode1);
+        let second_argument = self.argument_value(2, mode2);
+
+        self.locations[result_position] = operation(first_argument, second_argument);
+
+        self.advance(4);
+    }
+
+    fn input(&mut self) {
+        let first_argument_position = self.at_offset(1) as usize;
+        let input = self.inputs.pop().expect("Cannot run input: no more inputs");
+        self.locations[first_argument_position] = input;
+        self.advance(2);
+    }
+
+    fn output(&mut self) {
+        let first_argument = self.argument_value(1, self.unary_parameter_mode());
+        self.outputs.push(first_argument);
+        self.advance(2);
+    }
+
+    fn jump_if(&mut self, want_true: bool) {
+        let (mode1, mode2) = self.binary_parameter_modes();
+        let first = self.argument_value(1, mode1);
+        let second = self.argument_value(2, mode2) as usize;
+
+        if want_true {
+            if first != 0 {
+                self.jump(second);
+                return;
+            }
+        } else if first == 0 {
+            self.jump(second);
+            return;
+        }
+
+        self.advance(3);
+    }
+
+    fn advance(&mut self, offset: usize) {
+        self.program_counter += offset
+    }
+
+    fn jump(&mut self, target: usize) {
+        self.program_counter = target
+    }
+
+    fn comparative<F>(&mut self, compare: F)
+    where
+        F: Fn(i32, i32) -> bool,
+    {
+        self.binary_operation(|a, b| if compare(a, b) { 1 } else { 0 })
     }
 }
 
@@ -44,181 +167,71 @@ impl IndexMut<usize> for Program {
     }
 }
 
-fn run_opcode(
-    program: &mut [i32],
-    program_counter: usize,
-    inputs: &mut Vec<i32>,
-    outputs: &mut Vec<i32>,
-) -> Option<usize> {
-    let (opcode, modes) = opcode_and_modes(program[program_counter] as usize);
-    match opcode {
-        99 => None,
-        1 => Some(run_add(program, program_counter, &modes)),
-        2 => Some(run_multiply(program, program_counter, &modes)),
-        3 => Some(run_input(program, program_counter, inputs)),
-        4 => Some(run_output(program, program_counter, outputs, &modes)),
-        5 => Some(run_jump_if(program, program_counter, true, &modes)),
-        6 => Some(run_jump_if(program, program_counter, false, &modes)),
-        7 => Some(run_less_than(program, program_counter, &modes)),
-        8 => Some(run_equals(program, program_counter, &modes)),
-        _ => panic!("Unable to interpret opcode {}", opcode),
-    }
-}
-
-fn run_add(program: &mut [i32], program_counter: usize, modes: &[Mode]) -> usize {
-    run_binary_operation(program, program_counter, |a, b| a + b, modes)
-}
-
-fn run_multiply(program: &mut [i32], program_counter: usize, modes: &[Mode]) -> usize {
-    run_binary_operation(program, program_counter, |a, b| a * b, modes)
-}
-
-fn run_binary_operation<F>(
-    program: &mut [i32],
-    program_counter: usize,
-    op: F,
-    modes: &[Mode],
-) -> usize
-where
-    F: FnOnce(i32, i32) -> i32,
-{
-    let result_position = program[program_counter + 3] as usize;
-
-    let first_argument = get_argument_value(program, program_counter + 1, modes[0]);
-    let second_argument = get_argument_value(program, program_counter + 2, modes[1]);
-
-    program[result_position] = op(first_argument, second_argument);
-
-    program_counter + 4
-}
-
-fn get_argument_value(program: &mut [i32], argument_counter: usize, mode: Mode) -> i32 {
-    match mode {
-        Mode::Immediate => program[argument_counter],
-        Mode::Position => program[program[argument_counter] as usize],
-    }
-}
-
-fn run_input(program: &mut [i32], program_counter: usize, inputs: &mut Vec<i32>) -> usize {
-    let first_argument_position = program[program_counter + 1] as usize;
-    let input = inputs.pop().expect("Cannot run input: no more inputs");
-    program[first_argument_position] = input;
-    program_counter + 2
-}
-
-fn run_output(
-    program: &mut [i32],
-    program_counter: usize,
-    outputs: &mut Vec<i32>,
-    modes: &[Mode],
-) -> usize {
-    let first_argument = get_argument_value(program, program_counter + 1, modes[0]);
-    outputs.push(first_argument);
-    program_counter + 2
-}
-
-fn run_jump_if(
-    program: &mut [i32],
-    program_counter: usize,
-    want_true: bool,
-    modes: &[Mode],
-) -> usize {
-    let first = get_argument_value(program, program_counter + 1, modes[0]);
-    let second = get_argument_value(program, program_counter + 2, modes[1]);
-
-    if want_true {
-        if first != 0 {
-            return second as usize;
-        }
-    } else if first == 0 {
-        return second as usize;
-    }
-
-    program_counter + 3
-}
-
-fn run_less_than(program: &mut [i32], program_counter: usize, modes: &[Mode]) -> usize {
-    run_comparative(program, program_counter, |a, b| a < b, modes)
-}
-
-fn run_equals(program: &mut [i32], program_counter: usize, modes: &[Mode]) -> usize {
-    run_comparative(program, program_counter, |a, b| a == b, modes)
-}
-
-fn run_comparative<F>(
-    program: &mut [i32],
-    program_counter: usize,
-    compare: F,
-    modes: &[Mode],
-) -> usize
-where
-    F: Fn(i32, i32) -> bool,
-{
-    let first = get_argument_value(program, program_counter + 1, modes[0]);
-    let second = get_argument_value(program, program_counter + 2, modes[1]);
-    let answer_location = program[program_counter + 3] as usize;
-
-    program[answer_location] = if compare(first, second) { 1 } else { 0 };
-
-    program_counter + 4
-}
-
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 enum Mode {
     Position,
     Immediate,
 }
 
-fn opcode_and_modes(o: usize) -> (usize, Vec<Mode>) {
-    let opcode = o % 100;
-    let modes = o
-        .to_string()
-        .chars()
-        .rev()
-        .skip(2)
-        .map(|c| match c {
-            '0' => Mode::Position,
-            '1' => Mode::Immediate,
-            _ => panic!(format!("Unknown parameter mode {}", c)),
-        })
-        // ensure there is always a default pair of position parameters on the end
-        .chain(vec![Mode::Position, Mode::Position])
-        .take(match o {
-            99 => 0,
-            1 => 2,
-            2 => 2,
-            3 => 1,
-            4 => 1,
-            _ => 2,
-        })
-        .collect();
+fn char_to_mode(c: char) -> Mode {
+    match c {
+        '0' => Mode::Position,
+        '1' => Mode::Immediate,
+        _ => panic!("unknown mode character {}", c),
+    }
+}
 
-    (opcode, modes)
+fn str_to_binary_modes(s: &str) -> (Mode, Mode) {
+    let mut nums = s.chars().rev().skip(2).chain(vec!['0', '0']);
+    (
+        char_to_mode(nums.next().unwrap()),
+        char_to_mode(nums.next().unwrap()),
+    )
+}
+
+fn str_to_unary_mode(s: &str) -> Mode {
+    let mut nums = s.chars().rev().skip(2).chain(vec!['0', '0']);
+    char_to_mode(nums.next().unwrap())
 }
 
 #[test]
-fn test_opcode_no_modes() {
-    assert_eq!(opcode_and_modes(4), (4, vec![Mode::Position]));
-}
-
-#[test]
-fn test_opcode_two_modes() {
+fn test_str_to_binary_modes() {
     assert_eq!(
-        opcode_and_modes(1002),
-        (2, vec![Mode::Position, Mode::Immediate])
+        str_to_binary_modes("1101"),
+        (Mode::Immediate, Mode::Immediate)
     );
+    assert_eq!(
+        str_to_binary_modes("1001"),
+        (Mode::Position, Mode::Immediate)
+    );
+    assert_eq!(
+        str_to_binary_modes("0001"),
+        (Mode::Position, Mode::Position)
+    );
+    assert_eq!(str_to_binary_modes("1"), (Mode::Position, Mode::Position));
+}
+
+#[test]
+fn test_add_immediate() {
+    // add 2 + 3 and store in 0
+    let mut program = Program::from_str("1101,2,3,0,99").unwrap();
+    program.run(&vec![]);
+    assert_eq!(program[0], 5);
+}
+
+#[test]
+fn test_add_position() {
+    // add positions 5 and 6 and store in 0
+    let mut program = Program::from_str("1,5,6,0,99,1,3").unwrap();
+    program.run(&vec![]);
+    assert_eq!(program[0], 4);
 }
 
 #[test]
 fn test_from_str_happy() {
     let input = "2,4,5,219 ,00,2920";
     let program = Program::from_str(input).expect("This should not fail");
-    assert_eq!(
-        program,
-        Program {
-            locations: vec![2, 4, 5, 219, 0, 2920]
-        }
-    );
+    assert_eq!(program.locations, vec![2, 4, 5, 219, 0, 2920]);
 }
 
 #[test]
@@ -230,58 +243,31 @@ fn test_from_str_unhappy() {
 }
 
 #[test]
-fn test_sample_1() {
-    let mut program = vec![1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50];
-    let new_counter = run_opcode(&mut program, 0, &mut vec![], &mut vec![]);
-    assert_eq!(new_counter, Some(4), "New program counter is incorrect");
-    assert_eq!(program[3], 70, "Index 3 should have been updated to be 70")
-}
-
-#[test]
-fn test_halt() {
-    let mut program = vec![1, 2, 3, 4, 99, 1, 2, 4, 4];
-    let new_counter = run_opcode(&mut program, 4, &mut vec![], &mut vec![]);
-    assert_eq!(new_counter, None);
-}
-
-#[test]
 fn test_input() {
-    let mut program = vec![3, 2, 5, 22];
-    let mut inputs = vec![9, 8];
-    let new_counter = run_opcode(&mut program, 0, &mut inputs, &mut vec![]);
-    // remembering inputs are consumed from the end of the vec at this internal level
-    assert_eq!(new_counter, Some(2));
-    assert_eq!(inputs, vec![9]);
-    assert_eq!(program[2], 8);
+    let mut program = Program::from_str("3,3,99,5,22").unwrap();
+    program.run(&vec![9, 8]);
+    assert_eq!(program[3], 9);
 }
 
 #[test]
 fn test_output() {
-    let mut program = vec![4, 2, 5, 22];
-    let mut outputs = vec![];
-    let new_counter = run_opcode(&mut program, 0, &mut vec![], &mut outputs);
-    assert_eq!(new_counter, Some(2));
+    let mut program = Program::from_str("4,3,99,5").unwrap();
+    let outputs = program.run(&vec![]);
     assert_eq!(outputs, vec![5]);
-    assert_eq!(program, vec![4, 2, 5, 22]);
 }
 
 #[test]
 fn test_run_sample() {
-    let mut program = Program {
-        locations: vec![1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50],
-    };
+    let mut program = Program::from_str("1,9,10,3,2,3,11,0,99,30,40,50").unwrap();
     program.run(&mut vec![]);
     assert_eq!(program[0], 3500);
 }
 
 #[test]
 fn test_output_immediate() {
-    let mut program = vec![104, 2, 5, 22];
-    let mut outputs = vec![];
-    let new_counter = run_opcode(&mut program, 0, &mut vec![], &mut outputs);
-    assert_eq!(new_counter, Some(2));
+    let mut program = Program::from_str("104, 2, 99, 5, 22").unwrap();
+    let outputs = program.run(&vec![]);
     assert_eq!(outputs, vec![2]);
-    assert_eq!(program, vec![104, 2, 5, 22]);
 }
 
 #[test]

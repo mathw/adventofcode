@@ -12,7 +12,13 @@ fn main() -> Result<(), String> {
     let mut args = args();
 
     if args.len() != 2 {
-        return Err("Provide a day number as argument".into());
+        // run all days!
+        let last_known_day = 5;
+        for day in 1..=last_known_day {
+            println!("Running Day {}/{}...", day, last_known_day);
+            run_day(day)?;
+        }
+        return Ok(());
     }
 
     let requested_day = u8::from_str(
@@ -22,7 +28,11 @@ fn main() -> Result<(), String> {
     )
     .map_err(|e| e.to_string())?;
 
-    match requested_day {
+    run_day(requested_day)
+}
+
+fn run_day(day: u8) -> Result<(), String> {
+    match day {
         1 => day01::run(),
         2 => day02::run(),
         3 => day03::run(),
