@@ -1,18 +1,32 @@
+use crate::day::Day;
 use crate::intcode::Program;
 use std::str::FromStr;
 
-pub fn run() -> Result<(), String> {
-    let program = Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?;
+pub struct Day5 {
+    program: Program,
+}
 
-    let result = part1(&mut program.clone())?;
+impl Day5 {
+    pub fn new() -> Result<Day5, String> {
+        Ok(Day5 {
+            program: Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?,
+        })
+    }
+}
 
-    println!("Part 1: Diagnostic code is {}", result);
-
-    let result = part2(&mut program.clone())?;
-
-    println!("Part 2: Diagnostic code is {}", result);
-
-    Ok(())
+impl Day for Day5 {
+    fn part1(&mut self) -> Result<String, String> {
+        Ok(format!(
+            "Diagnostic code is {}",
+            part1(&mut self.program.clone())?
+        ))
+    }
+    fn part2(&mut self) -> Result<String, String> {
+        Ok(format!(
+            "Diagnostic code is {}",
+            part2(&mut self.program.clone())?
+        ))
+    }
 }
 
 fn part1(program: &mut Program) -> Result<i32, String> {

@@ -1,22 +1,34 @@
+use crate::day::Day;
 use crate::intcode::Program;
 use std::str::FromStr;
 
-pub fn run() -> Result<(), String> {
-    let program = Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?;
+pub struct Day2 {
+    program: Program,
+}
 
-    let mut program1 = program.clone();
+impl Day2 {
+    pub fn new() -> Result<Day2, String> {
+        let it = Day2 {
+            program: Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?,
+        };
+        Ok(it)
+    }
+}
 
-    run_part_1(&mut program1);
-
-    println!("Part 1: {}", program1[0]);
-
-    if let Some((noun, verb)) = run_part_2(program) {
-        println!("Part 2: {}", 100 * noun + verb);
-    } else {
-        println!("Part 2: no answer found");
+impl Day for Day2 {
+    fn part1(&mut self) -> Result<String, String> {
+        let mut program1 = self.program.clone();
+        run_part_1(&mut program1);
+        Ok(program1[0].to_string())
     }
 
-    Ok(())
+    fn part2(&mut self) -> Result<String, String> {
+        if let Some((noun, verb)) = run_part_2(self.program.clone()) {
+            Ok(format!("{}", 100 * noun + verb))
+        } else {
+            Ok(format!("no answer found"))
+        }
+    }
 }
 
 fn run_part_1(program: &mut Program) {

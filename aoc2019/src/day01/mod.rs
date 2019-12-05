@@ -1,12 +1,29 @@
+use crate::day::Day;
 use itertools::unfold;
 use std::str::FromStr;
 
-pub fn run() -> Result<(), String> {
-    let result: i32 = parse_input(INPUT).map(fuel).sum();
-    println!("Part 1: Total fuel: {}", result);
-    let result: i32 = parse_input(INPUT).map(fuel_recursive).sum();
-    println!("Part 2: Total fuel: {}", result);
-    Ok(())
+pub struct Day1 {
+    input: Vec<i32>,
+}
+
+impl Day1 {
+    pub fn new() -> Day1 {
+        Day1 {
+            input: parse_input(INPUT).collect(),
+        }
+    }
+}
+
+impl Day for Day1 {
+    fn part1(&mut self) -> Result<String, String> {
+        let result: i32 = self.input.iter().cloned().map(fuel).sum();
+        Ok(format!("Total fuel: {}", result))
+    }
+
+    fn part2(&mut self) -> Result<String, String> {
+        let result: i32 = self.input.iter().cloned().map(fuel_recursive).sum();
+        Ok(format!("Total fuel: {}", result))
+    }
 }
 
 fn fuel(mass: i32) -> i32 {

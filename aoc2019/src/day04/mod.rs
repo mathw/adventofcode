@@ -1,14 +1,30 @@
+use crate::day::Day;
 use itertools::Itertools;
 
 const LOWERBOUND: usize = 387638;
 const UPPERBOUND: usize = 919123;
 
-pub fn run() -> Result<(), String> {
-    let possibles = all_possible_passwords(LOWERBOUND, UPPERBOUND);
-    println!("Part 1: There are {} possible passwords", possibles);
-    let possibles = all_possible_passwords2(LOWERBOUND, UPPERBOUND);
-    println!("Part 2: There are {} possible passwords", possibles);
-    Ok(())
+pub struct Day4;
+
+impl Day4 {
+    pub fn new() -> Day4 {
+        Day4
+    }
+}
+
+impl Day for Day4 {
+    fn part1(&mut self) -> Result<String, String> {
+        let possibles = all_possible_passwords(LOWERBOUND, UPPERBOUND);
+        Ok(format!("There are {} possible passwords", possibles))
+    }
+
+    fn part2(&mut self) -> Result<String, String> {
+        let possibles = all_possible_passwords2(LOWERBOUND, UPPERBOUND);
+        Ok(format!(
+            "Part 2: There are {} possible passwords",
+            possibles
+        ))
+    }
 }
 
 fn digits_only_increase(digits: &Vec<u8>) -> bool {

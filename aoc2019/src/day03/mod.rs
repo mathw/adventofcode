@@ -1,25 +1,43 @@
+use crate::day::Day;
 use itertools::Itertools;
 use std::collections::{HashMap, HashSet};
 use std::str::FromStr;
 
-const INPUT: &'static str = include_str!("input.txt");
+pub struct Day3 {
+    wires: Vec<Wire>,
+}
 
-pub fn run() -> Result<(), String> {
-    let wires = parse_input(INPUT);
-    let crossings = wire_coords_cross(&wire_to_coords(&wires[0]), &wire_to_coords(&wires[1]));
-    let closest = closest_pos_to_origin(crossings);
-    let closest_distance = closest.map(|p| p.distance_from_origin());
-    println!(
-        "Part 1: Closest crossing to origin is {:?} away",
-        closest_distance.unwrap()
-    );
-    let crossings = combine_wires2(&wires[0], &wires[1]);
-    let chosen = intersection_with_shortest_steps(&crossings).map(|(_, d)| d);
-    println!(
-        "Part 2: Shortest steps to a crossing is {}",
-        chosen.unwrap()
-    );
-    Ok(())
+impl Day3 {
+    pub fn new() -> Day3 {
+        Day3 {
+            wires: parse_input(include_str!("input.txt")),
+        }
+    }
+}
+
+impl Day for Day3 {
+    fn part1(&mut self) -> Result<String, String> {
+        let crossings = wire_coords_cross(
+            &wire_to_coords(&self.wires[0]),
+            &wire_to_coords(&self.wires[1]),
+        );
+        let closest = closest_pos_to_origin(crossings);
+        let closest_distance = closest
+            .map(|p| p.distance_from_origin())
+            .ok_or("No closest crossing found".to_owned())?;
+        Ok(format!(
+            "Closest crossing to origin is {} away",
+            closest_distance
+        ))
+    }
+
+    fn part2(&mut self) -> Result<String, String> {
+        let crossings = combine_wires2(&self.wires[0], &self.wires[1]);
+        let chosen = intersection_with_shortest_steps(&crossings)
+            .map(|(_, d)| d)
+            .ok_or("No crossings found".to_owned())?;
+        Ok(format!("Shortest steps to a crossing is {}", chosen))
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
