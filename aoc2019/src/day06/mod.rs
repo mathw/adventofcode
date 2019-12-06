@@ -59,6 +59,10 @@ fn steps_to_common_centre<'a>(orbits: &HashMap<&'a str, &'a str>, object: &'a st
     }
 }
 
+/// Compute how many direct and indirect orbits are in the given orbit graph.
+/// Visits each orbiter and computs the number of steps to the common centre
+/// for each one, then adds them all together.
+/// Could definitely be quicker, as it recomputes a lot of paths it shouldn't need to
 fn total_orbits(orbits: &HashMap<&str, &str>) -> usize {
     orbits
         .keys()
@@ -83,6 +87,10 @@ fn transfers_from_to<'a>(
             let option = transfer_map.get(o);
             let option_iter = option.iter();
             let elements_iter = option_iter.map(|x| x.iter()).flatten().map(|x| (*x, 1));
+            // Unfortunately, this seems to be the only way to resolve the lifetimes
+            // otherwise the `option` value can't be shown to live long enough
+            // we have to collapse the iterator chain out of the option into a data structure
+            // and then consume that
             let v: Vec<_> = elements_iter.collect();
             v.into_iter()
         },
