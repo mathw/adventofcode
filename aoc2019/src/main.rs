@@ -17,11 +17,14 @@ fn main() -> Result<(), String> {
 
     if args.len() != 2 {
         // run all days!
-        let last_known_day = 5;
+        let last_known_day = 6;
+        let mut total_time = 0;
         for day in 1..=last_known_day {
             println!("\n## Running Day {}/{}...", day, last_known_day);
-            run_day(day)?;
+            let day_time = run_day(day)?;
+            total_time += day_time;
         }
+        println!("\n [{}ms] all days", total_time);
         return Ok(());
     }
 
@@ -32,10 +35,13 @@ fn main() -> Result<(), String> {
     )
     .map_err(|e| e.to_string())?;
 
-    run_day(requested_day)
+    let total_time = run_day(requested_day)?;
+
+    println!("[{}ms] total", total_time);
+    Ok(())
 }
 
-fn run_day(day: u8) -> Result<(), String> {
+fn run_day(day: u8) -> Result<u128, String> {
     let (mut day, construct_time) = timed_result(|| make_day(day))?;
     println!("[{}ms] construct", construct_time);
 
@@ -45,9 +51,7 @@ fn run_day(day: u8) -> Result<(), String> {
     let (part2, part2_time) = timed_result(|| day.part2())?;
     println!("[{}ms] 2: {}", part2_time, part2);
 
-    println!("[{}ms] total", construct_time + part1_time + part2_time);
-
-    Ok(())
+    Ok(construct_time + part1_time + part2_time)
 }
 
 fn make_day(day: u8) -> Result<Box<dyn Day>, String> {
