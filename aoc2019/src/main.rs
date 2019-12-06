@@ -4,6 +4,7 @@ mod day02;
 mod day03;
 mod day04;
 mod day05;
+mod day06;
 mod intcode;
 
 use crate::day::Day;
@@ -56,6 +57,7 @@ fn make_day(day: u8) -> Result<Box<dyn Day>, String> {
         3 => Ok(Box::new(day03::Day3::new())),
         4 => Ok(Box::new(day04::Day4::new())),
         5 => Ok(Box::new(day05::Day5::new()?)),
+        6 => Ok(Box::new(day06::Day6::new()?)),
         _ => Err(format!("I don't know how to make day {} yet", day)),
     }
 }
