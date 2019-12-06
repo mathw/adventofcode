@@ -1,5 +1,5 @@
 use crate::day::Day;
-use pathfinding::directed::{dfs::dfs, dijkstra::dijkstra};
+use pathfinding::directed::dijkstra::dijkstra;
 use std::collections::{HashMap, HashSet};
 
 pub struct Day6 {
@@ -9,7 +9,7 @@ pub struct Day6 {
 impl Day6 {
     pub fn new() -> Result<Day6, String> {
         Ok(Day6 {
-            orbits: construct_orbits(parse_input(include_str!("input.txt"))),
+            orbits: parse_input(include_str!("input.txt")),
         })
     }
 }
@@ -26,47 +26,51 @@ impl Day for Day6 {
     }
 }
 
-fn parse_input<'a>(input: &'a str) -> impl Iterator<Item = (&'a str, &'a str)> {
-    input.lines().map(|line| line.split(')')).map(|mut pair| {
-        (
-            pair.next().expect("first wasn't there"),
-            pair.next().expect("second wasn't there"),
-        )
-    })
+/// Takes input at one fact per line in format ORBITTED)ORBITER
+/// Returns a map of orbiter -> orbitted
+fn parse_input<'a>(input: &'a str) -> HashMap<&'a str, &'a str> {
+    input
+        .lines()
+        .map(|line| line.split(')'))
+        .map(|mut pair| {
+            let orbitted = pair.next().expect("orbitted body wasn't there");
+            let orbiter = pair.next().expect("orbiting body wasn't there");
+            (orbiter, orbitted)
+        })
+        .collect()
 }
 
-fn construct_orbits<'a>(
-    data: impl Iterator<Item = (&'a str, &'a str)>,
-) -> HashMap<&'a str, &'a str> {
-    let mut map = HashMap::new();
-
-    for (orbitted, orbiter) in data {
-        map.insert(orbiter, orbitted);
+fn steps_to_common_centre<'a>(
+    orbits: &HashMap<&'a str, &'a str>,
+    object: &'a str,
+    cache: &mut HashMap<&'a str, usize>,
+) -> usize {
+    if let Some(&cached) = cache.get(object) {
+        return cached;
     }
 
-    map
-}
+    let mut steps = 0;
 
-fn steps_to_common_centre<'a>(orbits: &HashMap<&'a str, &'a str>, object: &'a str) -> usize {
-    let result = dfs(
-        object,
-        |o| orbits.get(o).into_iter().cloned(),
-        |o| !orbits.contains_key(o),
-    );
-    match result {
-        None => 0,
-        Some(path) => path.len() - 1,
+    if let Some(next) = orbits.get(object) {
+        let rest = steps_to_common_centre(orbits, next, cache);
+        steps += rest + 1;
     }
+
+    cache.insert(object, steps);
+
+    steps
 }
 
 /// Compute how many direct and indirect orbits are in the given orbit graph.
 /// Visits each orbiter and computs the number of steps to the common centre
 /// for each one, then adds them all together.
-/// Could definitely be quicker, as it recomputes a lot of paths it shouldn't need to
+/// Passes a cache between calls to help avoid recalculating expensive things
 fn total_orbits(orbits: &HashMap<&str, &str>) -> usize {
+    let mut cache = HashMap::new();
+
     orbits
         .keys()
-        .map(|o| steps_to_common_centre(orbits, o))
+        .map(|o| steps_to_common_centre(orbits, o, &mut cache))
         .sum()
 }
 
@@ -124,17 +128,8 @@ J)K
 K)L";
 
 #[test]
-fn test_parse_input() {
-    let result = parse_input(TEST_INPUT).collect::<Vec<_>>();
-    assert_eq!(result.len(), 11, "11 inputs should be parsed");
-    assert_eq!(result[0], ("COM", "B"));
-    assert_eq!(result[5], ("B", "G"));
-}
-
-#[test]
 fn test_construct_orbits() {
-    let iter = parse_input(TEST_INPUT);
-    let map = construct_orbits(iter);
+    let map = parse_input(TEST_INPUT);
     assert_eq!(map.len(), 11);
     let b = map["B"];
     assert_eq!(b, "COM");
@@ -145,20 +140,19 @@ fn test_construct_orbits() {
 
 #[test]
 fn test_common_centre() {
-    let iter = parse_input(TEST_INPUT);
-    let map = construct_orbits(iter);
-    let d = steps_to_common_centre(&map, "D");
+    let map = parse_input(TEST_INPUT);
+    let mut cache = HashMap::new();
+    let d = steps_to_common_centre(&map, "D", &mut cache);
     assert_eq!(d, 3, "D");
-    let l = steps_to_common_centre(&map, "L");
+    let l = steps_to_common_centre(&map, "L", &mut cache);
     assert_eq!(l, 7, "L");
-    let com = steps_to_common_centre(&map, "COM");
+    let com = steps_to_common_centre(&map, "COM", &mut cache);
     assert_eq!(com, 0, "COM");
 }
 
 #[test]
 fn test_total_orbits() {
-    let iter = parse_input(TEST_INPUT);
-    let map = construct_orbits(iter);
+    let map = parse_input(TEST_INPUT);
     let total = total_orbits(&map);
     assert_eq!(total, 42);
 }
@@ -180,7 +174,7 @@ I)SAN";
 
 #[test]
 fn test_transfers() {
-    let orbits = construct_orbits(parse_input(TEST_INPUT_2));
+    let orbits = parse_input(TEST_INPUT_2);
     if let Some((_path, cost)) = transfers_from_to(&orbits, "YOU", "SAN") {
         assert_eq!(cost, 4);
     } else {
