@@ -6,6 +6,10 @@ use std::str::FromStr;
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Program {
     locations: Vec<i32>,
+}
+
+struct ProgramRunner {
+    locations: Vec<i32>,
     program_counter: usize,
     inputs: Vec<i32>,
     outputs: Vec<i32>,
@@ -18,29 +22,41 @@ impl FromStr for Program {
         s.split(',')
             .map(|n| i32::from_str(n.trim()))
             .collect::<Result<Vec<i32>, Self::Err>>()
-            .map(|v| Program {
-                locations: v,
-                program_counter: 0,
-                inputs: vec![],
-                outputs: vec![],
-                running: false,
-            })
+            .map(|v| Program { locations: v })
     }
 }
 
 impl Program {
     pub fn run(&mut self, inputs: &Vec<i32>) -> Vec<i32> {
-        self.inputs = inputs.iter().rev().cloned().collect();
-        self.program_counter = 0;
-        self.running = true;
+        let runner = self.run_core(inputs);
+        self.locations = runner.locations;
 
-        while self.running {
-            self.opcode();
-        }
-
-        self.outputs.clone()
+        runner.outputs.clone()
     }
 
+    pub fn run_pure(&self, inputs: &Vec<i32>) -> Vec<i32> {
+        let runner = self.run_core(inputs);
+        runner.outputs.clone()
+    }
+
+    fn run_core(&self, inputs: &Vec<i32>) -> ProgramRunner {
+        let mut runner = ProgramRunner {
+            locations: self.locations.clone(),
+            program_counter: 0,
+            inputs: inputs.iter().rev().cloned().collect(),
+            outputs: Vec::new(),
+            running: true,
+        };
+
+        while runner.running {
+            runner.opcode();
+        }
+
+        runner
+    }
+}
+
+impl ProgramRunner {
     fn current(&self) -> i32 {
         self.locations[self.program_counter]
     }
@@ -251,8 +267,8 @@ fn test_input() {
 
 #[test]
 fn test_output() {
-    let mut program = Program::from_str("4,3,99,5").unwrap();
-    let outputs = program.run(&vec![]);
+    let program = Program::from_str("4,3,99,5").unwrap();
+    let outputs = program.run_pure(&vec![]);
     assert_eq!(outputs, vec![5]);
 }
 
@@ -265,8 +281,8 @@ fn test_run_sample() {
 
 #[test]
 fn test_output_immediate() {
-    let mut program = Program::from_str("104, 2, 99, 5, 22").unwrap();
-    let outputs = program.run(&vec![]);
+    let program = Program::from_str("104, 2, 99, 5, 22").unwrap();
+    let outputs = program.run_pure(&vec![]);
     assert_eq!(outputs, vec![2]);
 }
 
@@ -276,13 +292,11 @@ fn test_day5_part2_sample1() {
     let program = Program::from_str("3,9,8,9,10,9,4,9,99,-1,8").expect("Program should parse");
 
     // check == 8
-    let mut program1 = program.clone();
-    let outputs = program1.run(&mut vec![8]);
+    let outputs = program.run_pure(&mut vec![8]);
     assert_eq!(outputs, vec![1]);
 
     // check != 8
-    let mut program2 = program.clone();
-    let outputs = program2.run(&mut vec![6]);
+    let outputs = program.run_pure(&mut vec![6]);
     assert_eq!(outputs, vec![0]);
 }
 
@@ -292,13 +306,11 @@ fn test_day5_part2_sample3() {
     let program = Program::from_str("3,3,1108,-1,8,3,4,3,99").expect("Program should parse");
 
     // check == 8
-    let mut program1 = program.clone();
-    let outputs = program1.run(&mut vec![8]);
+    let outputs = program.run_pure(&mut vec![8]);
     assert_eq!(outputs, vec![1]);
 
     // check != 8
-    let mut program2 = program.clone();
-    let outputs = program2.run(&mut vec![6]);
+    let outputs = program.run_pure(&mut vec![6]);
     assert_eq!(outputs, vec![0]);
 }
 
@@ -315,17 +327,14 @@ fn test_day5_part2_big_sample() {
     .expect("Program should parse");
 
     // check == 8
-    let mut program1 = program.clone();
-    let outputs = program1.run(&mut vec![8]);
+    let outputs = program.run_pure(&mut vec![8]);
     assert_eq!(outputs, vec![1000]);
 
     // check < 8
-    let mut program1 = program.clone();
-    let outputs = program1.run(&mut vec![7]);
+    let outputs = program.run_pure(&mut vec![7]);
     assert_eq!(outputs, vec![999]);
 
     // check > 8
-    let mut program1 = program.clone();
-    let outputs = program1.run(&mut vec![9]);
+    let outputs = program.run_pure(&mut vec![9]);
     assert_eq!(outputs, vec![1001]);
 }
