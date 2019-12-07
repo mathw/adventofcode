@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 itertools = "0.8.2"
 pathfinding = "2"
+rayon = "1.2.1"
