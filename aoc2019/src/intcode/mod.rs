@@ -8,14 +8,6 @@ pub struct Program {
     locations: Vec<i32>,
 }
 
-struct ProgramRunner {
-    locations: Vec<i32>,
-    program_counter: usize,
-    inputs: Vec<i32>,
-    outputs: Vec<i32>,
-    running: bool,
-}
-
 impl FromStr for Program {
     type Err = ParseIntError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -26,37 +18,133 @@ impl FromStr for Program {
     }
 }
 
-impl Program {
-    pub fn run(&mut self, inputs: &Vec<i32>) -> Vec<i32> {
-        let runner = self.run_core(inputs);
-        self.locations = runner.locations;
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum State {
+    NeedsInput,
+    ProvidedOutput(i32),
+    Completed,
+}
 
-        runner.outputs.clone()
+pub struct RunState {
+    pub state: State,
+    runner: ProgramRunner,
+}
+
+impl RunState {
+    pub fn resume(self) -> RunState {
+        RunState::next(self.runner)
     }
 
-    pub fn run_pure(&self, inputs: &Vec<i32>) -> Vec<i32> {
-        let runner = self.run_core(inputs);
-        runner.outputs.clone()
+    pub fn resume_with_input(self, input: i32) -> RunState {
+        let mut runner = self.runner;
+        runner.provide_input(input);
+        RunState::next(runner)
     }
 
-    fn run_core(&self, inputs: &Vec<i32>) -> ProgramRunner {
-        let mut runner = ProgramRunner {
-            locations: self.locations.clone(),
-            program_counter: 0,
-            inputs: inputs.iter().rev().cloned().collect(),
-            outputs: Vec::new(),
-            running: true,
-        };
-
-        while runner.running {
-            runner.opcode();
+    fn next(mut runner: ProgramRunner) -> RunState {
+        loop {
+            match runner.run_until_state_change() {
+                ProgramState::Completed => {
+                    return RunState {
+                        state: State::Completed,
+                        runner,
+                    }
+                }
+                ProgramState::NeedsInput => {
+                    return RunState {
+                        state: State::NeedsInput,
+                        runner,
+                    }
+                }
+                ProgramState::ProvidedOutput(o) => {
+                    return RunState {
+                        state: State::ProvidedOutput(o),
+                        runner,
+                    }
+                }
+                ProgramState::Running => continue,
+                ProgramState::NotStarted => panic!("Cannot transition into NotStarted"),
+            }
         }
-
-        runner
     }
 }
 
+impl Program {
+    pub fn run(&mut self, inputs: &Vec<i32>) -> Vec<i32> {
+        let (locations, outputs) = self.run_core(inputs);
+        self.locations = locations;
+
+        outputs
+    }
+
+    pub fn run_pure(&self, inputs: &Vec<i32>) -> Vec<i32> {
+        self.run_core(inputs).1
+    }
+
+    pub fn run_until_needs_interaction(&self) -> RunState {
+        let runner = ProgramRunner::new(self.locations.clone());
+        let runstate = RunState {
+            state: State::Completed,
+            runner: runner,
+        };
+        runstate.resume()
+    }
+
+    fn run_core(&self, inputs: &Vec<i32>) -> (Vec<i32>, Vec<i32>) {
+        let mut inputs = inputs.iter().rev().cloned().collect::<Vec<i32>>();
+        let mut outputs = Vec::new();
+
+        let mut runstate = self.run_until_needs_interaction();
+
+        loop {
+            match runstate.state {
+                State::Completed => break,
+                State::NeedsInput => {
+                    runstate = runstate
+                        .resume_with_input(inputs.pop().expect("Not enough inputs provideed"))
+                }
+                State::ProvidedOutput(o) => {
+                    outputs.push(o);
+                    runstate = runstate.resume()
+                }
+            }
+        }
+
+        (runstate.runner.locations, outputs)
+    }
+}
+
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
+enum ProgramState {
+    NotStarted,
+    Running,
+    NeedsInput,
+    ProvidedOutput(i32),
+    Completed,
+}
+
+struct ProgramRunner {
+    locations: Vec<i32>,
+    program_counter: usize,
+    inputs: Vec<i32>,
+    state: ProgramState,
+}
+
 impl ProgramRunner {
+    fn new(locations: Vec<i32>) -> ProgramRunner {
+        ProgramRunner {
+            locations,
+            program_counter: 0,
+            inputs: Vec::new(),
+            state: ProgramState::NotStarted,
+        }
+    }
+
+    fn run_until_state_change(&mut self) -> ProgramState {
+        while self.opcode() == ProgramState::Running {}
+        self.state
+    }
+
     fn current(&self) -> i32 {
         self.locations[self.program_counter]
     }
@@ -81,9 +169,9 @@ impl ProgramRunner {
         }
     }
 
-    fn opcode(&mut self) {
-        match self.current_opcode() {
-            99 => self.running = false,
+    fn opcode(&mut self) -> ProgramState {
+        self.state = match self.current_opcode() {
+            99 => ProgramState::Completed,
             1 => self.binary_operation(|a, b| a + b),
             2 => self.binary_operation(|a, b| a * b),
             3 => self.input(),
@@ -93,7 +181,9 @@ impl ProgramRunner {
             7 => self.comparative(|a, b| a < b),
             8 => self.comparative(|a, b| a == b),
             op => panic!("Unknown opcode {}", op),
-        }
+        };
+
+        self.state
     }
 
     fn argument_value(&self, offset: usize, mode: Mode) -> i32 {
@@ -108,7 +198,7 @@ impl ProgramRunner {
         self.locations[self.program_counter + offset]
     }
 
-    fn binary_operation<O>(&mut self, operation: O)
+    fn binary_operation<O>(&mut self, operation: O) -> ProgramState
     where
         O: Fn(i32, i32) -> i32,
     {
@@ -120,22 +210,33 @@ impl ProgramRunner {
         self.locations[result_position] = operation(first_argument, second_argument);
 
         self.advance(4);
+
+        ProgramState::Running
     }
 
-    fn input(&mut self) {
-        let first_argument_position = self.at_offset(1) as usize;
-        let input = self.inputs.pop().expect("Cannot run input: no more inputs");
-        self.locations[first_argument_position] = input;
-        self.advance(2);
+    fn provide_input(&mut self, input: i32) {
+        self.inputs.push(input)
     }
 
-    fn output(&mut self) {
+    fn input(&mut self) -> ProgramState {
+        if self.inputs.is_empty() {
+            ProgramState::NeedsInput
+        } else {
+            let first_argument_position = self.at_offset(1) as usize;
+            let input = self.inputs.pop().expect("Cannot run input: no more inputs");
+            self.locations[first_argument_position] = input;
+            self.advance(2);
+            ProgramState::Running
+        }
+    }
+
+    fn output(&mut self) -> ProgramState {
         let first_argument = self.argument_value(1, self.unary_parameter_mode());
-        self.outputs.push(first_argument);
         self.advance(2);
+        ProgramState::ProvidedOutput(first_argument)
     }
 
-    fn jump_if(&mut self, want_true: bool) {
+    fn jump_if(&mut self, want_true: bool) -> ProgramState {
         let (mode1, mode2) = self.binary_parameter_modes();
         let first = self.argument_value(1, mode1);
         let second = self.argument_value(2, mode2) as usize;
@@ -143,14 +244,15 @@ impl ProgramRunner {
         if want_true {
             if first != 0 {
                 self.jump(second);
-                return;
+                return ProgramState::Running;
             }
         } else if first == 0 {
             self.jump(second);
-            return;
+            return ProgramState::Running;
         }
 
         self.advance(3);
+        ProgramState::Running
     }
 
     fn advance(&mut self, offset: usize) {
@@ -161,7 +263,7 @@ impl ProgramRunner {
         self.program_counter = target
     }
 
-    fn comparative<F>(&mut self, compare: F)
+    fn comparative<F>(&mut self, compare: F) -> ProgramState
     where
         F: Fn(i32, i32) -> bool,
     {
