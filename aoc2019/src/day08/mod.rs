@@ -1,4 +1,5 @@
 use crate::day::Day;
+use itertools::Itertools;
 
 pub struct Day8 {
     image_layers: Vec<Vec<u8>>,
@@ -25,7 +26,27 @@ impl Day for Day8 {
     }
 
     fn part2(&mut self) -> Result<String, String> {
-        Err("Not implemented".into())
+        let pixel_layers = self
+            .image_layers
+            .iter()
+            .map(|l| layer_to_pixels(l.as_slice()))
+            .collect::<Result<Vec<Vec<Pixel>>, String>>()?;
+        let result = stack_all_layers(pixel_layers.as_slice());
+        let result_string = result
+            .iter()
+            .chunks(25)
+            .into_iter()
+            .map(|line| {
+                line.map(|pixel| match pixel {
+                    Pixel::White => '\u{2588}',
+                    Pixel::Black => ' ',
+                    Pixel::Transparent => ' ',
+                })
+                .collect::<String>()
+            })
+            .intersperse("\n".to_owned())
+            .collect::<String>();
+        Ok(format!("\n{}", result_string))
     }
 }
 
@@ -83,6 +104,43 @@ fn count_digits<T: Eq>(layer: &[T], digit: &T) -> usize {
     layer.iter().filter(|d| **d == *digit).count()
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+enum Pixel {
+    Black,
+    White,
+    Transparent,
+}
+
+fn layer_to_pixels(layer: &[u8]) -> Result<Vec<Pixel>, String> {
+    layer
+        .iter()
+        .map(|b| match b {
+            0 => Ok(Pixel::Black),
+            1 => Ok(Pixel::White),
+            2 => Ok(Pixel::Transparent),
+            _ => Err(format!("Invalid image data {}", b)),
+        })
+        .collect()
+}
+
+fn stack_layers(upper: &[Pixel], lower: &[Pixel]) -> Vec<Pixel> {
+    upper
+        .iter()
+        .zip(lower.iter())
+        .map(|(u, l)| match u {
+            Pixel::Transparent => *l,
+            _ => *u,
+        })
+        .collect()
+}
+
+fn stack_all_layers(layers: &[Vec<Pixel>]) -> Vec<Pixel> {
+    let transparent_layer = layers[0].iter().map(|_| Pixel::Transparent).collect();
+    layers.iter().fold(transparent_layer, |upper, lower| {
+        stack_layers(upper.as_slice(), lower.as_slice())
+    })
+}
+
 #[test]
 fn test_parse_layers() {
     let input = "123456789012";
@@ -105,4 +163,22 @@ fn test_layer_with_fewest() {
 
     let fewest_fives = layer_with_fewest(layers.as_slice(), &5);
     assert_eq!(fewest_fives, Some(layers[1].as_slice()));
+}
+
+#[test]
+fn test_stacking() {
+    let input = "0222112222120000";
+    let width = 2;
+    let height = 2;
+    let layers = parse_layers(input, width, height)
+        .expect("Layers should parse")
+        .into_iter()
+        .map(|v| layer_to_pixels(v.as_slice()))
+        .collect::<Result<Vec<Vec<Pixel>>, String>>()
+        .expect("All pixel data should be valid");
+    let result = stack_all_layers(layers.as_slice());
+    assert_eq!(
+        result,
+        vec![Pixel::Black, Pixel::White, Pixel::White, Pixel::Black]
+    )
 }
