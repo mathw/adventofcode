@@ -1,9 +1,11 @@
+use std::fmt::Display;
+
 /// An abstraction over a contiguous array of memory which can auto-grow when necessary
 pub struct Memory<N>(Vec<N>);
 
 impl<N> Memory<N>
 where
-    N: From<i32> + Copy,
+    N: From<i32> + Copy + Display,
 {
     pub fn get(&self, index: usize) -> N {
         if self.0.len() < index + 1 {

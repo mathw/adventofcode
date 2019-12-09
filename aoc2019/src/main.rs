@@ -7,6 +7,7 @@ mod day05;
 mod day06;
 mod day07;
 mod day08;
+mod day09;
 mod intcode;
 
 use crate::day::Day;
@@ -19,7 +20,7 @@ fn main() -> Result<(), String> {
 
     if args.len() != 2 {
         // run all days!
-        let last_known_day = 8;
+        let last_known_day = 9;
         let mut total_time = 0;
         for day in 1..=last_known_day {
             println!("\n## Running Day {}/{}...", day, last_known_day);
@@ -66,6 +67,7 @@ fn make_day(day: u8) -> Result<Box<dyn Day>, String> {
         6 => Ok(Box::new(day06::Day6::new()?)),
         7 => Ok(Box::new(day07::Day7::new()?)),
         8 => Ok(Box::new(day08::Day8::new()?)),
+        9 => Ok(Box::new(day09::Day9::new()?)),
         _ => Err(format!("I don't know how to make day {} yet", day)),
     }
 }

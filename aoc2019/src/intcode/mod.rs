@@ -162,7 +162,7 @@ enum ProgramState<N> {
 struct ProgramRunner<N> {
     memory: Memory<N>,
     program_counter: usize,
-    relative_offset: usize,
+    relative_offset: N,
     inputs: Vec<N>,
     state: ProgramState<N>,
 }
@@ -182,7 +182,7 @@ where
         ProgramRunner {
             memory: Memory::from(locations),
             program_counter: 0,
-            relative_offset: 0,
+            relative_offset: 0i32.into(),
             inputs: Vec::new(),
             state: ProgramState::NotStarted,
         }
@@ -200,7 +200,7 @@ where
     fn to_usize_or_panic(n: N) -> usize {
         match usize::try_from(n) {
             Ok(u) => u,
-            Err(_) => panic!("This N must be convertable to usize"),
+            Err(_) => panic!("This N {} must be convertable to usize", n),
         }
     }
 
@@ -256,7 +256,7 @@ where
             Mode::Immediate => self.program_counter + offset,
             Mode::Position => Self::to_usize_or_panic(self.memory.get(parameter_index)),
             Mode::Relative => {
-                Self::to_usize_or_panic(self.memory.get(parameter_index)) + self.relative_offset
+                Self::to_usize_or_panic(self.memory.get(parameter_index) + self.relative_offset)
             }
         };
         self.memory.get(value_index)
@@ -266,9 +266,9 @@ where
         let parameter_index = self.program_counter + offset;
         Self::to_usize_or_panic(match mode {
             Mode::Immediate | Mode::Position => self.memory.get(parameter_index),
-            Mode::Relative => self
-                .memory
-                .get(Self::to_usize_or_panic(self.memory.get(parameter_index))),
+            Mode::Relative => self.memory.get(Self::to_usize_or_panic(
+                self.memory.get(parameter_index) + self.relative_offset,
+            )),
         })
     }
 
@@ -276,8 +276,8 @@ where
     where
         O: Fn(N, N) -> N,
     {
-        let (mode1, mode2, mode3) = self.trinary_parameter_modes();
-        let result_position = self.output_parameter_write_location(3, mode3);
+        let (mode1, mode2, result_mode) = self.trinary_parameter_modes();
+        let result_position = self.output_parameter_write_location(3, result_mode);
         let first_argument = self.parameter_value(1, mode1);
         let second_argument = self.parameter_value(2, mode2);
 
@@ -356,7 +356,9 @@ where
         let mode = self.unary_parameter_mode();
         let value = self.parameter_value(1, mode);
 
-        self.relative_offset = Self::to_usize_or_panic(value);
+        self.relative_offset = self.relative_offset + value;
+
+        self.advance(2);
 
         ProgramState::Running
     }
@@ -562,4 +564,50 @@ fn test_out_of_bounds_write() {
     let outputs = program.run_pure(&Vec::new());
 
     assert_eq!(outputs, vec![5]);
+}
+
+#[test]
+fn test_quine() {
+    let program =
+        Program::<i32>::from_str("109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99")
+            .expect("Program should parse");
+
+    let outputs = program.run_pure(&Vec::new());
+
+    assert_eq!(
+        outputs,
+        vec![109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99]
+    );
+}
+
+#[test]
+fn test_add_relative() {
+    // set offset to 1
+    // add 1 to value from relative location -1 (location 0, value 109), store in 2
+    // output value in location 2
+    // stop
+    let program =
+        Program::<i32>::from_str("109,1,12101,1,-1,2,4,2,99").expect("Program should parse");
+
+    let outputs = program.run_pure(&Vec::new());
+
+    assert_eq!(outputs, vec![110]);
+}
+
+#[test]
+fn test_sixteen_digit_number() {
+    let program = Program::<i64>::from_str("1102,34915192,34915192,7,4,7,99,0")
+        .expect("Program should parse");
+
+    let outputs = program.run_pure(&Vec::new());
+
+    assert_eq!(outputs, vec![1219070632396864]);
+}
+
+#[test]
+fn test_output_large_number() {
+    let program =
+        Program::<i64>::from_str("104,1125899906842624,99").expect("Program should parse");
+
+    assert_eq!(program.run_pure(&Vec::new()), vec![1125899906842624]);
 }
