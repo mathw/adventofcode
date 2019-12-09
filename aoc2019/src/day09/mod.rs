@@ -28,13 +28,21 @@ impl Day for Day9 {
                 outputs
                     .iter()
                     .map(|x| x.to_string())
-                    .intersperse(", ".to_owned())
+                    .intersperse(",".to_owned())
                     .collect::<String>()
             ))
         }
     }
 
     fn part2(&mut self) -> Result<String, String> {
-        Err("Not implemented".into())
+        let outputs = self.program.run_pure(&vec![2]);
+        if outputs.len() == 1 {
+            Ok(format!("The distress signal coordinate is {}", outputs[0]))
+        } else {
+            Err(format!(
+                "There was not just one output. Outputs were: {:?}",
+                outputs
+            ))
+        }
     }
 }
