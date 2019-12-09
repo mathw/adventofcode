@@ -1,3 +1,4 @@
+use crate::intcode::memory::Memory;
 use std::convert::TryFrom;
 use std::fmt::Display;
 use std::ops::Add;
@@ -6,6 +7,8 @@ use std::ops::IndexMut;
 use std::ops::Mul;
 use std::ops::Rem;
 use std::str::FromStr;
+
+mod memory;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Program<N> {
@@ -143,7 +146,7 @@ where
             }
         }
 
-        (runstate.runner.locations, outputs)
+        (runstate.runner.memory.as_vector(), outputs)
     }
 }
 
@@ -157,7 +160,7 @@ enum ProgramState<N> {
 }
 
 struct ProgramRunner<N> {
-    locations: Vec<N>,
+    memory: Memory<N>,
     program_counter: usize,
     relative_offset: usize,
     inputs: Vec<N>,
@@ -177,7 +180,7 @@ where
 {
     fn new(locations: Vec<N>) -> ProgramRunner<N> {
         ProgramRunner {
-            locations,
+            memory: Memory::from(locations),
             program_counter: 0,
             relative_offset: 0,
             inputs: Vec::new(),
@@ -191,7 +194,7 @@ where
     }
 
     fn current(&self) -> N {
-        self.locations[self.program_counter]
+        self.memory.get(self.program_counter)
     }
 
     fn to_usize_or_panic(n: N) -> usize {
@@ -251,21 +254,21 @@ where
         let parameter_index = self.program_counter + offset;
         let value_index = match mode {
             Mode::Immediate => self.program_counter + offset,
-            Mode::Position => Self::to_usize_or_panic(self.locations[parameter_index]),
+            Mode::Position => Self::to_usize_or_panic(self.memory.get(parameter_index)),
             Mode::Relative => {
-                Self::to_usize_or_panic(self.locations[parameter_index]) + self.relative_offset
+                Self::to_usize_or_panic(self.memory.get(parameter_index)) + self.relative_offset
             }
         };
-        self.locations[value_index]
+        self.memory.get(value_index)
     }
 
     fn output_parameter_write_location(&self, offset: usize, mode: Mode) -> usize {
         let parameter_index = self.program_counter + offset;
         Self::to_usize_or_panic(match mode {
-            Mode::Immediate | Mode::Position => self.locations[parameter_index],
-            Mode::Relative => {
-                self.locations[Self::to_usize_or_panic(self.locations[parameter_index])]
-            }
+            Mode::Immediate | Mode::Position => self.memory.get(parameter_index),
+            Mode::Relative => self
+                .memory
+                .get(Self::to_usize_or_panic(self.memory.get(parameter_index))),
         })
     }
 
@@ -278,7 +281,8 @@ where
         let first_argument = self.parameter_value(1, mode1);
         let second_argument = self.parameter_value(2, mode2);
 
-        self.locations[result_position] = operation(first_argument, second_argument);
+        self.memory
+            .set(result_position, operation(first_argument, second_argument));
 
         self.advance(4);
 
@@ -296,7 +300,7 @@ where
             let mode = self.unary_parameter_mode();
             let write_location = self.output_parameter_write_location(1, mode);
             let input = self.inputs.pop().expect("Cannot run input: no more inputs");
-            self.locations[write_location] = input;
+            self.memory.set(write_location, input);
             self.advance(2);
             ProgramState::Running
         }
@@ -538,4 +542,24 @@ fn test_day5_part2_big_sample() {
     // check > 8
     let outputs = program.run_pure(&mut vec![9]);
     assert_eq!(outputs, vec![1001]);
+}
+
+#[test]
+fn test_out_of_bounds_output() {
+    let program = Program::<i32>::from_str("4, 0, 4, 67, 99").expect("Program should parse");
+
+    // should output location 0 (4), then location 67 (0)
+    let outputs = program.run_pure(&Vec::new());
+
+    assert_eq!(outputs, vec![4, 0]);
+}
+
+#[test]
+fn test_out_of_bounds_write() {
+    let program = Program::<i32>::from_str("01101,2,3,7,4,7,99").expect("Program should parse");
+
+    // calculate 2 + 3 and store in #7, then output #7
+    let outputs = program.run_pure(&Vec::new());
+
+    assert_eq!(outputs, vec![5]);
 }
