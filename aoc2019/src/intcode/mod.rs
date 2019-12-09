@@ -159,6 +159,7 @@ enum ProgramState<N> {
 struct ProgramRunner<N> {
     locations: Vec<N>,
     program_counter: usize,
+    relative_offset: usize,
     inputs: Vec<N>,
     state: ProgramState<N>,
 }
@@ -178,6 +179,7 @@ where
         ProgramRunner {
             locations,
             program_counter: 0,
+            relative_offset: 0,
             inputs: Vec::new(),
             state: ProgramState::NotStarted,
         }
@@ -201,6 +203,14 @@ where
 
     fn current_opcode(&self) -> usize {
         Self::to_usize_or_panic(self.current() % 100i32.into())
+    }
+
+    fn trinary_parameter_modes(&self) -> (Mode, Mode, Mode) {
+        if self.current() > 100i32.into() {
+            str_to_trinary_modes(&self.current().to_string())
+        } else {
+            (Mode::Position, Mode::Position, Mode::Position)
+        }
     }
 
     fn binary_parameter_modes(&self) -> (Mode, Mode) {
@@ -230,32 +240,43 @@ where
             6 => self.jump_if(false),
             7 => self.comparative(|a, b| a < b),
             8 => self.comparative(|a, b| a == b),
+            9 => self.set_relative_offset(),
             op => panic!("Unknown opcode {}", op),
         };
 
         self.state
     }
 
-    fn argument_value(&self, offset: usize, mode: Mode) -> N {
-        let location_value = self.at_offset(offset);
-        match mode {
-            Mode::Immediate => location_value,
-            Mode::Position => self.locations[Self::to_usize_or_panic(location_value)],
-        }
+    fn parameter_value(&self, offset: usize, mode: Mode) -> N {
+        let parameter_index = self.program_counter + offset;
+        let value_index = match mode {
+            Mode::Immediate => self.program_counter + offset,
+            Mode::Position => Self::to_usize_or_panic(self.locations[parameter_index]),
+            Mode::Relative => {
+                Self::to_usize_or_panic(self.locations[parameter_index]) + self.relative_offset
+            }
+        };
+        self.locations[value_index]
     }
 
-    fn at_offset(&self, offset: usize) -> N {
-        self.locations[self.program_counter + offset]
+    fn output_parameter_write_location(&self, offset: usize, mode: Mode) -> usize {
+        let parameter_index = self.program_counter + offset;
+        Self::to_usize_or_panic(match mode {
+            Mode::Immediate | Mode::Position => self.locations[parameter_index],
+            Mode::Relative => {
+                self.locations[Self::to_usize_or_panic(self.locations[parameter_index])]
+            }
+        })
     }
 
     fn binary_operation<O>(&mut self, operation: O) -> ProgramState<N>
     where
         O: Fn(N, N) -> N,
     {
-        let (mode1, mode2) = self.binary_parameter_modes();
-        let result_position = Self::to_usize_or_panic(self.at_offset(3));
-        let first_argument = self.argument_value(1, mode1);
-        let second_argument = self.argument_value(2, mode2);
+        let (mode1, mode2, mode3) = self.trinary_parameter_modes();
+        let result_position = self.output_parameter_write_location(3, mode3);
+        let first_argument = self.parameter_value(1, mode1);
+        let second_argument = self.parameter_value(2, mode2);
 
         self.locations[result_position] = operation(first_argument, second_argument);
 
@@ -272,24 +293,25 @@ where
         if self.inputs.is_empty() {
             ProgramState::NeedsInput
         } else {
-            let first_argument_position = Self::to_usize_or_panic(self.at_offset(1));
+            let mode = self.unary_parameter_mode();
+            let write_location = self.output_parameter_write_location(1, mode);
             let input = self.inputs.pop().expect("Cannot run input: no more inputs");
-            self.locations[first_argument_position] = input;
+            self.locations[write_location] = input;
             self.advance(2);
             ProgramState::Running
         }
     }
 
     fn output(&mut self) -> ProgramState<N> {
-        let first_argument = self.argument_value(1, self.unary_parameter_mode());
+        let first_argument = self.parameter_value(1, self.unary_parameter_mode());
         self.advance(2);
         ProgramState::ProvidedOutput(first_argument)
     }
 
     fn jump_if(&mut self, want_true: bool) -> ProgramState<N> {
         let (mode1, mode2) = self.binary_parameter_modes();
-        let first = self.argument_value(1, mode1);
-        let second = Self::to_usize_or_panic(self.argument_value(2, mode2));
+        let first = self.parameter_value(1, mode1);
+        let second = Self::to_usize_or_panic(self.parameter_value(2, mode2));
 
         if want_true {
             if first != 0i32.into() {
@@ -325,6 +347,15 @@ where
             }
         })
     }
+
+    fn set_relative_offset(&mut self) -> ProgramState<N> {
+        let mode = self.unary_parameter_mode();
+        let value = self.parameter_value(1, mode);
+
+        self.relative_offset = Self::to_usize_or_panic(value);
+
+        ProgramState::Running
+    }
 }
 
 impl<N> Index<usize> for Program<N> {
@@ -345,14 +376,25 @@ impl<N> IndexMut<usize> for Program<N> {
 enum Mode {
     Position,
     Immediate,
+    Relative,
 }
 
 fn char_to_mode(c: char) -> Mode {
     match c {
         '0' => Mode::Position,
         '1' => Mode::Immediate,
+        '2' => Mode::Relative,
         _ => panic!("unknown mode character {}", c),
     }
+}
+
+fn str_to_trinary_modes(s: &str) -> (Mode, Mode, Mode) {
+    let mut nums = s.chars().rev().skip(2).chain(vec!['0', '0', '0']);
+    (
+        char_to_mode(nums.next().unwrap()),
+        char_to_mode(nums.next().unwrap()),
+        char_to_mode(nums.next().unwrap()),
+    )
 }
 
 fn str_to_binary_modes(s: &str) -> (Mode, Mode) {
