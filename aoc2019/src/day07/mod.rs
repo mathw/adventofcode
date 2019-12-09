@@ -6,13 +6,14 @@ use std::collections::VecDeque;
 use std::str::FromStr;
 
 pub struct Day7 {
-    program: Program,
+    program: Program<i32>,
 }
 
 impl Day7 {
     pub fn new() -> Result<Self, String> {
         Ok(Day7 {
-            program: Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?,
+            program: Program::<i32>::from_str(include_str!("input.txt"))
+                .map_err(|e| e.to_string())?,
         })
     }
 }
@@ -36,7 +37,7 @@ fn all_inputs() -> Vec<Vec<u8>> {
     (0..=4).permutations(5).collect()
 }
 
-fn run_iteration(program: &Program, input: &[u8]) -> i32 {
+fn run_iteration(program: &Program<i32>, input: &[u8]) -> i32 {
     let mut input_signal = 0;
 
     for i in input {
@@ -47,7 +48,7 @@ fn run_iteration(program: &Program, input: &[u8]) -> i32 {
     input_signal
 }
 
-fn find_best_output(program: &Program) -> i32 {
+fn find_best_output(program: &Program<i32>) -> i32 {
     all_inputs()
         .par_iter()
         .map(|input| run_iteration(program, &input))
@@ -59,7 +60,7 @@ fn all_inputs_2() -> Vec<Vec<u8>> {
     (5..=9).permutations(5).collect()
 }
 
-fn find_best_output_2(program: &Program) -> Result<i32, String> {
+fn find_best_output_2(program: &Program<i32>) -> Result<i32, String> {
     all_inputs_2()
         .par_iter()
         .map(|i| run_iteration_2(program, i))
@@ -67,7 +68,7 @@ fn find_best_output_2(program: &Program) -> Result<i32, String> {
         .map(|v| v.iter().max().expect("Should always have elements").clone())
 }
 
-fn run_iteration_2(program: &Program, phases: &[u8]) -> Result<i32, String> {
+fn run_iteration_2(program: &Program<i32>, phases: &[u8]) -> Result<i32, String> {
     let mut a1_inputs = VecDeque::from(vec![phases[0] as i32, 0]);
     let mut a1 = program.run_until_needs_interaction();
     let mut a2_inputs = VecDeque::from(vec![phases[1] as i32]);
@@ -98,10 +99,10 @@ fn run_iteration_2(program: &Program, phases: &[u8]) -> Result<i32, String> {
     }
 
     fn process_amplifier(
-        state: RunState,
+        state: RunState<i32>,
         inputs: &mut VecDeque<i32>,
         next_inputs: &mut VecDeque<i32>,
-    ) -> RunState {
+    ) -> RunState<i32> {
         match state.state {
             State::NeedsInput => {
                 if let Some(input) = inputs.pop_front() {

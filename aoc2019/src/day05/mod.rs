@@ -3,13 +3,14 @@ use crate::intcode::Program;
 use std::str::FromStr;
 
 pub struct Day5 {
-    program: Program,
+    program: Program<i32>,
 }
 
 impl Day5 {
     pub fn new() -> Result<Day5, String> {
         Ok(Day5 {
-            program: Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?,
+            program: Program::<i32>::from_str(include_str!("input.txt"))
+                .map_err(|e| e.to_string())?,
         })
     }
 }
@@ -29,7 +30,7 @@ impl Day for Day5 {
     }
 }
 
-fn part1(program: &mut Program) -> Result<i32, String> {
+fn part1(program: &mut Program<i32>) -> Result<i32, String> {
     let input = vec![1];
     let mut outputs = program.run(&input);
     let last_output = outputs.pop().ok_or("No last value!".to_owned())?;
@@ -44,7 +45,7 @@ fn part1(program: &mut Program) -> Result<i32, String> {
     Ok(last_output)
 }
 
-fn part2(program: &mut Program) -> Result<i32, String> {
+fn part2(program: &mut Program<i32>) -> Result<i32, String> {
     let input = vec![5];
     let mut outputs = program.run(&input);
     let last_output = outputs.pop().ok_or("No last value!".to_owned())?;

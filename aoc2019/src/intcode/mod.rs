@@ -165,7 +165,13 @@ struct ProgramRunner<N> {
 
 impl<N> ProgramRunner<N>
 where
-    N: From<i32> + Rem<Output = N> + Add<Output = N> + Mul<Output = N> + PartialOrd + Display,
+    N: From<i32>
+        + Rem<Output = N>
+        + Add<Output = N>
+        + Mul<Output = N>
+        + PartialOrd
+        + Display
+        + Copy,
     usize: TryFrom<N>,
 {
     fn new(locations: Vec<N>) -> ProgramRunner<N> {
@@ -234,7 +240,7 @@ where
         let location_value = self.at_offset(offset);
         match mode {
             Mode::Immediate => location_value,
-            Mode::Position => self.locations[location_value.into()],
+            Mode::Position => self.locations[Self::to_usize_or_panic(location_value)],
         }
     }
 
@@ -247,7 +253,7 @@ where
         O: Fn(N, N) -> N,
     {
         let (mode1, mode2) = self.binary_parameter_modes();
-        let result_position = self.at_offset(3).into();
+        let result_position = Self::to_usize_or_panic(self.at_offset(3));
         let first_argument = self.argument_value(1, mode1);
         let second_argument = self.argument_value(2, mode2);
 
@@ -266,7 +272,7 @@ where
         if self.inputs.is_empty() {
             ProgramState::NeedsInput
         } else {
-            let first_argument_position = self.at_offset(1).into();
+            let first_argument_position = Self::to_usize_or_panic(self.at_offset(1));
             let input = self.inputs.pop().expect("Cannot run input: no more inputs");
             self.locations[first_argument_position] = input;
             self.advance(2);

@@ -3,13 +3,14 @@ use crate::intcode::Program;
 use std::str::FromStr;
 
 pub struct Day2 {
-    program: Program,
+    program: Program<i32>,
 }
 
 impl Day2 {
     pub fn new() -> Result<Day2, String> {
         let it = Day2 {
-            program: Program::from_str(include_str!("input.txt")).map_err(|e| e.to_string())?,
+            program: Program::<i32>::from_str(include_str!("input.txt"))
+                .map_err(|e| e.to_string())?,
         };
         Ok(it)
     }
@@ -31,13 +32,13 @@ impl Day for Day2 {
     }
 }
 
-fn run_part_1(program: &mut Program) {
+fn run_part_1(program: &mut Program<i32>) {
     program[1] = 12;
     program[2] = 2;
     program.run(&mut vec![]);
 }
 
-fn run_part_2(program: Program) -> Option<(usize, usize)> {
+fn run_part_2(program: Program<i32>) -> Option<(usize, usize)> {
     for noun in 0..=99 {
         for verb in 0..=99 {
             let mut program = program.clone();
