@@ -243,7 +243,7 @@ where
             6 => self.jump_if(false),
             7 => self.comparative(|a, b| a < b),
             8 => self.comparative(|a, b| a == b),
-            9 => self.set_relative_offset(),
+            9 => self.adjust_relative_offset(),
             op => panic!("Unknown opcode {}", op),
         };
 
@@ -266,9 +266,7 @@ where
         let parameter_index = self.program_counter + offset;
         Self::to_usize_or_panic(match mode {
             Mode::Immediate | Mode::Position => self.memory.get(parameter_index),
-            Mode::Relative => self.memory.get(Self::to_usize_or_panic(
-                self.memory.get(parameter_index) + self.relative_offset,
-            )),
+            Mode::Relative => self.memory.get(parameter_index) + self.relative_offset,
         })
     }
 
@@ -352,7 +350,7 @@ where
         })
     }
 
-    fn set_relative_offset(&mut self) -> ProgramState<N> {
+    fn adjust_relative_offset(&mut self) -> ProgramState<N> {
         let mode = self.unary_parameter_mode();
         let value = self.parameter_value(1, mode);
 
@@ -610,4 +608,16 @@ fn test_output_large_number() {
         Program::<i64>::from_str("104,1125899906842624,99").expect("Program should parse");
 
     assert_eq!(program.run_pure(&Vec::new()), vec![1125899906842624]);
+}
+
+#[test]
+fn test_input_relative() {
+    // relative offset + 5
+    // input relative -5 (0)
+    // output #0
+    let program = Program::<i64>::from_str("109,5,203,-5,4,0,99").expect("Program should parse");
+
+    let outputs = program.run_pure(&vec![66]);
+
+    assert_eq!(outputs, vec![66]);
 }

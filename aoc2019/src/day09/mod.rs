@@ -1,5 +1,6 @@
 use crate::day::Day;
 use crate::intcode::Program;
+use itertools::Itertools;
 use std::num::ParseIntError;
 use std::str::FromStr;
 
@@ -18,10 +19,19 @@ impl Day9 {
 
 impl Day for Day9 {
     fn part1(&mut self) -> Result<String, String> {
-        let p =
-            Program::<i32>::from_str("109,1,12101,1,-1,2,109,2,99").expect("Program should parse");
-        p.run_pure(&Vec::new());
-        Err("Not implemented".into())
+        let outputs = self.program.run_pure(&vec![1]);
+        if outputs.len() == 1 {
+            Ok(format!("BOOST code is {}", outputs[0]))
+        } else {
+            Err(format!(
+                "The following opcodes may be malfunctioning: {}",
+                outputs
+                    .iter()
+                    .map(|x| x.to_string())
+                    .intersperse(", ".to_owned())
+                    .collect::<String>()
+            ))
+        }
     }
 
     fn part2(&mut self) -> Result<String, String> {
