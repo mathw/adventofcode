@@ -29,7 +29,12 @@ impl Day for Day11 {
     }
 
     fn part2(&mut self) -> Result<String, String> {
-        Err("Not implemented".into())
+        let mut grid = Grid::new();
+        let mut robot = HullPaintingRobot::new(self.program.clone());
+        grid.set_colour_at((0, 0), Colour::White);
+        robot.paint_hull(&mut grid);
+
+        Ok(format!("\n{}", grid.to_string()))
     }
 }
 
@@ -114,6 +119,26 @@ impl Grid {
             Facing::Down => ((x - 1, y), facing.right()),
             Facing::Right => ((x, y + 1), facing.right()),
         }
+    }
+}
+
+impl Display for Grid {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        let xmin = self.painted.keys().map(|(x, _)| *x).min().unwrap_or(0);
+        let xmax = self.painted.keys().map(|(x, _)| *x).max().unwrap_or(0);
+        let ymin = self.painted.keys().map(|(_, y)| *y).min().unwrap_or(0);
+        let ymax = self.painted.keys().map(|(_, y)| *y).max().unwrap_or(0);
+        for y in ymin..=ymax {
+            for x in xmin..=xmax {
+                let c = match self.painted.get(&(x, y)) {
+                    Some(Colour::White) => '\u{2588}',
+                    Some(Colour::Black) | None => '.',
+                };
+                write!(fmt, "{}", c)?;
+            }
+            write!(fmt, "\n")?;
+        }
+        Ok(())
     }
 }
 
