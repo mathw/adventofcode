@@ -10,3 +10,7 @@ edition = "2018"
 itertools = "0.8.2"
 pathfinding = "2"
 rayon = "1.2.1"
+
+[dev-dependencies]
+quickcheck = "0.8"
+quickcheck_macros = "0.8"

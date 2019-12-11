@@ -1,6 +1,7 @@
 use crate::day::Day;
 use crate::intcode::{Program, State};
 use std::collections::HashMap;
+use std::fmt::Display;
 use std::str::FromStr;
 
 pub struct Day11 {
@@ -19,48 +20,9 @@ impl Day11 {
 impl Day for Day11 {
     fn part1(&mut self) -> Result<String, String> {
         let mut grid = Grid::new();
-        let mut current = (0, 0);
-        let mut facing = Facing::Up;
+        let mut robot = HullPaintingRobot::new(self.program.clone());
 
-        let mut state = self.program.run_until_needs_interaction();
-        let mut colour_to_paint = None;
-
-        loop {
-            match state.state {
-                State::NeedsInput => {
-                    state = state.resume_with_input(match grid.colour_at(current) {
-                        Colour::Black => 0,
-                        Colour::White => 1,
-                    });
-                }
-                State::ProvidedOutput(o) => {
-                    if colour_to_paint.is_none() {
-                        colour_to_paint = Some(o);
-                        grid.set_colour_at(
-                            current,
-                            match o {
-                                0 => Colour::Black,
-                                1 => Colour::White,
-                                _ => return Err(format!("Unknown colour {}", o)),
-                            },
-                        );
-                    } else {
-                        let direction = o;
-                        let turn = match direction {
-                            0 => Grid::turn_left_from(current, facing),
-                            1 => Grid::turn_right_from(current, facing),
-                            _ => return Err(format!("Unknown direction {}", direction)),
-                        };
-                        current = turn.0;
-                        facing = turn.1;
-                        colour_to_paint = None;
-                    }
-                }
-                State::Completed => {
-                    break;
-                }
-            }
-        }
+        robot.paint_hull(&mut grid);
 
         let painted_locations = grid.painted.len();
         Ok(format!("Painted {} different locations", painted_locations))
@@ -79,6 +41,14 @@ enum Colour {
 impl Default for Colour {
     fn default() -> Self {
         Colour::Black
+    }
+}
+impl Display for Colour {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        match self {
+            Colour::Black => write!(f, "black"),
+            Colour::White => write!(f, "white"),
+        }
     }
 }
 
@@ -144,5 +114,111 @@ impl Grid {
             Facing::Down => ((x - 1, y), facing.right()),
             Facing::Right => ((x, y + 1), facing.right()),
         }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+enum OutputState {
+    WantPaint,
+    WantTurn,
+}
+
+struct HullPaintingRobot {
+    program: Program<i64>,
+}
+
+impl HullPaintingRobot {
+    fn new(program: Program<i64>) -> HullPaintingRobot {
+        HullPaintingRobot { program }
+    }
+
+    fn paint_hull(&mut self, hull: &mut Grid) {
+        let mut x = 0;
+        let mut y = 0;
+        let mut facing = Facing::Up;
+
+        let mut state = self.program.run_until_needs_interaction();
+        let mut output_mode = OutputState::WantPaint;
+        loop {
+            match state.state {
+                State::Completed => break,
+                State::ProvidedOutput(o) => match output_mode {
+                    OutputState::WantPaint => {
+                        let colour = match o {
+                            0 => Colour::Black,
+                            1 => Colour::White,
+                            _ => panic!("unknown output colour {}", o),
+                        };
+                        hull.set_colour_at((x, y), colour);
+                        output_mode = OutputState::WantTurn;
+                        state = state.resume();
+                    }
+                    OutputState::WantTurn => {
+                        let ((nx, ny), nf) = match o {
+                            0 => Grid::turn_left_from((x, y), facing),
+                            1 => Grid::turn_right_from((x, y), facing),
+                            _ => panic!("Unknown turn instruction {}", o),
+                        };
+                        x = nx;
+                        y = ny;
+                        facing = nf;
+                        output_mode = OutputState::WantPaint;
+                        state = state.resume();
+                    }
+                },
+                State::NeedsInput => {
+                    let colour = hull.colour_at((x, y));
+                    state = state.resume_with_input(match colour {
+                        Colour::Black => 0,
+                        Colour::White => 1,
+                    });
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn test_turn_left() {
+    let position = (0, 0);
+    let (new_position, facing) = Grid::turn_left_from(position, Facing::Up);
+
+    assert_eq!(facing, Facing::Left);
+    assert_eq!(new_position, (-1, 0));
+
+    let (new_position, facing) = Grid::turn_left_from(new_position, facing);
+    assert_eq!(facing, Facing::Down);
+    assert_eq!(new_position, (-1, 1));
+}
+
+#[test]
+fn test_turn_right() {
+    let position = (0, 0);
+    let (new_position, facing) = Grid::turn_right_from(position, Facing::Up);
+    assert_eq!(facing, Facing::Right);
+    assert_eq!(new_position, (1, 0));
+}
+
+#[cfg(test)]
+mod propertytests {
+    use super::*;
+    use quickcheck::{Arbitrary, Gen};
+    use quickcheck_macros::quickcheck;
+
+    impl Arbitrary for Colour {
+        fn arbitrary<G: Gen>(g: &mut G) -> Colour {
+            match bool::arbitrary(g) {
+                true => Colour::White,
+                false => Colour::Black,
+            }
+        }
+    }
+
+    #[quickcheck]
+    fn location_painted_is_retrieved_as_that_colour(x: i32, y: i32, colour: Colour) -> bool {
+        let mut grid = Grid::new();
+        grid.set_colour_at((x, y), colour);
+        let grid_colour = grid.colour_at((x, y));
+        colour == grid_colour
     }
 }
