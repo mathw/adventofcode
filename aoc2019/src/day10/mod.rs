@@ -1,6 +1,7 @@
 use crate::day::Day;
 use itertools::Itertools;
 use num_rational::Rational;
+use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::str::FromStr;
@@ -125,6 +126,33 @@ fn visible_from(asteroids: &HashSet<(usize, usize)>, (x, y): (usize, usize)) -> 
     }
 
     unique_angles.len()
+}
+
+fn distance_between((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> f32 {
+    let dx = (x1 as isize - x2 as isize).abs() as f32;
+    let dy = (y1 as isize - y2 as isize).abs() as f32;
+    (dx * dx) + (dy * dy).sqrt()
+}
+
+fn asteroids_grouped_by_angle_from(asteroids: &HashSet<(usize, usize)>, (x, y): (usize, usize)) {
+    let mut asteroids_with_angle_and_distance = asteroids
+        .iter()
+        .filter(|(ax, ay)| !(*ax == x && *ay == y))
+        .map(|(ax, ay)| {
+            (
+                (ax, ay),
+                angle_between((x, y), (*ax, *ay)),
+                distance_between((x, y), (*ax, *ay)),
+            )
+        })
+        .collect::<Vec<_>>();
+
+    asteroids_with_angle_and_distance.sort_by(|(_, angle1, distance1), (_, angle2, distance2)| {
+        match angle1.partial_cmp(angle2).unwrap() {
+            Ordering::Equal => distance1.partial_cmp(distance2).unwrap(),
+            o => o,
+        }
+    });
 }
 
 #[test]
