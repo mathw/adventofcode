@@ -78,18 +78,14 @@ impl Map {
         let mut greatest_y = 0;
 
         for (x, y) in self.asteroids.iter().cloned() {
-            println!("Examining asteroid {},{}", x, y);
             let visible_from = self.asteroids_visible_from((x, y));
-            println!("{} asteroids visible from here", visible_from);
             if visible_from > greatest {
-                println!("New high visibility");
                 greatest = visible_from;
                 greatest_x = x;
                 greatest_y = y;
             }
             // sets are unsorted, always find the top-most leftmost answer if there are equals
             if visible_from == greatest && (x < greatest_x || y < greatest_y) {
-                println!("New superior visibility");
                 greatest = visible_from;
                 greatest_x = x;
                 greatest_y = y;
@@ -100,70 +96,35 @@ impl Map {
     }
 }
 
-fn gradient_between((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> Rational {
-    if y1 == y2 {
-        if x2 >= x1 {
-            Rational::from(0)
-        } else {
-            Rational::new(1, 2)
-        }
-    } else if x1 == x2 {
-        if y2 >= y1 {
-            Rational::new(1, 4)
-        } else {
-            Rational::new(3, 4)
-        }
+fn angle_between((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> f32 {
+    let dx = x2 as isize - x1 as isize;
+    let dy = y2 as isize - y1 as isize;
+    let angle = (dy as f32).atan2(dx as f32) * 180f32 / std::f32::consts::PI;
+    let angle = if angle < 0f32 {
+        angle + 450.0
     } else {
-        let dx = x2 as isize - x1 as isize;
-        let dy = y2 as isize - y1 as isize;
-        let quarter_ratio = Rational::new(dbg!(dx), dbg!(dy)) / 8;
-        let addon = if dy < 0 {
-            Rational::new(1, 2)
-        } else {
-            Rational::from(0)
-        };
-        quarter_ratio + addon
-    }
-}
-
-#[test]
-fn test_gradient_between() {
-    assert_eq!(
-        gradient_between((0, 0), (1, 1)),
-        Rational::new(1, 8),
-        "0, 0 -> 1, 1 == 1/8"
-    );
-    assert_eq!(
-        gradient_between((0, 0), (1, 0)),
-        Rational::from(0),
-        "0, 0 -> 1, 0 == 0"
-    );
-    assert_eq!(
-        gradient_between((1, 1), (0, 0)),
-        Rational::new(5, 8),
-        "1, 1 -> 0, 0: == 5/8"
-    );
-    assert_eq!(
-        gradient_between((1, 1), (2, 0)),
-        Rational::new(7, 8),
-        "1, 1 -> 2, 0: 7/8"
-    );
-    assert!(false);
-}
-
-fn group_by_gradient_from(
-    asteroids: &HashSet<(usize, usize)>,
-    origin: (usize, usize),
-) -> HashMap<Rational, Vec<(usize, usize)>> {
-    asteroids
-        .iter()
-        .map(|a| (gradient_between(origin, *a), *a))
-        .into_group_map()
+        angle + 90.0
+    };
+    let angle = if angle >= 360.0 { angle - 360.0 } else { angle };
+    angle
 }
 
 fn visible_from(asteroids: &HashSet<(usize, usize)>, (x, y): (usize, usize)) -> usize {
-    let groups = group_by_gradient_from(asteroids, (x, y));
-    groups.values().map(|g| g.iter().skip(1).count()).sum()
+    let angles = asteroids
+        .iter()
+        .filter(|(ax, ay)| !(*ax == x && *ay == y))
+        .map(|(ax, ay)| angle_between((x, y), (*ax, *ay)))
+        .collect::<Vec<f32>>();
+
+    let mut unique_angles = Vec::new();
+    for angle in angles {
+        if !unique_angles.contains(&angle) {
+            unique_angles.push(angle);
+        } else {
+        }
+    }
+
+    unique_angles.len()
 }
 
 #[test]
@@ -229,30 +190,30 @@ fn test_third_sample() {
 fn test_fourth_sample() {
     let map = Map::from_str(
         ".#..##.###...#######
-    ##.############..##.
-    .#.######.########.#
-    .###.#######.####.#.
-    #####.##.#.##.###.##
-    ..#####..#.#########
-    ####################
-    #.####....###.#.#.##
-    ##.#################
-    #####.##.###..####..
-    ..######..##.#######
-    ####.##.####...##..#
-    .#####..#.######.###
-    ##...#.##########...
-    #.##########.#######
-    .####.#.###.###.#.##
-    ....##.##.###..#####
-    .#.#.###########.###
-    #.#.#.#####.####.###
-    ###.##.####.##.#..##",
+##.############..##.
+.#.######.########.#
+.###.#######.####.#.
+#####.##.#.##.###.##
+..#####..#.#########
+####################
+#.####....###.#.#.##
+##.#################
+#####.##.###..####..
+..######..##.#######
+####.##.####...##..#
+.#####..#.######.###
+##...#.##########...
+#.##########.#######
+.####.#.###.###.#.##
+....##.##.###..#####
+.#.#.###########.###
+#.#.#.#####.####.###
+###.##.####.##.#..##",
     )
     .unwrap();
 
     let result = map.location_seeing_most_asteroids();
-    assert_eq!(result, (310, 11, 13));
+    assert_eq!(result, (210, 11, 13));
 }
 
 #[test]
@@ -265,18 +226,6 @@ fn test_simple_sample() {
 
     let result = map.location_seeing_most_asteroids();
     assert_eq!(result, (0, 0, 0));
-}
-
-#[test]
-fn test_simple_sample_2() {
-    let map = Map::from_str(
-        "#.#
-.#.
-...",
-    )
-    .unwrap();
-    let result = map.location_seeing_most_asteroids();
-    assert_eq!(result, (2, 0, 0));
 }
 
 #[test]
