@@ -6,11 +6,10 @@ use std::{
     collections::HashMap,
     io::{self, Read},
     str::FromStr,
-    sync::mpsc::channel,
     thread,
     time::Duration,
 };
-use termion::{event::Key, input::TermRead, raw::IntoRawMode};
+use termion::raw::IntoRawMode;
 use tui::{
     backend::{Backend, TermionBackend},
     layout::{Constraint, Direction, Layout},
@@ -219,7 +218,6 @@ fn run_game_interactive(program: &Program<i64>) -> Result<(i64, bool, usize), io
     let mut paddle_location = (-1, -1);
     let mut ball_location = (-1, -1);
     let mut stopped_by_user = false;
-    let mut last_input = 0;
 
     let stdout = io::stdout().into_raw_mode()?;
     let mut stdin = termion::async_stdin();
@@ -232,7 +230,7 @@ fn run_game_interactive(program: &Program<i64>) -> Result<(i64, bool, usize), io
     loop {
         let mut buf = [0];
         if stdin.read(&mut buf).is_ok() {
-            last_input = buf[0];
+            let last_input = buf[0];
             if last_input == 113 || last_input == 3 {
                 stopped_by_user = true;
                 break;
