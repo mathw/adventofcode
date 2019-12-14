@@ -21,7 +21,10 @@ pub struct Day12 {
 impl Day12 {
     pub fn new() -> Result<Day12, String> {
         Ok(Day12 {
-            moons: INPUT.lines().filter_map(parse_moon).collect::<Vec<_>>(),
+            moons: INPUT
+                .lines()
+                .map(|e| parse_moon(e).ok_or(format!("Unable to parse moon {}", e)))
+                .collect::<Result<Vec<_>, String>>()?,
         })
     }
 }
@@ -30,9 +33,9 @@ impl Day for Day12 {
     fn part1(&mut self) -> Result<String, String> {
         let moons = self.moons.clone();
 
-        let new_moons = (0..1000).fold(moons, |ms, _| run_step(ms));
+        let new_moons = run_steps(moons, 1000);
 
-        let total_energy: i32 = new_moons.iter().map(|m| m.energy()).sum();
+        let total_energy: i32 = new_moons.into_iter().map(|m| m.energy()).sum();
 
         Ok(format!("Total energy {}", total_energy))
     }
@@ -140,7 +143,7 @@ impl Mul<i32> for Vector {
 
 fn parse_moon(line: &str) -> Option<Moon> {
     lazy_static! {
-        static ref RE: Regex = Regex::new("<x=(\\d+), y=(\\d+), z=(\\d+)>").unwrap();
+        static ref RE: Regex = Regex::new("<x=(-?\\d+), y=(-?\\d+), z=(-?\\d+)>").unwrap();
     }
 
     let m = RE.captures_iter(line).next()?;
@@ -253,7 +256,7 @@ fn test_sample_full() {
         Moon::new(3, 5, -1),
     ];
 
-    let new_moons = (0..10).fold(moons, |ms, _| run_step(ms));
+    let new_moons = run_steps(moons, 10);
 
     assert_eq!(
         new_moons,
@@ -270,18 +273,34 @@ fn test_sample_full() {
     assert_eq!(energy, 179);
 }
 
+fn run_steps(moons: Vec<Moon>, steps: i32) -> Vec<Moon> {
+    (0..steps).fold(moons, |ms, _| run_step(ms))
+}
+
 #[test]
 fn test_big_sample_full() {
     let moons = vec![
-        Moon::new(-8, 10, 0),
+        Moon::new(-8, -10, 0),
         Moon::new(5, 5, 10),
         Moon::new(2, -7, 3),
         Moon::new(9, -8, -3),
     ];
-    let new_moons = (0..100).fold(moons, |ms, _| run_step(ms));
+
+    let moons = run_steps(moons, 10);
+    assert_eq!(
+        moons,
+        vec![
+            Moon::new_with_velocity(-9, -10, 1, -2, -2, -1),
+            Moon::new_with_velocity(4, 10, 9, -3, 7, -2),
+            Moon::new_with_velocity(8, -10, -3, 5, -1, -2),
+            Moon::new_with_velocity(5, -10, 3, 0, -4, 5)
+        ]
+    );
+
+    let moons = run_steps(moons, 90);
 
     assert_eq!(
-        new_moons,
+        moons,
         vec![
             Moon::new_with_velocity(8, -12, -9, -7, 3, 0),
             Moon::new_with_velocity(13, 16, -3, 3, -11, -5),
@@ -290,7 +309,7 @@ fn test_big_sample_full() {
         ]
     );
 
-    let energy: i32 = new_moons.into_iter().map(|m| m.energy()).sum();
+    let energy: i32 = moons.into_iter().map(|m| m.energy()).sum();
 
     assert_eq!(energy, 1940);
 }
