@@ -1,14 +1,21 @@
-use crate::day::Day;
-use crate::intcode::{Program, State};
-use std::collections::HashMap;
-use std::io;
-use std::str::FromStr;
+use crate::{
+    day::Day,
+    intcode::{Program, State},
+};
+use std::{
+    collections::HashMap,
+    io::{self, Read},
+    str::FromStr,
+    sync::mpsc::channel,
+    thread,
+    time::Duration,
+};
 use termion::{event::Key, input::TermRead, raw::IntoRawMode};
 use tui::{
     backend::{Backend, TermionBackend},
-    layout::{Constraint, Direction, Layout, Rect},
+    layout::{Constraint, Direction, Layout},
     style::{Color, Style},
-    widgets::{Block, Borders, Paragraph, Text, Widget},
+    widgets::{Paragraph, Text, Widget},
     Terminal,
 };
 
@@ -40,8 +47,26 @@ impl Day for Day13 {
         let mut program = self.program.clone();
         program[0] = 2;
 
-        let score = run_game_interactive(&program).map_err(|e| e.to_string())?;
-        Ok(format!("Final score is {}", score))
+        let (score, stopped_by_user, blocks_left) =
+            run_game_interactive(&program).map_err(|e| e.to_string())?;
+        if stopped_by_user {
+            Err(format!(
+                "Stopped by user with score of {} and {} blocks left",
+                score, blocks_left
+            ))
+        } else {
+            if blocks_left > 0 {
+                Err(format!(
+                    "Stopped by game engine with {} blocks left and a score of {}",
+                    blocks_left, score
+                ))
+            } else {
+                Ok(format!(
+                    "Game engine stopped with score of {} and {} blocks left",
+                    score, blocks_left
+                ))
+            }
+        }
     }
 }
 
@@ -98,23 +123,6 @@ fn draw_tile(screen: &mut Screen, x: i64, y: i64, id: i64) {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
-enum JoystickPosition {
-    Neutral,
-    Left,
-    Right,
-}
-
-impl From<JoystickPosition> for i64 {
-    fn from(p: JoystickPosition) -> Self {
-        match p {
-            JoystickPosition::Neutral => 0,
-            JoystickPosition::Left => -1,
-            JoystickPosition::Right => 1,
-        }
-    }
-}
-
 fn render_screen(screen: &Screen) -> String {
     let max_x = *screen.keys().map(|(x, _)| x).max().unwrap_or(&0);
     let max_y = *screen.keys().map(|(_, y)| y).max().unwrap_or(&0);
@@ -144,13 +152,15 @@ fn draw_screen<B: Backend>(
     screen: &Screen,
     score: i64,
     score_provided: bool,
+    ai_intent: String,
 ) -> Result<(), io::Error> {
     terminal.draw(|mut f| {
         let chunks = Layout::default()
             .constraints(
                 [
                     Constraint::Length(1),
-                    Constraint::Min(30),
+                    Constraint::Length(30),
+                    Constraint::Length(1),
                     Constraint::Length(1),
                 ]
                 .as_ref(),
@@ -175,18 +185,20 @@ fn draw_screen<B: Backend>(
         let text = [Text::raw(game_board)];
         Paragraph::new(text.iter()).render(&mut f, chunks[1]);
 
+        Paragraph::new([Text::styled(ai_intent, Style::default().fg(Color::Gray))].iter())
+            .render(&mut f, chunks[2]);
         Paragraph::new(
             [Text::styled(
-                "⬅️, ➡️ or space",
-                Style::default().fg(Color::Gray),
+                "Hold q to exit",
+                Style::default().fg(Color::LightGreen),
             )]
             .iter(),
         )
-        .render(&mut f, chunks[2]);
+        .render(&mut f, chunks[3]);
     })
 }
 
-fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
+fn run_game_interactive(program: &Program<i64>) -> Result<(i64, bool, usize), io::Error> {
     let mut screen = HashMap::new();
 
     enum OutputState {
@@ -204,39 +216,52 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
     let mut y = 0;
     let mut score = 0;
     let mut score_ever_provided = false;
+    let mut paddle_location = (-1, -1);
+    let mut ball_location = (-1, -1);
+    let mut stopped_by_user = false;
+    let mut last_input = 0;
 
     let stdout = io::stdout().into_raw_mode()?;
+    let mut stdin = termion::async_stdin();
     let backend = TermionBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
-    let stdin = io::stdin();
-    let stdin = stdin.lock();
-    let mut keys = stdin.keys();
 
     terminal.clear()?;
     terminal.hide_cursor()?;
 
     loop {
+        let mut buf = [0];
+        if stdin.read(&mut buf).is_ok() {
+            last_input = buf[0];
+            if last_input == 113 || last_input == 3 {
+                stopped_by_user = true;
+                break;
+            }
+        }
         match state.state {
             State::Completed => break,
             State::NeedsInput => {
-                draw_screen(&mut terminal, &screen, score, score_ever_provided)?;
-                loop {
-                    match keys.next() {
-                        Some(Ok(Key::Left)) => {
-                            state = state.resume_with_input(JoystickPosition::Left.into());
-                            break;
-                        }
-                        Some(Ok(Key::Right)) => {
-                            state = state.resume_with_input(JoystickPosition::Right.into());
-                            break;
-                        }
-                        Some(Ok(Key::Char(' '))) => {
-                            state = state.resume_with_input(JoystickPosition::Neutral.into());
-                            break;
-                        }
-                        _ => {}
-                    }
-                }
+                let horizontal_gap = ball_location.0 - paddle_location.0;
+                let direction = if horizontal_gap < 0 {
+                    -1
+                } else if horizontal_gap == 0 {
+                    0
+                } else {
+                    1
+                };
+                let ai_intent = format!(
+                    "Ball @ {:?}  Paddle @ {:?}  X-gap {}  Direction {}",
+                    ball_location, paddle_location, horizontal_gap, direction
+                );
+                draw_screen(
+                    &mut terminal,
+                    &screen,
+                    score,
+                    score_ever_provided,
+                    ai_intent,
+                )?;
+                thread::sleep(Duration::from_millis(5));
+                state = state.resume_with_input(direction);
             }
             State::ProvidedOutput(o) => {
                 match outputstate {
@@ -253,6 +278,12 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
                         };
                     }
                     OutputState::WantsId => {
+                        if o == 3 {
+                            paddle_location = (x, y);
+                        }
+                        if o == 4 {
+                            ball_location = (x, y);
+                        }
                         draw_tile(&mut screen, x, y, o);
                         outputstate = OutputState::WantsX;
                     }
@@ -270,5 +301,9 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
     terminal.clear()?;
     terminal.show_cursor()?;
 
-    Ok(score)
+    Ok((
+        score,
+        stopped_by_user,
+        screen.values().filter(|&t| *t == 2).count(),
+    ))
 }
