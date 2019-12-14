@@ -143,14 +143,15 @@ fn draw_screen<B: Backend>(
     terminal: &mut Terminal<B>,
     screen: &Screen,
     score: i64,
+    score_provided: bool,
 ) -> Result<(), io::Error> {
     terminal.draw(|mut f| {
         let chunks = Layout::default()
             .constraints(
                 [
-                    Constraint::Length(3),
+                    Constraint::Length(1),
                     Constraint::Min(30),
-                    Constraint::Length(3),
+                    Constraint::Length(1),
                 ]
                 .as_ref(),
             )
@@ -160,7 +161,11 @@ fn draw_screen<B: Backend>(
         Paragraph::new(
             [Text::styled(
                 format!("Score: {}", score),
-                Style::default().fg(Color::LightGreen),
+                Style::default().fg(if score_provided {
+                    Color::LightGreen
+                } else {
+                    Color::LightRed
+                }),
             )]
             .iter(),
         )
@@ -172,7 +177,7 @@ fn draw_screen<B: Backend>(
 
         Paragraph::new(
             [Text::styled(
-                "<, > or space",
+                "⬅️, ➡️ or space",
                 Style::default().fg(Color::Gray),
             )]
             .iter(),
@@ -198,6 +203,7 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
     let mut x = 0;
     let mut y = 0;
     let mut score = 0;
+    let mut score_ever_provided = false;
 
     let stdout = io::stdout().into_raw_mode()?;
     let backend = TermionBackend::new(stdout);
@@ -213,7 +219,7 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
         match state.state {
             State::Completed => break,
             State::NeedsInput => {
-                draw_screen(&mut terminal, &screen, score)?;
+                draw_screen(&mut terminal, &screen, score, score_ever_provided)?;
                 loop {
                     match keys.next() {
                         Some(Ok(Key::Left)) => {
@@ -240,7 +246,7 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
                     }
                     OutputState::WantsY => {
                         y = o;
-                        outputstate = if x == 0 && y == -1 {
+                        outputstate = if x == -1 && y == 0 {
                             OutputState::WantsScore
                         } else {
                             OutputState::WantsId
@@ -252,6 +258,7 @@ fn run_game_interactive(program: &Program<i64>) -> Result<i64, io::Error> {
                     }
                     OutputState::WantsScore => {
                         score = o;
+                        score_ever_provided = true;
                         outputstate = OutputState::WantsX;
                     }
                 };
