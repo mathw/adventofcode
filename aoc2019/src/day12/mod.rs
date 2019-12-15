@@ -72,6 +72,9 @@ fn test_big_sample_find_repeat_parts() {
     assert_eq!(4686774924 % x_repeats_in, 0);
     assert_eq!(4686774924 % y_repeats_in, 0);
     assert_eq!(4686774924 % z_repeats_in, 0);
+    assert_eq!(4686774924 % lcm(x_repeats_in, y_repeats_in), 0, "X Y");
+    assert_eq!(4686774924 % lcm(x_repeats_in, z_repeats_in), 0, "X Z");
+    assert_eq!(4686774924 % lcm(y_repeats_in, z_repeats_in), 0, "Y Z");
 
     let repeat = find_least_common_multiple(x_repeats_in, y_repeats_in, z_repeats_in);
     assert_eq!(repeat, 4686774924);
@@ -91,8 +94,8 @@ fn test_big_sample_find_repeat() {
 }
 
 fn find_least_common_multiple(a: u64, b: u64, c: u64) -> u64 {
-    let largest = *[a, b, c].iter().max().unwrap();
-    let mut current = largest;
+    let largest_lcm = *[lcm(a, b), lcm(b, c), lcm(a, c)].iter().max().unwrap();
+    let mut current = largest_lcm;
 
     loop {
         let a_rem = current % a;
@@ -102,7 +105,7 @@ fn find_least_common_multiple(a: u64, b: u64, c: u64) -> u64 {
         if a_rem == 0 && b_rem == 0 && c_rem == 0 {
             break;
         } else {
-            current += largest;
+            current += largest_lcm;
         }
     }
 
