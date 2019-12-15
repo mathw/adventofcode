@@ -1,9 +1,11 @@
 use crate::day::Day;
 use itertools::Itertools;
 use lazy_static::lazy_static;
+use num_integer::lcm;
 use regex::Regex;
 use std::cell::RefCell;
 use std::cmp::Ordering;
+use std::collections::HashSet;
 use std::fmt::Debug;
 use std::ops::{Add, Mul};
 use std::rc::Rc;
@@ -41,11 +43,80 @@ impl Day for Day12 {
     }
 
     fn part2(&mut self) -> Result<String, String> {
-        Err("not".into())
+        let repeat = run_until_repeat(&self.moons);
+
+        Ok(format!("System repeats after {}", repeat))
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+fn run_until_repeat(moons: &Vec<Moon>) -> u64 {
+    let x_repeats_in = find_x_repeat(moons);
+    let y_repeats_in = find_y_repeat(moons);
+    let z_repeats_in = find_z_repeat(moons);
+
+    find_least_common_multiple(x_repeats_in, y_repeats_in, z_repeats_in)
+}
+
+#[test]
+fn test_big_sample_find_repeat_parts() {
+    let moons = vec![
+        Moon::new(-8, -10, 0),
+        Moon::new(5, 5, 10),
+        Moon::new(2, -7, 3),
+        Moon::new(9, -8, -3),
+    ];
+    let x_repeats_in = find_x_repeat(&moons);
+    let y_repeats_in = find_y_repeat(&moons);
+    let z_repeats_in = find_z_repeat(&moons);
+
+    assert_eq!(4686774924 % x_repeats_in, 0);
+    assert_eq!(4686774924 % y_repeats_in, 0);
+    assert_eq!(4686774924 % z_repeats_in, 0);
+
+    let repeat = find_least_common_multiple(x_repeats_in, y_repeats_in, z_repeats_in);
+    assert_eq!(repeat, 4686774924);
+}
+
+#[test]
+fn test_big_sample_find_repeat() {
+    let moons = vec![
+        Moon::new(-8, -10, 0),
+        Moon::new(5, 5, 10),
+        Moon::new(2, -7, 3),
+        Moon::new(9, -8, -3),
+    ];
+
+    let repeat = run_until_repeat(&moons);
+    assert_eq!(repeat, 4686774924);
+}
+
+fn find_least_common_multiple(a: u64, b: u64, c: u64) -> u64 {
+    let largest = *[a, b, c].iter().max().unwrap();
+    let mut current = largest;
+
+    loop {
+        let a_rem = current % a;
+        let b_rem = current % b;
+        let c_rem = current % c;
+
+        if a_rem == 0 && b_rem == 0 && c_rem == 0 {
+            break;
+        } else {
+            current += largest;
+        }
+    }
+
+    current
+}
+
+#[test]
+fn test_find_least_common_multiple() {
+    assert_eq!(find_least_common_multiple(1, 1, 1), 1);
+    assert_eq!(find_least_common_multiple(2, 4, 1), 4);
+    assert_eq!(find_least_common_multiple(10, 20, 30), 60);
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Moon {
     pos: Vector,
     velocity: Vector,
@@ -86,7 +157,7 @@ impl Moon {
     }
 }
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 struct Vector {
     x: i32,
     y: i32,
@@ -175,6 +246,43 @@ fn pair_velocity(first: &Moon, second: &Moon) -> (Vector, Vector) {
     (change.clone(), change * -1)
 }
 
+fn pair_axis_velocity(first: i32, second: i32) -> (i32, i32) {
+    let change = match second.cmp(&first) {
+        Ordering::Less => -1,
+        Ordering::Equal => 0,
+        Ordering::Greater => 1,
+    };
+    (change, change * -1)
+}
+
+fn run_axis_step(moons: Vec<(i32, i32)>) -> Vec<(i32, i32)> {
+    fn adjust_axis_velocity((pos, velocity): (i32, i32), change: i32) -> (i32, i32) {
+        (pos, velocity + change)
+    }
+
+    let moon_refs = moons
+        .iter()
+        .map(|moon| Rc::new(RefCell::new(moon.clone())))
+        .collect::<Vec<_>>();
+
+    for pair in moon_refs.iter().combinations(2) {
+        let (first, second) = (pair[0], pair[1]);
+        let (change1, change2) = pair_axis_velocity(first.borrow().0, second.borrow().0);
+        first.replace_with(|m| adjust_axis_velocity(*m, change1));
+        second.replace_with(|m| adjust_axis_velocity(*m, change2));
+    }
+
+    moon_refs
+        .into_iter()
+        .map(|r| {
+            Rc::try_unwrap(r)
+                .expect("Shouldn't fail to try_unwrap the Rc")
+                .into_inner()
+        })
+        .map(|(pos, velocity)| (pos + velocity, velocity))
+        .collect()
+}
+
 fn adjust_velocities(moons: Vec<Moon>) -> Vec<Moon> {
     // Cheating by using interior mutability here
     // combinations requires something cloneable, which an &mut Moon isn't
@@ -206,6 +314,67 @@ fn run_step(moons: Vec<Moon>) -> Vec<Moon> {
         .into_iter()
         .map(|m| m.apply_velocity())
         .collect()
+}
+
+fn find_repeat_by<F>(moons: &Vec<Moon>, f: F) -> u64
+where
+    F: Fn(&Moon) -> (i32, i32) + Copy,
+{
+    let mut iterations = 0;
+    let mut previous_states = HashSet::new();
+
+    let mut xs = moons.iter().map(f).collect::<Vec<_>>();
+    previous_states.insert(xs.clone());
+
+    loop {
+        iterations += 1;
+        let new_state = run_axis_step(xs.clone());
+        if previous_states.contains(&new_state) {
+            break;
+        } else {
+            xs = new_state;
+        }
+    }
+
+    iterations
+}
+
+fn extract_x_axis(moon: &Moon) -> (i32, i32) {
+    (moon.pos.x, moon.velocity.x)
+}
+
+fn extract_y_axis(moon: &Moon) -> (i32, i32) {
+    (moon.pos.y, moon.velocity.y)
+}
+
+fn extract_z_axis(moon: &Moon) -> (i32, i32) {
+    (moon.pos.z, moon.velocity.z)
+}
+
+fn find_x_repeat(moons: &Vec<Moon>) -> u64 {
+    find_repeat_by(moons, extract_x_axis)
+}
+
+fn find_y_repeat(moons: &Vec<Moon>) -> u64 {
+    find_repeat_by(moons, extract_y_axis)
+}
+
+fn find_z_repeat(moons: &Vec<Moon>) -> u64 {
+    find_repeat_by(moons, extract_z_axis)
+}
+
+#[test]
+fn test_simple_find_repeat() {
+    let moons = vec![
+        Moon::new(-1, 0, 2),
+        Moon::new(2, -10, -7),
+        Moon::new(4, -8, 8),
+        Moon::new(3, 5, -1),
+    ];
+
+    let iterations = run_until_repeat(&moons);
+
+    assert_eq!(iterations, 2772);
 }
 
 #[test]
