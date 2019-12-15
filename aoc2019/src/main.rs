@@ -22,7 +22,7 @@ fn main() -> Result<(), String> {
     let mut args = args();
 
     if args.len() != 2 {
-        // run all days!
+        // run all contiguous complete days!
         let last_known_day = 9;
         let mut total_time = 0;
         for day in 1..=last_known_day {
