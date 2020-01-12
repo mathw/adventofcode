@@ -1,0 +1,4173 @@
+
+running 5 tests
+[1:0] asked for 1 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 1 FUEL
+[1:0] I need 2 AB
+[1:0] No leftovers were available
+[2:0] asked for 2 AB
+[2:0] got recipe
+[2:0] (multiplied) I will make 2 AB
+[2:0] I need 6 A
+[2:0] No leftovers were available
+[3:0] asked for 6 A
+[3:0] got recipe
+[3:0] (multiplied) I will make 6 A
+[2:0] That used 27 ore
+[2:0] I need 8 B
+[2:0] No leftovers were available
+[3:0] asked for 8 B
+[3:0] got recipe
+[3:0] (multiplied) I will make 9 B
+[2:0] That used 24 ore
+[1:0] That used 51 ore
+[1:0] I need 4 CA
+[1:0] No leftovers were available
+[1:0] asked for 1 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 1 FUEL
+test day14::test_how_much_ore_simple_1 ... ok
+[1:0] asked for 1 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 1 FUEL
+[1:0] I need 7 A
+[1:0] No leftovers were available
+[2:0] asked for 7 A
+[2:0] got recipe
+[2:0] (multiplied) I will make 10 A
+[1:0] That used 10 ore
+[1:0] I need 1 E
+[1:0] No leftovers were available
+[2:0] asked for 1 E
+[2:0] got recipe
+[2:0] (multiplied) I will make 1 E
+[2:0] I need 1 D
+[2:0] No leftovers were available
+[3:0] asked for 1 D
+[3:0] got recipe
+[3:0] (multiplied) I will make 1 D
+[3:0] I need 1 C
+[3:0] No leftovers were available
+[4:0] asked for 1 C
+[4:0] got recipe
+[4:0] (multiplied) I will make 1 C
+[4:0] I need 1 B
+[4:0] No leftovers were available
+[5:0] asked for 1 B
+[5:0] got recipe
+[5:0] (multiplied) I will make 1 B
+[4:0] That used 1 ore
+[4:0] I need 7 A
+[4:0] After leftovers I need 4 more
+[5:0] asked for 4 A
+[5:0] got recipe
+[5:0] (multiplied) I will make 10 A
+[4:0] That used 10 ore
+[3:0] That used 11 ore
+[3:0] I need 7 A
+[3:0] After leftovers I need 1 more
+[4:0] asked for 1 A
+[4:0] got recipe
+[4:0] (multiplied) I will make 10 A
+[3:0] That used 10 ore
+[2:0] That used 21 ore
+[2:0] I need 7 A
+[1:1] That used 21 ore
+Finding range for target 1000000000000
+[1:0] asked for 1 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 1 FUEL
+[1:0] I need 48 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 48 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 50 HKGWZ
+[1:0] That used 1770 ore
+[1:0] I need 1 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 1 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 9 QDVJ
+[2:0] I need 8 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 8 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 14 PSHF
+[2:0] That used 358 ore
+[2:0] I need 12 HKGWZ
+[2:0] After leftovers I need 10 more
+[3:0] asked for 10 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 10 HKGWZ
+[2:0] That used 354 ore
+[2:0] I need 1 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 1 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 2 GPVTF
+[2:0] That used 165 ore
+[1:0] That used 877 ore
+[1:0] I need 44 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 44 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 44 XJWVT
+[2:0] I need 154 PSHF
+[2:0] After leftovers I need 148 more
+[3:0] asked for 148 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 154 PSHF
+[2:0] That used 3938 ore
+[2:0] I need 154 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 154 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 156 DCFZ
+[2:0] That used 4290 ore
+[1:1] That used 8228 ore
+[1:1] I need 9 GPVTF
+[1:1] After leftovers I need 8 more
+[2:0] asked for 8 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 8 GPVTF
+[1:1] That used 660 ore
+[1:1] I need 5 KHKGT
+[1:1] No leftovers were available
+[2:0] asked for 5 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 8 KHKGT
+[2:0] I need 5 HKGWZ
+[2:0] After leftovers I need 5 more
+[3:0] asked for 5 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 5 HKGWZ
+[2:0] That used 177 ore
+[2:0] I need 3 DCFZ
+test day14::test_how_much_ore_for_example_1 ... ok
+[2:0] After leftovers I need 1 more
+[3:0] asked for 1 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 6 DCFZ
+[2:0] That used 165 ore
+[2:0] I need 7 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 7 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 10 NZVS
+[2:0] That used 314 ore
+[2:0] I need 10 PSHF
+[2:0] After leftovers I need 4 more
+[3:0] asked for 4 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 7 PSHF
+[2:0] That used 179 ore
+[1:1] That used 835 ore
+[1:1] I need 29 NZVS
+[1:1] After leftovers I need 26 more
+[2:0] asked for 26 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 30 NZVS
+[1:2] That used 942 ore
+1 fuel needed only 13312 ore
+New low 1 high 4
+[1:0] asked for 4 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 4 FUEL
+[1:0] I need 192 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 192 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 195 HKGWZ
+[1:0] That used 6903 ore
+[1:0] I need 4 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 4 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 9 QDVJ
+[2:0] I need 8 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 8 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 14 PSHF
+[2:0] That used 358 ore
+[2:0] I need 12 HKGWZ
+[2:0] After leftovers I need 9 more
+[3:0] asked for 9 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 10 HKGWZ
+[2:0] That used 354 ore
+[2:0] I need 1 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 1 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 2 GPVTF
+[2:0] That used 165 ore
+[1:0] That used 877 ore
+[1:0] I need 176 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 176 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 176 XJWVT
+[2:0] I need 616 PSHF
+[2:0] After leftovers I need 610 more
+[3:0] asked for 610 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 616 PSHF
+[2:0] That used 15752 ore
+[2:0] I need 616 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 616 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 618 DCFZ
+[2:0] That used 16995 ore
+[1:1] That used 32747 ore
+[1:1] I need 36 GPVTF
+[1:1] After leftovers I need 35 more
+[2:0] asked for 35 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 36 GPVTF
+[1:1] That used 2970 ore
+[1:1] I need 20 KHKGT
+[1:1] No leftovers were available
+[2:0] asked for 20 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 24 KHKGT
+[2:0] I need 15 HKGWZ
+[2:0] After leftovers I need 14 more
+[3:0] asked for 14 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 15 HKGWZ
+[2:0] That used 531 ore
+[2:0] I need 9 DCFZ
+[2:0] After leftovers I need 7 more
+[3:0] asked for 7 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12 DCFZ
+[2:0] That used 330 ore
+[2:0] I need 21 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 21 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 25 NZVS
+[2:0] That used 785 ore
+[2:0] I need 30 PSHF
+[2:0] After leftovers I need 24 more
+[3:0] asked for 24 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 28 PSHF
+[2:0] That used 716 ore
+[1:1] That used 2362 ore
+[1:1] I need 116 NZVS
+[1:1] After leftovers I need 112 more
+[2:0] asked for 112 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 115 NZVS
+[1:1] That used 3611 ore
+4 fuel needed only 49470 ore
+New low 4 high 16
+[1:0] asked for 16 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 16 FUEL
+[1:0] I need 768 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 768 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 770 HKGWZ
+[1:0] That used 27258 ore
+[1:0] I need 16 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 16 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 18 QDVJ
+[2:0] I need 16 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 16 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 21 PSHF
+[2:0] That used 537 ore
+[2:0] I need 24 HKGWZ
+[2:0] After leftovers I need 22 more
+[3:0] asked for 22 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 25 HKGWZ
+[2:0] That used 885 ore
+[2:0] I need 2 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 2 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 2 GPVTF
+[2:0] That used 165 ore
+[1:0] That used 1587 ore
+[1:0] I need 704 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 704 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 704 XJWVT
+[2:0] I need 2464 PSHF
+[2:0] After leftovers I need 2459 more
+[3:0] asked for 2459 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 2464 PSHF
+[2:0] That used 63008 ore
+[2:0] I need 2464 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 2464 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 2466 DCFZ
+[2:0] That used 67815 ore
+[1:0] That used 130823 ore
+[1:0] I need 144 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 144 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 144 GPVTF
+[1:1] That used 11880 ore
+[1:1] I need 80 KHKGT
+[1:1] No leftovers were available
+[2:0] asked for 80 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 80 KHKGT
+[2:0] I need 50 HKGWZ
+[2:0] After leftovers I need 47 more
+[3:0] asked for 47 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 50 HKGWZ
+[2:0] That used 1770 ore
+[2:0] I need 30 DCFZ
+[2:0] After leftovers I need 28 more
+[3:0] asked for 28 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 30 DCFZ
+[2:0] That used 825 ore
+[2:0] I need 70 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 70 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 70 NZVS
+[2:0] That used 2198 ore
+[2:0] I need 100 PSHF
+[2:0] After leftovers I need 95 more
+[3:0] asked for 95 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 98 PSHF
+[2:0] That used 2506 ore
+[1:1] That used 7299 ore
+[1:1] I need 464 NZVS
+[1:1] No leftovers were available
+[2:0] asked for 464 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 465 NZVS
+[1:1] That used 14601 ore
+16 fuel needed only 193448 ore
+New low 16 high 64
+[1:0] asked for 64 FUEL
+test day14::test_parse_reaction ... ok
+[2:0] asked for 4 CA
+[2:8] got recipe
+[2:8] (multiplied) I will make 4 CA
+[2:8] I need 16 C
+[2:8] No leftovers were available
+[3:0] asked for 16 C
+[3:0] got recipe
+[3:0] (multiplied) I will make 20 C
+[2:8] That used 28 ore
+[2:8] I need 4 A
+[2:8] No leftovers were available
+[3:0] asked for 4 A
+[3:0] got recipe
+[3:0] (multiplied) I will make 4 A
+[2:8] That used 18 ore
+[1:8] That used 46 ore
+[1:8] I need 3 BC
+[1:8] No leftovers were available
+[2:0] asked for 3 BC
+[2:0] got recipe
+[2:0] (multiplied) I will make 3 BC
+[2:0] I need 15 B
+[2:0] After leftovers I need 14 more
+[3:0] asked for 14 B
+[3:0] got recipe
+[3:0] (multiplied) I will make 15 B
+[2:0] That used 40 ore
+[2:0] I need 21 C
+[2:0] After leftovers I need 17 more
+[3:0] asked for 17 C
+[3:0] got recipe
+[3:0] (multiplied) I will make 20 C
+[2:0] That used 28 ore
+[1:8] That used 68 ore
+test day14::test_how_much_ore_for_example_2 ... ok
+[1:1] got recipe
+[1:1] (multiplied) I will make 64 FUEL
+[1:1] I need 3072 HKGWZ
+[1:1] No leftovers were available
+[2:0] asked for 3072 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3075 HKGWZ
+[1:1] That used 108855 ore
+[1:1] I need 64 QDVJ
+[1:1] No leftovers were available
+[2:0] asked for 64 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 72 QDVJ
+[2:0] I need 64 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 64 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 70 PSHF
+[2:0] That used 1790 ore
+[2:0] I need 96 HKGWZ
+[2:0] After leftovers I need 93 more
+[3:0] asked for 93 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 95 HKGWZ
+[2:0] That used 3363 ore
+[2:0] I need 8 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 8 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 8 GPVTF
+[2:0] That used 660 ore
+[1:1] That used 5813 ore
+[1:1] I need 2816 XJWVT
+[1:1] No leftovers were available
+[2:0] asked for 2816 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 2816 XJWVT
+[2:0] I need 9856 PSHF
+[2:0] After leftovers I need 9850 more
+[3:0] asked for 9850 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9856 PSHF
+[2:0] That used 252032 ore
+[2:0] I need 9856 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 9856 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 9858 DCFZ
+[2:0] That used 271095 ore
+[1:1] That used 523127 ore
+[1:1] I need 576 GPVTF
+[1:1] No leftovers were available
+[2:0] asked for 576 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 576 GPVTF
+[1:1] That used 47520 ore
+[1:1] I need 320 KHKGT
+[1:1] No leftovers were available
+[2:0] asked for 320 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 320 KHKGT
+[2:0] I need 200 HKGWZ
+[2:0] After leftovers I need 198 more
+[3:0] asked for 198 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 200 HKGWZ
+[2:0] That used 7080 ore
+[2:0] I need 120 DCFZ
+[2:0] After leftovers I need 118 more
+[3:0] asked for 118 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 120 DCFZ
+[2:0] That used 3300 ore
+[2:0] I need 280 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 280 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 280 NZVS
+[2:0] That used 8792 ore
+[2:0] I need 400 PSHF
+[2:0] After leftovers I need 394 more
+[3:0] asked for 394 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 399 PSHF
+[2:0] That used 10203 ore
+[1:1] That used 29375 ore
+[1:1] I need 1856 NZVS
+[1:1] No leftovers were available
+[2:0] asked for 1856 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 1860 NZVS
+[1:1] That used 58404 ore
+64 fuel needed only 773094 ore
+New low 64 high 256
+[1:0] asked for 256 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 256 FUEL
+[1:0] I need 12288 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 12288 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 12290 HKGWZ
+[1:0] That used 435066 ore
+[1:0] I need 256 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 256 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 261 QDVJ
+[2:0] I need 232 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 232 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 238 PSHF
+[2:0] That used 6086 ore
+[2:0] I need 348 HKGWZ
+[2:0] After leftovers I need 346 more
+[3:0] asked for 346 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 350 HKGWZ
+[2:0] That used 12390 ore
+[2:0] I need 29 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 29 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 30 GPVTF
+[2:0] That used 2475 ore
+[1:0] That used 20951 ore
+[1:0] I need 11264 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 11264 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 11264 XJWVT
+[2:0] I need 39424 PSHF
+[2:0] After leftovers I need 39418 more
+[3:0] asked for 39418 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 39424 PSHF
+[2:0] That used 1008128 ore
+[2:0] I need 39424 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 39424 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 39426 DCFZ
+[2:0] That used 1084215 ore
+[1:0] That used 2092343 ore
+[1:0] I need 2304 GPVTF
+[1:0] After leftovers I need 2303 more
+[2:0] asked for 2303 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 2304 GPVTF
+[1:0] That used 190080 ore
+[1:0] I need 1280 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 1280 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 1280 KHKGT
+[2:0] I need 800 HKGWZ
+[2:0] After leftovers I need 796 more
+[3:0] asked for 796 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 800 HKGWZ
+[2:0] That used 28320 ore
+[2:0] I need 480 DCFZ
+[2:0] After leftovers I need 478 more
+[3:0] asked for 478 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 480 DCFZ
+[2:0] That used 13200 ore
+[2:0] I need 1120 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 1120 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 1120 NZVS
+[2:0] That used 35168 ore
+[2:0] I need 1600 PSHF
+[2:0] After leftovers I need 1594 more
+[3:0] asked for 1594 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 1596 PSHF
+[2:0] That used 40812 ore
+[1:0] That used 117500 ore
+[1:0] I need 7424 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 7424 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 7425 NZVS
+[1:0] That used 233145 ore
+256 fuel needed only 3089085 ore
+New low 256 high 1024
+[1:0] asked for 1024 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 1024 FUEL
+[1:0] I need 49152 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 49152 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 49155 HKGWZ
+[1:0] That used 1740087 ore
+[1:0] I need 1024 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 1024 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 1026 QDVJ
+[2:0] I need 912 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 912 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 917 PSHF
+[2:0] That used 23449 ore
+[2:0] I need 1368 HKGWZ
+[2:0] After leftovers I need 1365 more
+[3:0] asked for 1365 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 1365 HKGWZ
+[2:0] That used 48321 ore
+[2:0] I need 114 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 114 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 114 GPVTF
+[2:0] That used 9405 ore
+[1:0] That used 81175 ore
+[1:0] I need 45056 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 45056 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 45056 XJWVT
+[2:0] I need 157696 PSHF
+[2:0] After leftovers I need 157691 more
+[3:0] asked for 157691 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 157696 PSHF
+[2:0] That used 4032512 ore
+[2:0] I need 157696 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 157696 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 157698 DCFZ
+[2:0] That used 4336695 ore
+[1:0] That used 8369207 ore
+[1:0] I need 9216 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 9216 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 9216 GPVTF
+[1:0] That used 760320 ore
+[1:0] I need 5120 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 5120 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 5120 KHKGT
+[2:0] I need 3200 HKGWZ
+[2:0] After leftovers I need 3200 more
+[3:0] asked for 3200 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 3200 HKGWZ
+[2:0] That used 113280 ore
+[2:0] I need 1920 DCFZ
+[2:0] After leftovers I need 1918 more
+[3:0] asked for 1918 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 1920 DCFZ
+[2:0] That used 52800 ore
+[2:0] I need 4480 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 4480 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 4480 NZVS
+[2:0] That used 140672 ore
+[2:0] I need 6400 PSHF
+[2:0] After leftovers I need 6395 more
+[3:0] asked for 6395 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 6398 PSHF
+[2:0] That used 163606 ore
+[1:0] That used 470358 ore
+[1:0] I need 29696 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 29696 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 29700 NZVS
+[1:0] That used 932580 ore
+1024 fuel needed only 12353727 ore
+New low 1024 high 4096
+[1:0] asked for 4096 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 4096 FUEL
+[1:0] I need 196608 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 196608 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 196610 HKGWZ
+[1:0] That used 6959994 ore
+[1:0] I need 4096 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 4096 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 4104 QDVJ
+[2:0] I need 3648 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 3648 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 3654 PSHF
+[2:0] That used 93438 ore
+[2:0] I need 5472 HKGWZ
+[2:0] After leftovers I need 5470 more
+[3:0] asked for 5470 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 5470 HKGWZ
+[2:0] That used 193638 ore
+[2:0] I need 456 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 456 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 456 GPVTF
+[2:0] That used 37620 ore
+[1:0] That used 324696 ore
+[1:0] I need 180224 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 180224 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 180224 XJWVT
+[2:0] I need 630784 PSHF
+[2:0] After leftovers I need 630778 more
+[3:0] asked for 630778 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 630784 PSHF
+[2:0] That used 16130048 ore
+[2:0] I need 630784 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 630784 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 630786 DCFZ
+[2:0] That used 17346615 ore
+[1:0] That used 33476663 ore
+[1:0] I need 36864 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 36864 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 36864 GPVTF
+[1:0] That used 3041280 ore
+[1:0] I need 20480 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 20480 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 20480 KHKGT
+[2:0] I need 12800 HKGWZ
+[2:0] After leftovers I need 12800 more
+[3:0] asked for 12800 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12800 HKGWZ
+[2:0] That used 453120 ore
+[2:0] I need 7680 DCFZ
+[2:0] After leftovers I need 7678 more
+[3:0] asked for 7678 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 7680 DCFZ
+[2:0] That used 211200 ore
+[2:0] I need 17920 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 17920 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 17920 NZVS
+[2:0] That used 562688 ore
+[2:0] I need 25600 PSHF
+[2:0] After leftovers I need 25594 more
+[3:0] asked for 25594 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 25599 PSHF
+[2:0] That used 654603 ore
+[1:0] That used 1881611 ore
+[1:0] I need 118784 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 118784 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 118785 NZVS
+[1:0] That used 3729849 ore
+4096 fuel needed only 49414093 ore
+New low 4096 high 16384
+[1:0] asked for 16384 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 16384 FUEL
+[1:0] I need 786432 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 786432 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 786435 HKGWZ
+[1:0] That used 27839799 ore
+[1:0] I need 16384 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 16384 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 16389 QDVJ
+[2:0] I need 14568 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 14568 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 14574 PSHF
+[2:0] That used 372678 ore
+[2:0] I need 21852 HKGWZ
+[2:0] After leftovers I need 21849 more
+[3:0] asked for 21849 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 21850 HKGWZ
+[2:0] That used 773490 ore
+[2:0] I need 1821 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 1821 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 1822 GPVTF
+[2:0] That used 150315 ore
+[1:0] That used 1296483 ore
+[1:0] I need 720896 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 720896 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 720896 XJWVT
+[2:0] I need 2523136 PSHF
+[2:0] After leftovers I need 2523130 more
+[3:0] asked for 2523130 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 2523136 PSHF
+[2:0] That used 64520192 ore
+[2:0] I need 2523136 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 2523136 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 2523138 DCFZ
+[2:0] That used 69386295 ore
+[1:0] That used 133906487 ore
+[1:0] I need 147456 GPVTF
+[1:0] After leftovers I need 147455 more
+[2:0] asked for 147455 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 147456 GPVTF
+[1:0] That used 12165120 ore
+[1:0] I need 81920 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 81920 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 81920 KHKGT
+[2:0] I need 51200 HKGWZ
+[2:0] After leftovers I need 51199 more
+[3:0] asked for 51199 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 51200 HKGWZ
+[2:0] That used 1812480 ore
+[2:0] I need 30720 DCFZ
+[2:0] After leftovers I need 30718 more
+[3:0] asked for 30718 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 30720 DCFZ
+[2:0] That used 844800 ore
+[2:0] I need 71680 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 71680 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 71680 NZVS
+[2:0] That used 2250752 ore
+[2:0] I need 102400 PSHF
+[2:0] After leftovers I need 102394 more
+[3:0] asked for 102394 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 102396 PSHF
+[2:0] That used 2618412 ore
+[1:0] That used 7526444 ore
+[1:0] I need 475136 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 475136 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 475140 NZVS
+[1:0] That used 14919396 ore
+16384 fuel needed only 197653729 ore
+New low 16384 high 65536
+[1:0] asked for 65536 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 65536 FUEL
+[1:0] I need 3145728 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3145728 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3145730 HKGWZ
+[1:0] That used 111358842 ore
+[1:0] I need 65536 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 65536 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 65538 QDVJ
+[2:0] I need 58256 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 58256 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 58261 PSHF
+[2:0] That used 1489817 ore
+[2:0] I need 87384 HKGWZ
+[2:0] After leftovers I need 87382 more
+[3:0] asked for 87382 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 87385 HKGWZ
+[2:0] That used 3093429 ore
+[2:0] I need 7282 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 7282 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 7282 GPVTF
+[2:0] That used 600765 ore
+[1:0] That used 5184011 ore
+[1:0] I need 2883584 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 2883584 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 2883584 XJWVT
+[2:0] I need 10092544 PSHF
+[2:0] After leftovers I need 10092539 more
+[3:0] asked for 10092539 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 10092544 PSHF
+[2:0] That used 258080768 ore
+[2:0] I need 10092544 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 10092544 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 10092546 DCFZ
+[2:0] That used 277545015 ore
+[1:0] That used 535625783 ore
+[1:0] I need 589824 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 589824 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 589824 GPVTF
+[1:0] That used 48660480 ore
+[1:0] I need 327680 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 327680 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 327680 KHKGT
+[2:0] I need 204800 HKGWZ
+[2:0] After leftovers I need 204797 more
+[3:0] asked for 204797 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 204800 HKGWZ
+[2:0] That used 7249920 ore
+[2:0] I need 122880 DCFZ
+[2:0] After leftovers I need 122878 more
+[3:0] asked for 122878 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 122880 DCFZ
+[2:0] That used 3379200 ore
+[2:0] I need 286720 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 286720 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 286720 NZVS
+[2:0] That used 9003008 ore
+[2:0] I need 409600 PSHF
+[2:0] After leftovers I need 409595 more
+[3:0] asked for 409595 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 409598 PSHF
+[2:0] That used 10474006 ore
+[1:0] That used 30106134 ore
+[1:0] I need 1900544 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 1900544 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 1900545 NZVS
+[1:0] That used 59677113 ore
+65536 fuel needed only 790612363 ore
+New low 65536 high 262144
+[1:0] asked for 262144 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 262144 FUEL
+[1:0] I need 12582912 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 12582912 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 12582915 HKGWZ
+[1:0] That used 445435191 ore
+[1:0] I need 262144 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 262144 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 262152 QDVJ
+[2:0] I need 233024 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 233024 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 233030 PSHF
+[2:0] That used 5958910 ore
+[2:0] I need 349536 HKGWZ
+[2:0] After leftovers I need 349533 more
+[3:0] asked for 349533 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 349535 HKGWZ
+[2:0] That used 12373539 ore
+[2:0] I need 29128 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 29128 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 29128 GPVTF
+[2:0] That used 2403060 ore
+[1:0] That used 20735509 ore
+[1:0] I need 11534336 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 11534336 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 11534336 XJWVT
+[2:0] I need 40370176 PSHF
+[2:0] After leftovers I need 40370170 more
+[3:0] asked for 40370170 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 40370176 PSHF
+[2:0] That used 1032323072 ore
+[2:0] I need 40370176 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 40370176 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 40370178 DCFZ
+[2:0] That used 1110179895 ore
+[1:0] That used 2142502967 ore
+[1:0] I need 2359296 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 2359296 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 2359296 GPVTF
+[1:0] That used 194641920 ore
+[1:0] I need 1310720 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 1310720 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 1310720 KHKGT
+[2:0] I need 819200 HKGWZ
+[2:0] After leftovers I need 819198 more
+[3:0] asked for 819198 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 819200 HKGWZ
+[2:0] That used 28999680 ore
+[2:0] I need 491520 DCFZ
+[2:0] After leftovers I need 491518 more
+[3:0] asked for 491518 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 491520 DCFZ
+[2:0] That used 13516800 ore
+[2:0] I need 1146880 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 1146880 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 1146880 NZVS
+[2:0] That used 36012032 ore
+[2:0] I need 1638400 PSHF
+[2:0] After leftovers I need 1638394 more
+[3:0] asked for 1638394 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 1638399 PSHF
+[2:0] That used 41896203 ore
+[1:0] That used 120424715 ore
+[1:0] I need 7602176 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 7602176 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 7602180 NZVS
+[1:0] That used 238708452 ore
+262144 fuel needed only 3162448754 ore
+New low 262144 high 1048576
+[1:0] asked for 1048576 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 1048576 FUEL
+[1:0] I need 50331648 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 50331648 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 50331650 HKGWZ
+[1:0] That used 1781740410 ore
+[1:0] I need 1048576 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 1048576 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 1048581 QDVJ
+[2:0] I need 932072 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 932072 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 932078 PSHF
+[2:0] That used 23834566 ore
+[2:0] I need 1398108 HKGWZ
+[2:0] After leftovers I need 1398106 more
+[3:0] asked for 1398106 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 1398110 HKGWZ
+[2:0] That used 49493094 ore
+[2:0] I need 116509 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 116509 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 116510 GPVTF
+[2:0] That used 9612075 ore
+[1:0] That used 82939735 ore
+[1:0] I need 46137344 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 46137344 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 46137344 XJWVT
+[2:0] I need 161480704 PSHF
+[2:0] After leftovers I need 161480698 more
+[3:0] asked for 161480698 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 161480704 PSHF
+[2:0] That used 4129292288 ore
+[2:0] I need 161480704 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 161480704 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 161480706 DCFZ
+[2:0] That used 4440719415 ore
+[1:0] That used 8570011703 ore
+[1:0] I need 9437184 GPVTF
+[1:0] After leftovers I need 9437183 more
+[2:0] asked for 9437183 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 9437184 GPVTF
+[1:0] That used 778567680 ore
+[1:0] I need 5242880 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 5242880 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 5242880 KHKGT
+[2:0] I need 3276800 HKGWZ
+[2:0] After leftovers I need 3276796 more
+[3:0] asked for 3276796 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 3276800 HKGWZ
+[2:0] That used 115998720 ore
+[2:0] I need 1966080 DCFZ
+[2:0] After leftovers I need 1966078 more
+[3:0] asked for 1966078 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 1966080 DCFZ
+[2:0] That used 54067200 ore
+[2:0] I need 4587520 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 4587520 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 4587520 NZVS
+[2:0] That used 144048128 ore
+[2:0] I need 6553600 PSHF
+[2:0] After leftovers I need 6553594 more
+[3:0] asked for 6553594 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 6553596 PSHF
+[2:0] That used 167584812 ore
+[1:0] That used 481698860 ore
+[1:0] I need 30408704 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 30408704 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 30408705 NZVS
+[1:0] That used 954833337 ore
+1048576 fuel needed only 12649791725 ore
+New low 1048576 high 4194304
+[1:0] asked for 4194304 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 4194304 FUEL
+[1:0] I need 201326592 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 201326592 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 201326595 HKGWZ
+[1:0] That used 7126961463 ore
+[1:0] I need 4194304 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 4194304 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 4194306 QDVJ
+[2:0] I need 3728272 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 3728272 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 3728277 PSHF
+[2:0] That used 95337369 ore
+[2:0] I need 5592408 HKGWZ
+[2:0] After leftovers I need 5592405 more
+[3:0] asked for 5592405 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 5592405 HKGWZ
+[2:0] That used 197971137 ore
+[2:0] I need 466034 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 466034 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 466034 GPVTF
+[2:0] That used 38447805 ore
+[1:0] That used 331756311 ore
+[1:0] I need 184549376 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 184549376 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 184549376 XJWVT
+[2:0] I need 645922816 PSHF
+[2:0] After leftovers I need 645922811 more
+[3:0] asked for 645922811 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 645922816 PSHF
+[2:0] That used 16517169152 ore
+[2:0] I need 645922816 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 645922816 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 645922818 DCFZ
+[2:0] That used 17762877495 ore
+[1:0] That used 34280046647 ore
+[1:0] I need 37748736 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 37748736 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 37748736 GPVTF
+[1:0] That used 3114270720 ore
+[1:0] I need 20971520 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 20971520 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 20971520 KHKGT
+[2:0] I need 13107200 HKGWZ
+[2:0] After leftovers I need 13107200 more
+[3:0] asked for 13107200 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 13107200 HKGWZ
+[2:0] That used 463994880 ore
+[2:0] I need 7864320 DCFZ
+[2:0] After leftovers I need 7864318 more
+[3:0] asked for 7864318 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 7864320 DCFZ
+[2:0] That used 216268800 ore
+[2:0] I need 18350080 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 18350080 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 18350080 NZVS
+[2:0] That used 576192512 ore
+[2:0] I need 26214400 PSHF
+[2:0] After leftovers I need 26214395 more
+[3:0] asked for 26214395 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 26214398 PSHF
+[2:0] That used 670339606 ore
+[1:0] That used 1926795798 ore
+[1:0] I need 121634816 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 121634816 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 121634820 NZVS
+[1:0] That used 3819333348 ore
+4194304 fuel needed only 50599164287 ore
+New low 4194304 high 16777216
+[1:0] asked for 16777216 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 16777216 FUEL
+[1:0] I need 805306368 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 805306368 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 805306370 HKGWZ
+[1:0] That used 28507845498 ore
+[1:0] I need 16777216 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 16777216 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 16777224 QDVJ
+[2:0] I need 14913088 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 14913088 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 14913094 PSHF
+[2:0] That used 381349118 ore
+[2:0] I need 22369632 HKGWZ
+[2:0] After leftovers I need 22369630 more
+[3:0] asked for 22369630 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 22369630 HKGWZ
+[2:0] That used 791884902 ore
+[2:0] I need 1864136 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 1864136 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 1864136 GPVTF
+[2:0] That used 153791220 ore
+[1:0] That used 1327025240 ore
+[1:0] I need 738197504 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 738197504 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 738197504 XJWVT
+[2:0] I need 2583691264 PSHF
+[2:0] After leftovers I need 2583691258 more
+[3:0] asked for 2583691258 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 2583691264 PSHF
+[2:0] That used 66068676608 ore
+[2:0] I need 2583691264 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 2583691264 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 2583691266 DCFZ
+[2:0] That used 71051509815 ore
+[1:0] That used 137120186423 ore
+[1:0] I need 150994944 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 150994944 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 150994944 GPVTF
+[1:0] That used 12457082880 ore
+[1:0] I need 83886080 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 83886080 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 83886080 KHKGT
+[2:0] I need 52428800 HKGWZ
+[2:0] After leftovers I need 52428800 more
+[3:0] asked for 52428800 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 52428800 HKGWZ
+[2:0] That used 1855979520 ore
+[2:0] I need 31457280 DCFZ
+[2:0] After leftovers I need 31457278 more
+[3:0] asked for 31457278 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 31457280 DCFZ
+[2:0] That used 865075200 ore
+[2:0] I need 73400320 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 73400320 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 73400320 NZVS
+[2:0] That used 2304770048 ore
+[2:0] I need 104857600 PSHF
+[2:0] After leftovers I need 104857594 more
+[3:0] asked for 104857594 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 104857599 PSHF
+[2:0] That used 2681358603 ore
+[1:0] That used 7707183371 ore
+[1:0] I need 486539264 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 486539264 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 486539265 NZVS
+[1:0] That used 15277332921 ore
+16777216 fuel needed only 202396656333 ore
+New low 16777216 high 67108864
+[1:0] asked for 67108864 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 67108864 FUEL
+[1:0] I need 3221225472 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3221225472 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3221225475 HKGWZ
+[1:0] That used 114031381815 ore
+[1:0] I need 67108864 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 67108864 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 67108869 QDVJ
+[2:0] I need 59652328 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 59652328 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 59652334 PSHF
+[2:0] That used 1525395398 ore
+[2:0] I need 89478492 HKGWZ
+[2:0] After leftovers I need 89478489 more
+[3:0] asked for 89478489 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 89478490 HKGWZ
+[2:0] That used 3167538546 ore
+[2:0] I need 7456541 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 7456541 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 7456542 GPVTF
+[2:0] That used 615164715 ore
+[1:0] That used 5308098659 ore
+[1:0] I need 2952790016 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 2952790016 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 2952790016 XJWVT
+[2:0] I need 10334765056 PSHF
+[2:0] After leftovers I need 10334765050 more
+[3:0] asked for 10334765050 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 10334765056 PSHF
+[2:0] That used 264274706432 ore
+[2:0] I need 10334765056 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 10334765056 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 10334765058 DCFZ
+[2:0] That used 284206039095 ore
+[1:0] That used 548480745527 ore
+[1:0] I need 603979776 GPVTF
+[1:0] After leftovers I need 603979775 more
+[2:0] asked for 603979775 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 603979776 GPVTF
+[1:0] That used 49828331520 ore
+[1:0] I need 335544320 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 335544320 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 335544320 KHKGT
+[2:0] I need 209715200 HKGWZ
+[2:0] After leftovers I need 209715199 more
+[3:0] asked for 209715199 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 209715200 HKGWZ
+[2:0] That used 7423918080 ore
+[2:0] I need 125829120 DCFZ
+[2:0] After leftovers I need 125829118 more
+[3:0] asked for 125829118 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 125829120 DCFZ
+[2:0] That used 3460300800 ore
+[2:0] I need 293601280 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 293601280 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 293601280 NZVS
+[2:0] That used 9219080192 ore
+[2:0] I need 419430400 PSHF
+[2:0] After leftovers I need 419430394 more
+[3:0] asked for 419430394 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 419430396 PSHF
+[2:0] That used 10725434412 ore
+[1:0] That used 30828733484 ore
+[1:0] I need 1946157056 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 1946157056 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 1946157060 NZVS
+[1:0] That used 61109331684 ore
+67108864 fuel needed only 809586622689 ore
+New low 67108864 high 268435456
+[1:0] asked for 268435456 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 268435456 FUEL
+[1:0] I need 12884901888 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 12884901888 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 12884901890 HKGWZ
+[1:0] That used 456125526906 ore
+[1:0] I need 268435456 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 268435456 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 268435458 QDVJ
+[2:0] I need 238609296 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 238609296 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 238609301 PSHF
+[2:0] That used 6101580697 ore
+[2:0] I need 357913944 HKGWZ
+[2:0] After leftovers I need 357913942 more
+[3:0] asked for 357913942 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 357913945 HKGWZ
+[2:0] That used 12670153653 ore
+[2:0] I need 29826162 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 29826162 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 29826162 GPVTF
+[2:0] That used 2460658365 ore
+[1:0] That used 21232392715 ore
+[1:0] I need 11811160064 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 11811160064 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 11811160064 XJWVT
+[2:0] I need 41339060224 PSHF
+[2:0] After leftovers I need 41339060219 more
+[3:0] asked for 41339060219 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 41339060224 PSHF
+[2:0] That used 1057098825728 ore
+[2:0] I need 41339060224 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 41339060224 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 41339060226 DCFZ
+[2:0] That used 1136824156215 ore
+[1:0] That used 2193922981943 ore
+[1:0] I need 2415919104 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 2415919104 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 2415919104 GPVTF
+[1:0] That used 199313326080 ore
+[1:0] I need 1342177280 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 1342177280 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 1342177280 KHKGT
+[2:0] I need 838860800 HKGWZ
+[2:0] After leftovers I need 838860797 more
+[3:0] asked for 838860797 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 838860800 HKGWZ
+[2:0] That used 29695672320 ore
+[2:0] I need 503316480 DCFZ
+[2:0] After leftovers I need 503316478 more
+[3:0] asked for 503316478 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 503316480 DCFZ
+[2:0] That used 13841203200 ore
+[2:0] I need 1174405120 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 1174405120 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 1174405120 NZVS
+[2:0] That used 36876320768 ore
+[2:0] I need 1677721600 PSHF
+[2:0] After leftovers I need 1677721595 more
+[3:0] asked for 1677721595 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 1677721598 PSHF
+[2:0] That used 42901738006 ore
+[1:0] That used 123314934294 ore
+[1:0] I need 7784628224 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 7784628224 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 7784628225 NZVS
+[1:0] That used 244437326265 ore
+Searching range [67108864, 268435456)
+Try midpoint 167772160
+[1:0] asked for 167772160 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 167772160 FUEL
+[1:0] I need 8053063680 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 8053063680 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 8053063680 HKGWZ
+[1:0] That used 285078454272 ore
+[1:0] I need 167772160 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 167772160 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 167772168 QDVJ
+[2:0] I need 149130816 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 149130816 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 149130821 PSHF
+[2:0] That used 3813488137 ore
+[2:0] I need 223696224 HKGWZ
+[2:0] No leftovers were available
+[3:0] asked for 223696224 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 223696225 HKGWZ
+[2:0] That used 7918846365 ore
+[2:0] I need 18641352 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 18641352 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 18641352 GPVTF
+[2:0] That used 1537911540 ore
+[1:0] That used 13270246042 ore
+[1:0] I need 7381975040 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 7381975040 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 7381975040 XJWVT
+[2:0] I need 25836912640 PSHF
+[2:0] After leftovers I need 25836912635 more
+[3:0] asked for 25836912635 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 25836912640 PSHF
+[2:0] That used 660686766080 ore
+[2:0] I need 25836912640 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 25836912640 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 25836912642 DCFZ
+[2:0] That used 710515097655 ore
+[1:0] That used 1371201863735 ore
+[1:0] I need 1509949440 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 1509949440 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 1509949440 GPVTF
+[1:0] That used 124570828800 ore
+[1:0] I need 838860800 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 838860800 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 838860800 KHKGT
+[2:0] I need 524288000 HKGWZ
+[2:0] After leftovers I need 524287999 more
+[3:0] asked for 524287999 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 524288000 HKGWZ
+[2:0] That used 18559795200 ore
+[2:0] I need 314572800 DCFZ
+[2:0] After leftovers I need 314572798 more
+[3:0] asked for 314572798 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 314572800 DCFZ
+[2:0] That used 8650752000 ore
+[2:0] I need 734003200 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 734003200 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 734003200 NZVS
+[2:0] That used 23047700480 ore
+[2:0] I need 1048576000 PSHF
+[2:0] After leftovers I need 1048575995 more
+[3:0] asked for 1048575995 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 1048575997 PSHF
+[2:0] That used 26813586209 ore
+[1:0] That used 77071833889 ore
+[1:0] I need 4865392640 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 4865392640 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 4865392640 NZVS
+[1:0] That used 152773328896 ore
+Try midpoint 117440512
+[1:0] asked for 117440512 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 117440512 FUEL
+[1:0] I need 5637144576 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 5637144576 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 5637144580 HKGWZ
+[1:0] That used 199554918132 ore
+[1:0] I need 117440512 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 117440512 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 117440514 QDVJ
+[2:0] I need 104391568 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 104391568 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 104391574 PSHF
+[2:0] That used 2669441678 ore
+[2:0] I need 156587352 HKGWZ
+[2:0] After leftovers I need 156587348 more
+[3:0] asked for 156587348 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 156587350 HKGWZ
+[2:0] That used 5543192190 ore
+[2:0] I need 13048946 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 13048946 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 13048946 GPVTF
+[2:0] That used 1076538045 ore
+[1:0] That used 9289171913 ore
+[1:0] I need 5167382528 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 5167382528 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 5167382528 XJWVT
+[2:0] I need 18085838848 PSHF
+[2:0] After leftovers I need 18085838842 more
+[3:0] asked for 18085838842 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 18085838848 PSHF
+[2:0] That used 462480736256 ore
+[2:0] I need 18085838848 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 18085838848 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 18085838850 DCFZ
+[2:0] That used 497360568375 ore
+[1:0] That used 959841304631 ore
+[1:0] I need 1056964608 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 1056964608 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 1056964608 GPVTF
+[1:0] That used 87199580160 ore
+[1:0] I need 587202560 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 587202560 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 587202560 KHKGT
+[2:0] I need 367001600 HKGWZ
+[2:0] After leftovers I need 367001598 more
+[3:0] asked for 367001598 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 367001600 HKGWZ
+[2:0] That used 12991856640 ore
+[2:0] I need 220200960 DCFZ
+[2:0] After leftovers I need 220200958 more
+[3:0] asked for 220200958 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 220200960 DCFZ
+[2:0] That used 6055526400 ore
+[2:0] I need 513802240 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 513802240 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 513802240 NZVS
+[2:0] That used 16133390336 ore
+[2:0] I need 734003200 PSHF
+[2:0] After leftovers I need 734003194 more
+[3:0] asked for 734003194 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 734003200 PSHF
+[2:0] That used 18769510400 ore
+[1:0] That used 53950283776 ore
+[1:0] I need 3405774848 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 3405774848 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 3405774850 NZVS
+[1:0] That used 106941330290 ore
+Try midpoint 92274688
+[1:0] asked for 92274688 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 92274688 FUEL
+[1:0] I need 4429185024 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 4429185024 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 4429185025 HKGWZ
+[1:0] That used 156793149885 ore
+[1:0] I need 92274688 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 92274688 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 92274696 QDVJ
+[2:0] I need 82021952 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 82021952 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 82021954 PSHF
+[2:0] That used 2097418538 ore
+[2:0] I need 123032928 HKGWZ
+[2:0] After leftovers I need 123032927 more
+[3:0] asked for 123032927 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 123032930 HKGWZ
+[2:0] That used 4355365722 ore
+[2:0] I need 10252744 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 10252744 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 10252744 GPVTF
+[2:0] That used 845851380 ore
+[1:0] That used 7298635640 ore
+[1:0] I need 4060086272 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 4060086272 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 4060086272 XJWVT
+[2:0] I need 14210301952 PSHF
+[2:0] After leftovers I need 14210301950 more
+[3:0] asked for 14210301950 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 14210301952 PSHF
+[2:0] That used 363377721344 ore
+[2:0] I need 14210301952 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 14210301952 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 14210301954 DCFZ
+[2:0] That used 390783303735 ore
+[1:0] That used 754161025079 ore
+[1:0] I need 830472192 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 830472192 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 830472192 GPVTF
+[1:0] That used 68513955840 ore
+[1:0] I need 461373440 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 461373440 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 461373440 KHKGT
+[2:0] I need 288358400 HKGWZ
+[2:0] After leftovers I need 288358397 more
+[3:0] asked for 288358397 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 288358400 HKGWZ
+[2:0] That used 10207887360 ore
+[2:0] I need 173015040 DCFZ
+[2:0] After leftovers I need 173015038 more
+[3:0] asked for 173015038 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 173015040 DCFZ
+[2:0] That used 4757913600 ore
+[2:0] I need 403701760 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 403701760 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 403701760 NZVS
+[2:0] That used 12676235264 ore
+[2:0] I need 576716800 PSHF
+[2:0] After leftovers I need 576716798 more
+[3:0] asked for 576716798 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 576716798 PSHF
+[2:0] That used 14747472406 ore
+[1:0] That used 42389508630 ore
+[1:0] I need 2675965952 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2675965952 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2675965955 NZVS
+[1:0] That used 84025330987 ore
+Try midpoint 79691776
+[1:0] asked for 79691776 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 79691776 FUEL
+[1:0] I need 3825205248 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3825205248 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3825205250 HKGWZ
+[1:0] That used 135412265850 ore
+[1:0] I need 79691776 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 79691776 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 79691778 QDVJ
+[2:0] I need 70837136 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 70837136 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 70837137 PSHF
+[2:0] That used 1811406789 ore
+[2:0] I need 106255704 HKGWZ
+[2:0] After leftovers I need 106255702 more
+[3:0] asked for 106255702 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 106255705 HKGWZ
+[2:0] That used 3761451957 ore
+[2:0] I need 8854642 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 8854642 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 8854642 GPVTF
+[2:0] That used 730507965 ore
+[1:0] That used 6303366711 ore
+[1:0] I need 3506438144 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3506438144 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3506438144 XJWVT
+[2:0] I need 12272533504 PSHF
+[2:0] After leftovers I need 12272533503 more
+[3:0] asked for 12272533503 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12272533504 PSHF
+[2:0] That used 313826213888 ore
+[2:0] I need 12272533504 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12272533504 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12272533506 DCFZ
+[2:0] That used 337494671415 ore
+[1:0] That used 651320885303 ore
+[1:0] I need 717225984 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 717225984 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 717225984 GPVTF
+[1:0] That used 59171143680 ore
+[1:0] I need 398458880 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 398458880 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 398458880 KHKGT
+[2:0] I need 249036800 HKGWZ
+[2:0] After leftovers I need 249036797 more
+[3:0] asked for 249036797 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 249036800 HKGWZ
+[2:0] That used 8815902720 ore
+[2:0] I need 149422080 DCFZ
+[2:0] After leftovers I need 149422078 more
+[3:0] asked for 149422078 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 149422080 DCFZ
+[2:0] That used 4109107200 ore
+[2:0] I need 348651520 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 348651520 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 348651520 NZVS
+[2:0] That used 10947657728 ore
+[2:0] I need 498073600 PSHF
+[2:0] After leftovers I need 498073599 more
+[3:0] asked for 498073599 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 498073604 PSHF
+[2:0] That used 12736453588 ore
+[1:0] That used 36609121236 ore
+[1:0] I need 2311061504 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2311061504 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2311061505 NZVS
+[1:0] That used 72567331257 ore
+Try midpoint 85983232
+[1:0] asked for 85983232 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 85983232 FUEL
+[1:0] I need 4127195136 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 4127195136 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 4127195140 HKGWZ
+[1:0] That used 146102707956 ore
+[1:0] I need 85983232 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 85983232 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 85983237 QDVJ
+[2:0] I need 76429544 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 76429544 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 76429549 PSHF
+[2:0] That used 1954412753 ore
+[2:0] I need 114644316 HKGWZ
+[2:0] After leftovers I need 114644312 more
+[3:0] asked for 114644312 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 114644315 HKGWZ
+[2:0] That used 4058408751 ore
+[2:0] I need 9553693 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9553693 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9553694 GPVTF
+[2:0] That used 788179755 ore
+[1:0] That used 6801001259 ore
+[1:0] I need 3783262208 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3783262208 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3783262208 XJWVT
+[2:0] I need 13241417728 PSHF
+[2:0] After leftovers I need 13241417723 more
+[3:0] asked for 13241417723 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 13241417728 PSHF
+[2:0] That used 338601967616 ore
+[2:0] I need 13241417728 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 13241417728 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 13241417730 DCFZ
+[2:0] That used 364138987575 ore
+[1:0] That used 702740955191 ore
+[1:0] I need 773849088 GPVTF
+[1:0] After leftovers I need 773849087 more
+[2:0] asked for 773849087 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 773849088 GPVTF
+[1:0] That used 63842549760 ore
+[1:0] I need 429916160 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 429916160 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 429916160 KHKGT
+[2:0] I need 268697600 HKGWZ
+[2:0] After leftovers I need 268697597 more
+[3:0] asked for 268697597 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 268697600 HKGWZ
+[2:0] That used 9511895040 ore
+[2:0] I need 161218560 DCFZ
+[2:0] After leftovers I need 161218558 more
+[3:0] asked for 161218558 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 161218560 DCFZ
+[2:0] That used 4433510400 ore
+[2:0] I need 376176640 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 376176640 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 376176640 NZVS
+[2:0] That used 11811946496 ore
+[2:0] I need 537395200 PSHF
+[2:0] After leftovers I need 537395195 more
+[3:0] asked for 537395195 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 537395201 PSHF
+[2:0] That used 13741962997 ore
+[1:0] That used 39499314933 ore
+[1:0] I need 2493513728 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2493513728 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2493513730 NZVS
+[1:0] That used 78296331122 ore
+Try midpoint 82837504
+[1:0] asked for 82837504 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82837504 FUEL
+[1:0] I need 3976200192 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3976200192 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3976200195 HKGWZ
+[1:0] That used 140757486903 ore
+[1:0] I need 82837504 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82837504 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82837512 QDVJ
+[2:0] I need 73633344 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73633344 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73633350 PSHF
+[2:0] That used 1882909950 ore
+[2:0] I need 110450016 HKGWZ
+[2:0] After leftovers I need 110450013 more
+[3:0] asked for 110450013 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110450015 HKGWZ
+[2:0] That used 3909930531 ore
+[2:0] I need 9204168 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9204168 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9204168 GPVTF
+[2:0] That used 759343860 ore
+[1:0] That used 6552184341 ore
+[1:0] I need 3644850176 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3644850176 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3644850176 XJWVT
+[2:0] I need 12756975616 PSHF
+[2:0] After leftovers I need 12756975610 more
+[3:0] asked for 12756975610 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12756975616 PSHF
+[2:0] That used 326214090752 ore
+[2:0] I need 12756975616 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12756975616 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12756975618 DCFZ
+[2:0] That used 350816829495 ore
+[1:0] That used 677030920247 ore
+[1:0] I need 745537536 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 745537536 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 745537536 GPVTF
+[1:0] That used 61506846720 ore
+[1:0] I need 414187520 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414187520 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414187520 KHKGT
+[2:0] I need 258867200 HKGWZ
+[2:0] After leftovers I need 258867198 more
+[3:0] asked for 258867198 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 258867200 HKGWZ
+[2:0] That used 9163898880 ore
+[2:0] I need 155320320 DCFZ
+[2:0] After leftovers I need 155320318 more
+[3:0] asked for 155320318 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155320320 DCFZ
+[2:0] That used 4271308800 ore
+[2:0] I need 362414080 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362414080 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362414080 NZVS
+[2:0] That used 11379802112 ore
+[2:0] I need 517734400 PSHF
+[2:0] After leftovers I need 517734394 more
+[3:0] asked for 517734394 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 517734399 PSHF
+[2:0] That used 13239208203 ore
+[1:0] That used 38054217995 ore
+[1:0] I need 2402287616 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2402287616 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2402287620 NZVS
+[1:0] That used 75431831268 ore
+Try midpoint 84410368
+[1:0] asked for 84410368 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 84410368 FUEL
+[1:0] I need 4051697664 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 4051697664 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 4051697665 HKGWZ
+[1:0] That used 143430097341 ore
+[1:0] I need 84410368 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 84410368 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 84410370 QDVJ
+[2:0] I need 75031440 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 75031440 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 75031446 PSHF
+[2:0] That used 1918661262 ore
+[2:0] I need 112547160 HKGWZ
+[2:0] After leftovers I need 112547159 more
+[3:0] asked for 112547159 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 112547160 HKGWZ
+[2:0] That used 3984169464 ore
+[2:0] I need 9378930 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9378930 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9378930 GPVTF
+[2:0] That used 773761725 ore
+[1:0] That used 6676592451 ore
+[1:0] I need 3714056192 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3714056192 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3714056192 XJWVT
+[2:0] I need 12999196672 PSHF
+[2:0] After leftovers I need 12999196666 more
+[3:0] asked for 12999196666 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12999196672 PSHF
+[2:0] That used 332408029184 ore
+[2:0] I need 12999196672 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12999196672 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12999196674 DCFZ
+[2:0] That used 357477908535 ore
+[1:0] That used 689885937719 ore
+[1:0] I need 759693312 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 759693312 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 759693312 GPVTF
+[1:0] That used 62674698240 ore
+[1:0] I need 422051840 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 422051840 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 422051840 KHKGT
+[2:0] I need 263782400 HKGWZ
+[2:0] After leftovers I need 263782399 more
+[3:0] asked for 263782399 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 263782400 HKGWZ
+[2:0] That used 9337896960 ore
+[2:0] I need 158269440 DCFZ
+[2:0] After leftovers I need 158269438 more
+[3:0] asked for 158269438 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 158269440 DCFZ
+[2:0] That used 4352409600 ore
+[2:0] I need 369295360 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 369295360 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 369295360 NZVS
+[2:0] That used 11595874304 ore
+[2:0] I need 527564800 PSHF
+[2:0] After leftovers I need 527564794 more
+[3:0] asked for 527564794 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 527564800 PSHF
+[2:0] That used 13490585600 ore
+[1:0] That used 38776766464 ore
+[1:0] I need 2447900672 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2447900672 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2447900675 NZVS
+[1:0] That used 76864081195 ore
+Try midpoint 83623936
+[1:0] asked for 83623936 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 83623936 FUEL
+[1:0] I need 4013948928 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 4013948928 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 4013948930 HKGWZ
+[1:0] That used 142093792122 ore
+[1:0] I need 83623936 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 83623936 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 83623941 QDVJ
+[2:0] I need 74332392 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 74332392 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 74332398 PSHF
+[2:0] That used 1900785606 ore
+[2:0] I need 111498588 HKGWZ
+[2:0] After leftovers I need 111498586 more
+[3:0] asked for 111498586 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 111498590 HKGWZ
+[2:0] That used 3947050086 ore
+[2:0] I need 9291549 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9291549 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9291550 GPVTF
+[2:0] That used 766552875 ore
+[1:0] That used 6614388567 ore
+[1:0] I need 3679453184 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3679453184 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3679453184 XJWVT
+[2:0] I need 12878086144 PSHF
+[2:0] After leftovers I need 12878086138 more
+[3:0] asked for 12878086138 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12878086144 PSHF
+[2:0] That used 329311059968 ore
+[2:0] I need 12878086144 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12878086144 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12878086146 DCFZ
+[2:0] That used 354147369015 ore
+[1:0] That used 683458428983 ore
+[1:0] I need 752615424 GPVTF
+[1:0] After leftovers I need 752615423 more
+[2:0] asked for 752615423 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 752615424 GPVTF
+[1:0] That used 62090772480 ore
+[1:0] I need 418119680 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 418119680 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 418119680 KHKGT
+[2:0] I need 261324800 HKGWZ
+[2:0] After leftovers I need 261324796 more
+[3:0] asked for 261324796 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 261324800 HKGWZ
+[2:0] That used 9250897920 ore
+[2:0] I need 156794880 DCFZ
+[2:0] After leftovers I need 156794878 more
+[3:0] asked for 156794878 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 156794880 DCFZ
+[2:0] That used 4311859200 ore
+[2:0] I need 365854720 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 365854720 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 365854720 NZVS
+[2:0] That used 11487838208 ore
+[2:0] I need 522649600 PSHF
+[2:0] After leftovers I need 522649594 more
+[3:0] asked for 522649594 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 522649596 PSHF
+[2:0] That used 13364896812 ore
+[1:0] That used 38415492140 ore
+[1:0] I need 2425094144 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2425094144 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2425094145 NZVS
+[1:0] That used 76147956153 ore
+Try midpoint 83230720
+[1:0] asked for 83230720 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 83230720 FUEL
+[1:0] I need 3995074560 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3995074560 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3995074560 HKGWZ
+[1:0] That used 141425639424 ore
+[1:0] I need 83230720 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 83230720 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 83230722 QDVJ
+[2:0] I need 73982864 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73982864 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73982867 PSHF
+[2:0] That used 1891847599 ore
+[2:0] I need 110974296 HKGWZ
+[2:0] No leftovers were available
+[3:0] asked for 110974296 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110974300 HKGWZ
+[2:0] That used 3928490220 ore
+[2:0] I need 9247858 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9247858 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9247858 GPVTF
+[2:0] That used 762948285 ore
+[1:0] That used 6583286104 ore
+[1:0] I need 3662151680 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3662151680 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3662151680 XJWVT
+[2:0] I need 12817530880 PSHF
+[2:0] After leftovers I need 12817530877 more
+[3:0] asked for 12817530877 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12817530880 PSHF
+[2:0] That used 327762575360 ore
+[2:0] I need 12817530880 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12817530880 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12817530882 DCFZ
+[2:0] That used 352482099255 ore
+[1:0] That used 680244674615 ore
+[1:0] I need 749076480 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 749076480 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 749076480 GPVTF
+[1:0] That used 61798809600 ore
+[1:0] I need 416153600 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 416153600 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 416153600 KHKGT
+[2:0] I need 260096000 HKGWZ
+[2:0] After leftovers I need 260095996 more
+[3:0] asked for 260095996 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 260096000 HKGWZ
+[2:0] That used 9207398400 ore
+[2:0] I need 156057600 DCFZ
+[2:0] After leftovers I need 156057598 more
+[3:0] asked for 156057598 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 156057600 DCFZ
+[2:0] That used 4291584000 ore
+[2:0] I need 364134400 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 364134400 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 364134400 NZVS
+[2:0] That used 11433820160 ore
+[2:0] I need 520192000 PSHF
+[2:0] After leftovers I need 520191997 more
+[3:0] asked for 520191997 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 520192001 PSHF
+[2:0] That used 13302052597 ore
+[1:0] That used 38234855157 ore
+[1:0] I need 2413690880 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2413690880 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2413690880 NZVS
+[1:0] That used 75789893632 ore
+Try midpoint 83034112
+[1:0] asked for 83034112 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 83034112 FUEL
+[1:0] I need 3985637376 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3985637376 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3985637380 HKGWZ
+[1:0] That used 141091563252 ore
+[1:0] I need 83034112 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 83034112 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 83034117 QDVJ
+[2:0] I need 73808104 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73808104 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73808105 PSHF
+[2:0] That used 1887378685 ore
+[2:0] I need 110712156 HKGWZ
+[2:0] After leftovers I need 110712152 more
+[3:0] asked for 110712152 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110712155 HKGWZ
+[2:0] That used 3919210287 ore
+[2:0] I need 9226013 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9226013 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9226014 GPVTF
+[2:0] That used 761146155 ore
+[1:0] That used 6567735127 ore
+[1:0] I need 3653500928 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3653500928 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3653500928 XJWVT
+[2:0] I need 12787253248 PSHF
+[2:0] After leftovers I need 12787253247 more
+[3:0] asked for 12787253247 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12787253248 PSHF
+[2:0] That used 326988333056 ore
+[2:0] I need 12787253248 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12787253248 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12787253250 DCFZ
+[2:0] That used 351649464375 ore
+[1:0] That used 678637797431 ore
+[1:0] I need 747307008 GPVTF
+[1:0] After leftovers I need 747307007 more
+[2:0] asked for 747307007 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 747307008 GPVTF
+[1:0] That used 61652828160 ore
+[1:0] I need 415170560 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 415170560 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 415170560 KHKGT
+[2:0] I need 259481600 HKGWZ
+[2:0] After leftovers I need 259481597 more
+[3:0] asked for 259481597 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259481600 HKGWZ
+[2:0] That used 9185648640 ore
+[2:0] I need 155688960 DCFZ
+[2:0] After leftovers I need 155688958 more
+[3:0] asked for 155688958 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155688960 DCFZ
+[2:0] That used 4281446400 ore
+[2:0] I need 363274240 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 363274240 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 363274240 NZVS
+[2:0] That used 11406811136 ore
+[2:0] I need 518963200 PSHF
+[2:0] After leftovers I need 518963199 more
+[3:0] asked for 518963199 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518963200 PSHF
+[2:0] That used 13270630400 ore
+[1:0] That used 38144536576 ore
+[1:0] I need 2407989248 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2407989248 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2407989250 NZVS
+[1:0] That used 75610862450 ore
+Try midpoint 82935808
+[1:0] asked for 82935808 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82935808 FUEL
+[1:0] I need 3980918784 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3980918784 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3980918785 HKGWZ
+[1:0] That used 140924524989 ore
+[1:0] I need 82935808 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82935808 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82935810 QDVJ
+[2:0] I need 73720720 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73720720 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73720724 PSHF
+[2:0] That used 1885144228 ore
+[2:0] I need 110581080 HKGWZ
+[2:0] After leftovers I need 110581079 more
+[3:0] asked for 110581079 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110581080 HKGWZ
+[2:0] That used 3914570232 ore
+[2:0] I need 9215090 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9215090 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9215090 GPVTF
+[2:0] That used 760244925 ore
+[1:0] That used 6559959385 ore
+[1:0] I need 3649175552 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3649175552 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3649175552 XJWVT
+[2:0] I need 12772114432 PSHF
+[2:0] After leftovers I need 12772114428 more
+[3:0] asked for 12772114428 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12772114432 PSHF
+[2:0] That used 326601211904 ore
+[2:0] I need 12772114432 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12772114432 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12772114434 DCFZ
+[2:0] That used 351233146935 ore
+[1:0] That used 677834358839 ore
+[1:0] I need 746422272 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746422272 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746422272 GPVTF
+[1:0] That used 61579837440 ore
+[1:0] I need 414679040 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414679040 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414679040 KHKGT
+[2:0] I need 259174400 HKGWZ
+[2:0] After leftovers I need 259174399 more
+[3:0] asked for 259174399 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259174400 HKGWZ
+[2:0] That used 9174773760 ore
+[2:0] I need 155504640 DCFZ
+[2:0] After leftovers I need 155504638 more
+[3:0] asked for 155504638 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155504640 DCFZ
+[2:0] That used 4276377600 ore
+[2:0] I need 362844160 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362844160 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362844160 NZVS
+[2:0] That used 11393306624 ore
+[2:0] I need 518348800 PSHF
+[2:0] After leftovers I need 518348796 more
+[3:0] asked for 518348796 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518348796 PSHF
+[2:0] That used 13254919212 ore
+[1:0] That used 38099377196 ore
+[1:0] I need 2405138432 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2405138432 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2405138435 NZVS
+[1:0] That used 75521346859 ore
+Try midpoint 82886656
+[1:0] asked for 82886656 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82886656 FUEL
+[1:0] I need 3978559488 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978559488 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978559490 HKGWZ
+[1:0] That used 140841005946 ore
+[1:0] I need 82886656 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82886656 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82886661 QDVJ
+[2:0] I need 73677032 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73677032 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73677037 PSHF
+[2:0] That used 1884027089 ore
+[2:0] I need 110515548 HKGWZ
+[2:0] After leftovers I need 110515546 more
+[3:0] asked for 110515546 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110515550 HKGWZ
+[2:0] That used 3912250470 ore
+[2:0] I need 9209629 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9209629 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9209630 GPVTF
+[2:0] That used 759794475 ore
+[1:0] That used 6556072034 ore
+[1:0] I need 3647012864 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647012864 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647012864 XJWVT
+[2:0] I need 12764545024 PSHF
+[2:0] After leftovers I need 12764545019 more
+[3:0] asked for 12764545019 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12764545024 PSHF
+[2:0] That used 326407651328 ore
+[2:0] I need 12764545024 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12764545024 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12764545026 DCFZ
+[2:0] That used 351024988215 ore
+[1:0] That used 677432639543 ore
+[1:0] I need 745979904 GPVTF
+[1:0] After leftovers I need 745979903 more
+[2:0] asked for 745979903 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 745979904 GPVTF
+[1:0] That used 61543342080 ore
+[1:0] I need 414433280 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414433280 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414433280 KHKGT
+[2:0] I need 259020800 HKGWZ
+[2:0] After leftovers I need 259020796 more
+[3:0] asked for 259020796 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259020800 HKGWZ
+[2:0] That used 9169336320 ore
+[2:0] I need 155412480 DCFZ
+[2:0] After leftovers I need 155412478 more
+[3:0] asked for 155412478 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155412480 DCFZ
+[2:0] That used 4273843200 ore
+[2:0] I need 362629120 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362629120 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362629120 NZVS
+[2:0] That used 11386554368 ore
+[2:0] I need 518041600 PSHF
+[2:0] After leftovers I need 518041595 more
+[3:0] asked for 518041595 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518041601 PSHF
+[2:0] That used 13247063797 ore
+[1:0] That used 38076797685 ore
+[1:0] I need 2403713024 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403713024 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403713025 NZVS
+[1:0] That used 75476588985 ore
+Try midpoint 82911232
+[1:0] asked for 82911232 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82911232 FUEL
+[1:0] I need 3979739136 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3979739136 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3979739140 HKGWZ
+[1:0] That used 140882765556 ore
+[1:0] I need 82911232 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82911232 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82911240 QDVJ
+[2:0] I need 73698880 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73698880 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73698884 PSHF
+[2:0] That used 1884585748 ore
+[2:0] I need 110548320 HKGWZ
+[2:0] After leftovers I need 110548316 more
+[3:0] asked for 110548316 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110548320 HKGWZ
+[2:0] That used 3913410528 ore
+[2:0] I need 9212360 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9212360 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9212360 GPVTF
+[2:0] That used 760019700 ore
+[1:0] That used 6558015976 ore
+[1:0] I need 3648094208 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3648094208 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3648094208 XJWVT
+[2:0] I need 12768329728 PSHF
+[2:0] After leftovers I need 12768329724 more
+[3:0] asked for 12768329724 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12768329728 PSHF
+[2:0] That used 326504431616 ore
+[2:0] I need 12768329728 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12768329728 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12768329730 DCFZ
+[2:0] That used 351129067575 ore
+[1:0] That used 677633499191 ore
+[1:0] I need 746201088 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746201088 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746201088 GPVTF
+[1:0] That used 61561589760 ore
+[1:0] I need 414556160 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414556160 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414556160 KHKGT
+[2:0] I need 259097600 HKGWZ
+[2:0] After leftovers I need 259097596 more
+[3:0] asked for 259097596 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259097600 HKGWZ
+[2:0] That used 9172055040 ore
+[2:0] I need 155458560 DCFZ
+[2:0] After leftovers I need 155458558 more
+[3:0] asked for 155458558 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155458560 DCFZ
+[2:0] That used 4275110400 ore
+[2:0] I need 362736640 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362736640 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362736640 NZVS
+[2:0] That used 11389930496 ore
+[2:0] I need 518195200 PSHF
+[2:0] After leftovers I need 518195196 more
+[3:0] asked for 518195196 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518195202 PSHF
+[2:0] That used 13250991594 ore
+[1:0] That used 38088087530 ore
+[1:0] I need 2404425728 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2404425728 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2404425730 NZVS
+[1:0] That used 75498967922 ore
+Try midpoint 82898944
+[1:0] asked for 82898944 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82898944 FUEL
+[1:0] I need 3979149312 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3979149312 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3979149315 HKGWZ
+[1:0] That used 140861885751 ore
+[1:0] I need 82898944 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82898944 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82898946 QDVJ
+[2:0] I need 73687952 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73687952 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73687957 PSHF
+[2:0] That used 1884306329 ore
+[2:0] I need 110531928 HKGWZ
+[2:0] After leftovers I need 110531925 more
+[3:0] asked for 110531925 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110531925 HKGWZ
+[2:0] That used 3912830145 ore
+[2:0] I need 9210994 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210994 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210994 GPVTF
+[2:0] That used 759907005 ore
+[1:0] That used 6557043479 ore
+[1:0] I need 3647553536 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647553536 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647553536 XJWVT
+[2:0] I need 12766437376 PSHF
+[2:0] After leftovers I need 12766437371 more
+[3:0] asked for 12766437371 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12766437376 PSHF
+[2:0] That used 326456041472 ore
+[2:0] I need 12766437376 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12766437376 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12766437378 DCFZ
+[2:0] That used 351077027895 ore
+[1:0] That used 677533069367 ore
+[1:0] I need 746090496 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746090496 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746090496 GPVTF
+[1:0] That used 61552465920 ore
+[1:0] I need 414494720 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414494720 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414494720 KHKGT
+[2:0] I need 259059200 HKGWZ
+[2:0] After leftovers I need 259059200 more
+[3:0] asked for 259059200 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259059200 HKGWZ
+[2:0] That used 9170695680 ore
+[2:0] I need 155435520 DCFZ
+[2:0] After leftovers I need 155435518 more
+[3:0] asked for 155435518 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155435520 DCFZ
+[2:0] That used 4274476800 ore
+[2:0] I need 362682880 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362682880 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362682880 NZVS
+[2:0] That used 11388242432 ore
+[2:0] I need 518118400 PSHF
+[2:0] After leftovers I need 518118395 more
+[3:0] asked for 518118395 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518118398 PSHF
+[2:0] That used 13249027606 ore
+[1:0] That used 38082442518 ore
+[1:0] I need 2404069376 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2404069376 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2404069380 NZVS
+[1:0] That used 75487778532 ore
+Try midpoint 82892800
+[1:0] asked for 82892800 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892800 FUEL
+[1:0] I need 3978854400 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978854400 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978854400 HKGWZ
+[1:0] That used 140851445760 ore
+[1:0] I need 82892800 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892800 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892808 QDVJ
+[2:0] I need 73682496 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682496 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682497 PSHF
+[2:0] That used 1884166709 ore
+[2:0] I need 110523744 HKGWZ
+[2:0] No leftovers were available
+[3:0] asked for 110523744 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523745 HKGWZ
+[2:0] That used 3912540573 ore
+[2:0] I need 9210312 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210312 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210312 GPVTF
+[2:0] That used 759850740 ore
+[1:0] That used 6556558022 ore
+[1:0] I need 3647283200 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647283200 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647283200 XJWVT
+[2:0] I need 12765491200 PSHF
+[2:0] After leftovers I need 12765491199 more
+[3:0] asked for 12765491199 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765491200 PSHF
+[2:0] That used 326431846400 ore
+[2:0] I need 12765491200 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765491200 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765491202 DCFZ
+[2:0] That used 351051008055 ore
+[1:0] That used 677482854455 ore
+[1:0] I need 746035200 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746035200 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746035200 GPVTF
+[1:0] That used 61547904000 ore
+[1:0] I need 414464000 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414464000 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414464000 KHKGT
+[2:0] I need 259040000 HKGWZ
+[2:0] After leftovers I need 259039999 more
+[3:0] asked for 259039999 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259040000 HKGWZ
+[2:0] That used 9170016000 ore
+[2:0] I need 155424000 DCFZ
+[2:0] After leftovers I need 155423998 more
+[3:0] asked for 155423998 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155424000 DCFZ
+[2:0] That used 4274160000 ore
+[2:0] I need 362656000 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362656000 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362656000 NZVS
+[2:0] That used 11387398400 ore
+[2:0] I need 518080000 PSHF
+[2:0] After leftovers I need 518079999 more
+[3:0] asked for 518079999 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518080003 PSHF
+[2:0] That used 13248045791 ore
+[1:0] That used 38079620191 ore
+[1:0] I need 2403891200 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403891200 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403891200 NZVS
+[1:0] That used 75482183680 ore
+Try midpoint 82889728
+[1:0] asked for 82889728 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82889728 FUEL
+[1:0] I need 3978706944 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978706944 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978706945 HKGWZ
+[1:0] That used 140846225853 ore
+[1:0] I need 82889728 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82889728 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82889730 QDVJ
+[2:0] I need 73679760 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73679760 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73679760 PSHF
+[2:0] That used 1884096720 ore
+[2:0] I need 110519640 HKGWZ
+[2:0] After leftovers I need 110519639 more
+[3:0] asked for 110519639 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110519640 HKGWZ
+[2:0] That used 3912395256 ore
+[2:0] I need 9209970 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9209970 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9209970 GPVTF
+[2:0] That used 759822525 ore
+[1:0] That used 6556314501 ore
+[1:0] I need 3647148032 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647148032 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647148032 XJWVT
+[2:0] I need 12765018112 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 12765018112 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765018112 PSHF
+[2:0] That used 326419748864 ore
+[2:0] I need 12765018112 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765018112 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765018114 DCFZ
+[2:0] That used 351037998135 ore
+[1:0] That used 677457746999 ore
+[1:0] I need 746007552 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746007552 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746007552 GPVTF
+[1:0] That used 61545623040 ore
+[1:0] I need 414448640 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414448640 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414448640 KHKGT
+[2:0] I need 259030400 HKGWZ
+[2:0] After leftovers I need 259030399 more
+[3:0] asked for 259030399 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259030400 HKGWZ
+[2:0] That used 9169676160 ore
+[2:0] I need 155418240 DCFZ
+[2:0] After leftovers I need 155418238 more
+[3:0] asked for 155418238 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155418240 DCFZ
+[2:0] That used 4274001600 ore
+[2:0] I need 362642560 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362642560 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362642560 NZVS
+[2:0] That used 11386976384 ore
+[2:0] I need 518060800 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 518060800 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518060802 PSHF
+[2:0] That used 13247554794 ore
+[1:0] That used 38078208938 ore
+[1:0] I need 2403802112 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403802112 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403802115 NZVS
+[1:0] That used 75479386411 ore
+Try midpoint 82891264
+[1:0] asked for 82891264 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82891264 FUEL
+[1:0] I need 3978780672 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978780672 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978780675 HKGWZ
+[1:0] That used 140848835895 ore
+[1:0] I need 82891264 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82891264 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82891269 QDVJ
+[2:0] I need 73681128 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73681128 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73681132 PSHF
+[2:0] That used 1884131804 ore
+[2:0] I need 110521692 HKGWZ
+[2:0] After leftovers I need 110521689 more
+[3:0] asked for 110521689 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110521690 HKGWZ
+[2:0] That used 3912467826 ore
+[2:0] I need 9210141 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210141 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210142 GPVTF
+[2:0] That used 759836715 ore
+[1:0] That used 6556436345 ore
+[1:0] I need 3647215616 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647215616 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647215616 XJWVT
+[2:0] I need 12765254656 PSHF
+[2:0] After leftovers I need 12765254652 more
+[3:0] asked for 12765254652 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765254656 PSHF
+[2:0] That used 326425797632 ore
+[2:0] I need 12765254656 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765254656 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765254658 DCFZ
+[2:0] That used 351044503095 ore
+[1:0] That used 677470300727 ore
+[1:0] I need 746021376 GPVTF
+[1:0] After leftovers I need 746021375 more
+[2:0] asked for 746021375 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746021376 GPVTF
+[1:0] That used 61546763520 ore
+[1:0] I need 414456320 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414456320 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414456320 KHKGT
+[2:0] I need 259035200 HKGWZ
+[2:0] After leftovers I need 259035199 more
+[3:0] asked for 259035199 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259035200 HKGWZ
+[2:0] That used 9169846080 ore
+[2:0] I need 155421120 DCFZ
+[2:0] After leftovers I need 155421118 more
+[3:0] asked for 155421118 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155421120 DCFZ
+[2:0] That used 4274080800 ore
+[2:0] I need 362649280 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362649280 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362649280 NZVS
+[2:0] That used 11387187392 ore
+[2:0] I need 518070400 PSHF
+[2:0] After leftovers I need 518070396 more
+[3:0] asked for 518070396 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518070399 PSHF
+[2:0] That used 13247800203 ore
+[1:0] That used 38078914475 ore
+[1:0] I need 2403846656 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403846656 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403846660 NZVS
+[1:0] That used 75480785124 ore
+Try midpoint 82892032
+[1:0] asked for 82892032 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892032 FUEL
+[1:0] I need 3978817536 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978817536 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978817540 HKGWZ
+[1:0] That used 140850140916 ore
+[1:0] I need 82892032 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892032 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892034 QDVJ
+[2:0] I need 73681808 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73681808 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73681811 PSHF
+[2:0] That used 1884149167 ore
+[2:0] I need 110522712 HKGWZ
+[2:0] After leftovers I need 110522708 more
+[3:0] asked for 110522708 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110522710 HKGWZ
+[2:0] That used 3912503934 ore
+[2:0] I need 9210226 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210226 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210226 GPVTF
+[2:0] That used 759843645 ore
+[1:0] That used 6556496746 ore
+[1:0] I need 3647249408 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647249408 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647249408 XJWVT
+[2:0] I need 12765372928 PSHF
+[2:0] After leftovers I need 12765372925 more
+[3:0] asked for 12765372925 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765372928 PSHF
+[2:0] That used 326428822016 ore
+[2:0] I need 12765372928 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765372928 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765372930 DCFZ
+[2:0] That used 351047755575 ore
+[1:0] That used 677476577591 ore
+[1:0] I need 746028288 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746028288 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746028288 GPVTF
+[1:0] That used 61547333760 ore
+[1:0] I need 414460160 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414460160 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414460160 KHKGT
+[2:0] I need 259037600 HKGWZ
+[2:0] After leftovers I need 259037598 more
+[3:0] asked for 259037598 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259037600 HKGWZ
+[2:0] That used 9169931040 ore
+[2:0] I need 155422560 DCFZ
+[2:0] After leftovers I need 155422558 more
+[3:0] asked for 155422558 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155422560 DCFZ
+[2:0] That used 4274120400 ore
+[2:0] I need 362652640 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362652640 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362652640 NZVS
+[2:0] That used 11387292896 ore
+[2:0] I need 518075200 PSHF
+[2:0] After leftovers I need 518075197 more
+[3:0] asked for 518075197 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518075201 PSHF
+[2:0] That used 13247922997 ore
+[1:0] That used 38079267333 ore
+[1:0] I need 2403868928 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403868928 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403868930 NZVS
+[1:0] That used 75481484402 ore
+Try midpoint 82892416
+[1:0] asked for 82892416 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892416 FUEL
+[1:0] I need 3978835968 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978835968 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978835970 HKGWZ
+[1:0] That used 140850793338 ore
+[1:0] I need 82892416 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892416 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892421 QDVJ
+[2:0] I need 73682152 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682152 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682154 PSHF
+[2:0] That used 1884157938 ore
+[2:0] I need 110523228 HKGWZ
+[2:0] After leftovers I need 110523226 more
+[3:0] asked for 110523226 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523230 HKGWZ
+[2:0] That used 3912522342 ore
+[2:0] I need 9210269 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210269 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210270 GPVTF
+[2:0] That used 759847275 ore
+[1:0] That used 6556527555 ore
+[1:0] I need 3647266304 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647266304 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647266304 XJWVT
+[2:0] I need 12765432064 PSHF
+[2:0] After leftovers I need 12765432062 more
+[3:0] asked for 12765432062 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765432064 PSHF
+[2:0] That used 326430334208 ore
+[2:0] I need 12765432064 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765432064 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765432066 DCFZ
+[2:0] That used 351049381815 ore
+[1:0] That used 677479716023 ore
+[1:0] I need 746031744 GPVTF
+[1:0] After leftovers I need 746031743 more
+[2:0] asked for 746031743 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746031744 GPVTF
+[1:0] That used 61547618880 ore
+[1:0] I need 414462080 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414462080 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414462080 KHKGT
+[2:0] I need 259038800 HKGWZ
+[2:0] After leftovers I need 259038796 more
+[3:0] asked for 259038796 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259038800 HKGWZ
+[2:0] That used 9169973520 ore
+[2:0] I need 155423280 DCFZ
+[2:0] After leftovers I need 155423278 more
+[3:0] asked for 155423278 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423280 DCFZ
+[2:0] That used 4274140200 ore
+[2:0] I need 362654320 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362654320 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362654320 NZVS
+[2:0] That used 11387345648 ore
+[2:0] I need 518077600 PSHF
+[2:0] After leftovers I need 518077598 more
+[3:0] asked for 518077598 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518077602 PSHF
+[2:0] That used 13247984394 ore
+[1:0] That used 38079443762 ore
+[1:0] I need 2403880064 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403880064 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403880065 NZVS
+[1:0] That used 75481834041 ore
+Try midpoint 82892608
+[1:0] asked for 82892608 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892608 FUEL
+[1:0] I need 3978845184 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978845184 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978845185 HKGWZ
+[1:0] That used 140851119549 ore
+[1:0] I need 82892608 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892608 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892610 QDVJ
+[2:0] I need 73682320 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682320 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682322 PSHF
+[2:0] That used 1884162234 ore
+[2:0] I need 110523480 HKGWZ
+[2:0] After leftovers I need 110523479 more
+[3:0] asked for 110523479 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523480 HKGWZ
+[2:0] That used 3912531192 ore
+[2:0] I need 9210290 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210290 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210290 GPVTF
+[2:0] That used 759848925 ore
+[1:0] That used 6556542351 ore
+[1:0] I need 3647274752 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647274752 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647274752 XJWVT
+[2:0] I need 12765461632 PSHF
+[2:0] After leftovers I need 12765461630 more
+[3:0] asked for 12765461630 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765461632 PSHF
+[2:0] That used 326431090304 ore
+[2:0] I need 12765461632 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765461632 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765461634 DCFZ
+[2:0] That used 351050194935 ore
+[1:0] That used 677481285239 ore
+[1:0] I need 746033472 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746033472 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746033472 GPVTF
+[1:0] That used 61547761440 ore
+[1:0] I need 414463040 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463040 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463040 KHKGT
+[2:0] I need 259039400 HKGWZ
+[2:0] After leftovers I need 259039399 more
+[3:0] asked for 259039399 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039400 HKGWZ
+[2:0] That used 9169994760 ore
+[2:0] I need 155423640 DCFZ
+[2:0] After leftovers I need 155423638 more
+[3:0] asked for 155423638 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423640 DCFZ
+[2:0] That used 4274150100 ore
+[2:0] I need 362655160 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655160 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655160 NZVS
+[2:0] That used 11387372024 ore
+[2:0] I need 518078800 PSHF
+[2:0] After leftovers I need 518078798 more
+[3:0] asked for 518078798 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518078799 PSHF
+[2:0] That used 13248015003 ore
+[1:0] That used 38079531887 ore
+[1:0] I need 2403885632 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403885632 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403885635 NZVS
+[1:0] That used 75482008939 ore
+Try midpoint 82892704
+[1:0] asked for 82892704 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892704 FUEL
+[1:0] I need 3978849792 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978849792 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978849795 HKGWZ
+[1:0] That used 140851282743 ore
+[1:0] I need 82892704 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892704 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892709 QDVJ
+[2:0] I need 73682408 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682408 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682413 PSHF
+[2:0] That used 1884164561 ore
+[2:0] I need 110523612 HKGWZ
+[2:0] After leftovers I need 110523609 more
+[3:0] asked for 110523609 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523610 HKGWZ
+[2:0] That used 3912535794 ore
+[2:0] I need 9210301 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210301 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210302 GPVTF
+[2:0] That used 759849915 ore
+[1:0] That used 6556550270 ore
+[1:0] I need 3647278976 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647278976 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647278976 XJWVT
+[2:0] I need 12765476416 PSHF
+[2:0] After leftovers I need 12765476411 more
+[3:0] asked for 12765476411 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765476416 PSHF
+[2:0] That used 326431468352 ore
+[2:0] I need 12765476416 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765476416 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765476418 DCFZ
+[2:0] That used 351050601495 ore
+[1:0] That used 677482069847 ore
+[1:0] I need 746034336 GPVTF
+[1:0] After leftovers I need 746034335 more
+[2:0] asked for 746034335 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034336 GPVTF
+[1:0] That used 61547832720 ore
+[1:0] I need 414463520 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463520 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463520 KHKGT
+[2:0] I need 259039700 HKGWZ
+[2:0] After leftovers I need 259039699 more
+[3:0] asked for 259039699 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039700 HKGWZ
+[2:0] That used 9170005380 ore
+[2:0] I need 155423820 DCFZ
+[2:0] After leftovers I need 155423818 more
+[3:0] asked for 155423818 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423820 DCFZ
+[2:0] That used 4274155050 ore
+[2:0] I need 362655580 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655580 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655580 NZVS
+[2:0] That used 11387385212 ore
+[2:0] I need 518079400 PSHF
+[2:0] After leftovers I need 518079395 more
+[3:0] asked for 518079395 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079401 PSHF
+[2:0] That used 13248030397 ore
+[1:0] That used 38079576039 ore
+[1:0] I need 2403888416 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403888416 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403888420 NZVS
+[1:0] That used 75482096388 ore
+Try midpoint 82892752
+[1:0] asked for 82892752 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892752 FUEL
+[1:0] I need 3978852096 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978852096 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978852100 HKGWZ
+[1:0] That used 140851364340 ore
+[1:0] I need 82892752 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892752 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892754 QDVJ
+[2:0] I need 73682448 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682448 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682448 PSHF
+[2:0] That used 1884165456 ore
+[2:0] I need 110523672 HKGWZ
+[2:0] After leftovers I need 110523668 more
+[3:0] asked for 110523668 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523670 HKGWZ
+[2:0] That used 3912537918 ore
+[2:0] I need 9210306 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210306 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210306 GPVTF
+[2:0] That used 759850245 ore
+[1:0] That used 6556553619 ore
+[1:0] I need 3647281088 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647281088 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647281088 XJWVT
+[2:0] I need 12765483808 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 12765483808 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765483808 PSHF
+[2:0] That used 326431657376 ore
+[2:0] I need 12765483808 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765483808 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765483810 DCFZ
+[2:0] That used 351050804775 ore
+[1:0] That used 677482462151 ore
+[1:0] I need 746034768 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746034768 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034768 GPVTF
+[1:0] That used 61547868360 ore
+[1:0] I need 414463760 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463760 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463760 KHKGT
+[2:0] I need 259039850 HKGWZ
+[2:0] After leftovers I need 259039848 more
+[3:0] asked for 259039848 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039850 HKGWZ
+[2:0] That used 9170010690 ore
+[2:0] I need 155423910 DCFZ
+[2:0] After leftovers I need 155423908 more
+[3:0] asked for 155423908 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423910 DCFZ
+[2:0] That used 4274157525 ore
+[2:0] I need 362655790 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655790 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655790 NZVS
+[2:0] That used 11387391806 ore
+[2:0] I need 518079700 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 518079700 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079702 PSHF
+[2:0] That used 13248038094 ore
+[1:0] That used 38079598115 ore
+[1:0] I need 2403889808 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403889808 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403889810 NZVS
+[1:0] That used 75482140034 ore
+Try midpoint 82892776
+[1:0] asked for 82892776 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892776 FUEL
+[1:0] I need 3978853248 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978853248 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978853250 HKGWZ
+[1:0] That used 140851405050 ore
+[1:0] I need 82892776 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892776 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892781 QDVJ
+[2:0] I need 73682472 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682472 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682476 PSHF
+[2:0] That used 1884166172 ore
+[2:0] I need 110523708 HKGWZ
+[2:0] After leftovers I need 110523706 more
+[3:0] asked for 110523706 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523710 HKGWZ
+[2:0] That used 3912539334 ore
+[2:0] I need 9210309 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210309 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210310 GPVTF
+[2:0] That used 759850575 ore
+[1:0] That used 6556556081 ore
+[1:0] I need 3647282144 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647282144 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647282144 XJWVT
+[2:0] I need 12765487504 PSHF
+[2:0] After leftovers I need 12765487500 more
+[3:0] asked for 12765487500 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765487504 PSHF
+[2:0] That used 326431751888 ore
+[2:0] I need 12765487504 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765487504 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765487506 DCFZ
+[2:0] That used 351050906415 ore
+[1:0] That used 677482658303 ore
+[1:0] I need 746034984 GPVTF
+[1:0] After leftovers I need 746034983 more
+[2:0] asked for 746034983 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034984 GPVTF
+[1:0] That used 61547886180 ore
+[1:0] I need 414463880 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463880 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463880 KHKGT
+[2:0] I need 259039925 HKGWZ
+[2:0] After leftovers I need 259039921 more
+[3:0] asked for 259039921 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039925 HKGWZ
+[2:0] That used 9170013345 ore
+[2:0] I need 155423955 DCFZ
+[2:0] After leftovers I need 155423953 more
+[3:0] asked for 155423953 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423958 DCFZ
+[2:0] That used 4274158845 ore
+[2:0] I need 362655895 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655895 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655895 NZVS
+[2:0] That used 11387395103 ore
+[2:0] I need 518079850 PSHF
+[2:0] After leftovers I need 518079846 more
+[3:0] asked for 518079846 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079849 PSHF
+[2:0] That used 13248041853 ore
+[1:0] That used 38079609146 ore
+[1:0] I need 2403890504 NZVS
+[1:0] No leftovers were available
+[2:0] asked for 2403890504 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403890505 NZVS
+[1:0] That used 75482161857 ore
+Try midpoint 82892764
+[1:0] asked for 82892764 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892764 FUEL
+[1:0] I need 3978852672 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978852672 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978852675 HKGWZ
+[1:0] That used 140851384695 ore
+[1:0] I need 82892764 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892764 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892772 QDVJ
+[2:0] I need 73682464 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682464 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682469 PSHF
+[2:0] That used 1884165993 ore
+[2:0] I need 110523696 HKGWZ
+[2:0] After leftovers I need 110523693 more
+[3:0] asked for 110523693 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523695 HKGWZ
+[2:0] That used 3912538803 ore
+[2:0] I need 9210308 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210308 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210308 GPVTF
+[2:0] That used 759850410 ore
+[1:0] That used 6556555206 ore
+[1:0] I need 3647281616 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647281616 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647281616 XJWVT
+[2:0] I need 12765485656 PSHF
+[2:0] After leftovers I need 12765485651 more
+[3:0] asked for 12765485651 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765485656 PSHF
+[2:0] That used 326431704632 ore
+[2:0] I need 12765485656 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765485656 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765485658 DCFZ
+[2:0] That used 351050855595 ore
+[1:0] That used 677482560227 ore
+[1:0] I need 746034876 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746034876 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034876 GPVTF
+[1:0] That used 61547877270 ore
+[1:0] I need 414463820 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463820 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463824 KHKGT
+[2:0] I need 259039890 HKGWZ
+[2:0] After leftovers I need 259039888 more
+[3:0] asked for 259039888 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039890 HKGWZ
+[2:0] That used 9170012106 ore
+[2:0] I need 155423934 DCFZ
+[2:0] After leftovers I need 155423932 more
+[3:0] asked for 155423932 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423934 DCFZ
+[2:0] That used 4274158185 ore
+[2:0] I need 362655846 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655846 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655850 NZVS
+[2:0] That used 11387393690 ore
+[2:0] I need 518079780 PSHF
+[2:0] After leftovers I need 518079775 more
+[3:0] asked for 518079775 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079779 PSHF
+[2:0] That used 13248040063 ore
+[1:0] That used 38079604044 ore
+[1:0] I need 2403890156 NZVS
+[1:0] After leftovers I need 2403890152 more
+[2:0] asked for 2403890152 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403890155 NZVS
+[1:0] That used 75482150867 ore
+Try midpoint 82892758
+[1:0] asked for 82892758 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892758 FUEL
+[1:0] I need 3978852384 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978852384 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978852385 HKGWZ
+[1:0] That used 140851374429 ore
+[1:0] I need 82892758 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892758 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892763 QDVJ
+[2:0] I need 73682456 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682456 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682462 PSHF
+[2:0] That used 1884165814 ore
+[2:0] I need 110523684 HKGWZ
+[2:0] After leftovers I need 110523683 more
+[3:0] asked for 110523683 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523685 HKGWZ
+[2:0] That used 3912538449 ore
+[2:0] I need 9210307 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210307 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210308 GPVTF
+[2:0] That used 759850410 ore
+[1:0] That used 6556554673 ore
+[1:0] I need 3647281352 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647281352 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647281352 XJWVT
+[2:0] I need 12765484732 PSHF
+[2:0] After leftovers I need 12765484726 more
+[3:0] asked for 12765484726 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765484732 PSHF
+[2:0] That used 326431681004 ore
+[2:0] I need 12765484732 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765484732 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765484734 DCFZ
+[2:0] That used 351050830185 ore
+[1:0] That used 677482511189 ore
+[1:0] I need 746034822 GPVTF
+[1:0] After leftovers I need 746034821 more
+[2:0] asked for 746034821 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034822 GPVTF
+[1:0] That used 61547872815 ore
+[1:0] I need 414463790 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463790 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463792 KHKGT
+[2:0] I need 259039870 HKGWZ
+[2:0] After leftovers I need 259039868 more
+[3:0] asked for 259039868 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039870 HKGWZ
+[2:0] That used 9170011398 ore
+[2:0] I need 155423922 DCFZ
+[2:0] After leftovers I need 155423920 more
+[3:0] asked for 155423920 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423922 DCFZ
+[2:0] That used 4274157855 ore
+[2:0] I need 362655818 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655818 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655820 NZVS
+[2:0] That used 11387392748 ore
+[2:0] I need 518079740 PSHF
+[2:0] After leftovers I need 518079734 more
+[3:0] asked for 518079734 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079737 PSHF
+[2:0] That used 13248038989 ore
+[1:0] That used 38079600990 ore
+[1:0] I need 2403889982 NZVS
+[1:0] After leftovers I need 2403889980 more
+[2:0] asked for 2403889980 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403889980 NZVS
+[1:0] That used 75482145372 ore
+Try midpoint 82892755
+[1:0] asked for 82892755 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892755 FUEL
+[1:0] I need 3978852240 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978852240 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978852240 HKGWZ
+[1:0] That used 140851369296 ore
+[1:0] I need 82892755 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892755 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892763 QDVJ
+[2:0] I need 73682456 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682456 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682462 PSHF
+[2:0] That used 1884165814 ore
+[2:0] I need 110523684 HKGWZ
+[2:0] No leftovers were available
+[3:0] asked for 110523684 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523685 HKGWZ
+[2:0] That used 3912538449 ore
+[2:0] I need 9210307 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210307 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210308 GPVTF
+[2:0] That used 759850410 ore
+[1:0] That used 6556554673 ore
+[1:0] I need 3647281220 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647281220 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647281220 XJWVT
+[2:0] I need 12765484270 PSHF
+[2:0] After leftovers I need 12765484264 more
+[3:0] asked for 12765484264 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765484270 PSHF
+[2:0] That used 326431669190 ore
+[2:0] I need 12765484270 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765484270 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765484272 DCFZ
+[2:0] That used 351050817480 ore
+[1:0] That used 677482486670 ore
+[1:0] I need 746034795 GPVTF
+[1:0] After leftovers I need 746034794 more
+[2:0] asked for 746034794 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034794 GPVTF
+[1:0] That used 61547870505 ore
+[1:0] I need 414463775 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463775 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463776 KHKGT
+[2:0] I need 259039860 HKGWZ
+[2:0] After leftovers I need 259039859 more
+[3:0] asked for 259039859 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039860 HKGWZ
+[2:0] That used 9170011044 ore
+[2:0] I need 155423916 DCFZ
+[2:0] After leftovers I need 155423914 more
+[3:0] asked for 155423914 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423916 DCFZ
+[2:0] That used 4274157690 ore
+[2:0] I need 362655804 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655804 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655805 NZVS
+[2:0] That used 11387392277 ore
+[2:0] I need 518079720 PSHF
+[2:0] After leftovers I need 518079714 more
+[3:0] asked for 518079714 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079716 PSHF
+[2:0] That used 13248038452 ore
+[1:0] That used 38079599463 ore
+[1:0] I need 2403889895 NZVS
+[1:0] After leftovers I need 2403889894 more
+[2:0] asked for 2403889894 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403889895 NZVS
+[1:0] That used 75482142703 ore
+Try midpoint 82892753
+[1:0] asked for 82892753 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892753 FUEL
+[1:0] I need 3978852144 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978852144 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978852145 HKGWZ
+[1:0] That used 140851365933 ore
+[1:0] I need 82892753 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892753 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892754 QDVJ
+[2:0] I need 73682448 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682448 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682448 PSHF
+[2:0] That used 1884165456 ore
+[2:0] I need 110523672 HKGWZ
+[2:0] After leftovers I need 110523671 more
+[3:0] asked for 110523671 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523675 HKGWZ
+[2:0] That used 3912538095 ore
+[2:0] I need 9210306 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210306 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210306 GPVTF
+[2:0] That used 759850245 ore
+[1:0] That used 6556553796 ore
+[1:0] I need 3647281132 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647281132 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647281132 XJWVT
+[2:0] I need 12765483962 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 12765483962 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765483962 PSHF
+[2:0] That used 326431661314 ore
+[2:0] I need 12765483962 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765483962 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765483966 DCFZ
+[2:0] That used 351050809065 ore
+[1:0] That used 677482470379 ore
+[1:0] I need 746034777 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746034777 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034778 GPVTF
+[1:0] That used 61547869185 ore
+[1:0] I need 414463765 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463765 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463768 KHKGT
+[2:0] I need 259039855 HKGWZ
+[2:0] After leftovers I need 259039851 more
+[3:0] asked for 259039851 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039855 HKGWZ
+[2:0] That used 9170010867 ore
+[2:0] I need 155423913 DCFZ
+[2:0] After leftovers I need 155423909 more
+[3:0] asked for 155423909 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423910 DCFZ
+[2:0] That used 4274157525 ore
+[2:0] I need 362655797 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655797 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655800 NZVS
+[2:0] That used 11387392120 ore
+[2:0] I need 518079710 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 518079710 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079716 PSHF
+[2:0] That used 13248038452 ore
+[1:0] That used 38079598964 ore
+[1:0] I need 2403889837 NZVS
+[1:0] After leftovers I need 2403889834 more
+[2:0] asked for 2403889834 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403889835 NZVS
+[1:0] That used 75482140819 ore
+Try midpoint 82892754
+[1:0] asked for 82892754 FUEL
+[1:0] got recipe
+[1:0] (multiplied) I will make 82892754 FUEL
+[1:0] I need 3978852192 HKGWZ
+[1:0] No leftovers were available
+[2:0] asked for 3978852192 HKGWZ
+[2:0] got recipe
+[2:0] (multiplied) I will make 3978852195 HKGWZ
+[1:0] That used 140851367703 ore
+[1:0] I need 82892754 QDVJ
+[1:0] No leftovers were available
+[2:0] asked for 82892754 QDVJ
+[2:0] got recipe
+[2:0] (multiplied) I will make 82892754 QDVJ
+[2:0] I need 73682448 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 73682448 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 73682448 PSHF
+[2:0] That used 1884165456 ore
+[2:0] I need 110523672 HKGWZ
+[2:0] After leftovers I need 110523669 more
+[3:0] asked for 110523669 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 110523670 HKGWZ
+[2:0] That used 3912537918 ore
+[2:0] I need 9210306 GPVTF
+[2:0] No leftovers were available
+[3:0] asked for 9210306 GPVTF
+[3:0] got recipe
+[3:0] (multiplied) I will make 9210306 GPVTF
+[2:0] That used 759850245 ore
+[1:0] That used 6556553619 ore
+[1:0] I need 3647281176 XJWVT
+[1:0] No leftovers were available
+[2:0] asked for 3647281176 XJWVT
+[2:0] got recipe
+[2:0] (multiplied) I will make 3647281176 XJWVT
+[2:0] I need 12765484116 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 12765484116 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765484116 PSHF
+[2:0] That used 326431665252 ore
+[2:0] I need 12765484116 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 12765484116 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 12765484116 DCFZ
+[2:0] That used 351050813190 ore
+[1:0] That used 677482478442 ore
+[1:0] I need 746034786 GPVTF
+[1:0] No leftovers were available
+[2:0] asked for 746034786 GPVTF
+[2:0] got recipe
+[2:0] (multiplied) I will make 746034786 GPVTF
+[1:0] That used 61547869845 ore
+[1:0] I need 414463770 KHKGT
+[1:0] No leftovers were available
+[2:0] asked for 414463770 KHKGT
+[2:0] got recipe
+[2:0] (multiplied) I will make 414463776 KHKGT
+[2:0] I need 259039860 HKGWZ
+[2:0] After leftovers I need 259039859 more
+[3:0] asked for 259039859 HKGWZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 259039860 HKGWZ
+[2:0] That used 9170011044 ore
+[2:0] I need 155423916 DCFZ
+[2:0] No leftovers were available
+[3:0] asked for 155423916 DCFZ
+[3:0] got recipe
+[3:0] (multiplied) I will make 155423916 DCFZ
+[2:0] That used 4274157690 ore
+[2:0] I need 362655804 NZVS
+[2:0] No leftovers were available
+[3:0] asked for 362655804 NZVS
+[3:0] got recipe
+[3:0] (multiplied) I will make 362655805 NZVS
+[2:0] That used 11387392277 ore
+[2:0] I need 518079720 PSHF
+[2:0] No leftovers were available
+[3:0] asked for 518079720 PSHF
+[3:0] got recipe
+[3:0] (multiplied) I will make 518079723 PSHF
+[2:0] That used 13248038631 ore
+[1:0] That used 38079599642 ore
+[1:0] I need 2403889866 NZVS
+[1:0] After leftovers I need 2403889865 more
+[2:0] asked for 2403889865 NZVS
+[2:0] got recipe
+[2:0] (multiplied) I will make 2403889865 NZVS
+[1:0] That used 75482141761 ore
+test day14::test_part1_example1 ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 61 filtered out
+

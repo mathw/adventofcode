@@ -11,6 +11,7 @@ mod day09;
 mod day11;
 mod day12;
 mod day13;
+mod day14;
 mod intcode;
 
 use crate::day::Day;
@@ -22,16 +23,7 @@ fn main() -> Result<(), String> {
     let mut args = args();
 
     if args.len() != 2 {
-        // run all contiguous complete days!
-        let last_known_day = 9;
-        let mut total_time = 0;
-        for day in 1..=last_known_day {
-            println!("\n## Running Day {}/{}...", day, last_known_day);
-            let day_time = run_day(day)?;
-            total_time += day_time;
-        }
-        println!("\n [{}ms] all days", total_time);
-        return Ok(());
+        return Err("Please specify a day number to run".into());
     }
 
     let requested_day = u8::from_str(
@@ -74,6 +66,7 @@ fn make_day(day: u8) -> Result<Box<dyn Day>, String> {
         11 => Ok(Box::new(day11::Day11::new()?)),
         12 => Ok(Box::new(day12::Day12::new()?)),
         13 => Ok(Box::new(day13::Day13::new()?)),
+        14 => Ok(Box::new(day14::Day14::new()?)),
         _ => Err(format!("I don't know how to make day {} yet", day)),
     }
 }
