@@ -29,7 +29,15 @@ impl Day for Day10 {
     }
 
     fn part2(&mut self) -> Result<String, String> {
-        Err("Not implemented".into())
+        let (_, greatest_x, greatest_y) = self.map.location_seeing_most_asteroids();
+        let order = self.map.order_of_destruction((greatest_x, greatest_y));
+        let answer = order.get(199);
+        answer
+            .ok_or(format!(
+                "there was no 200th answer only {} of them",
+                order.len()
+            ))
+            .map(|a| format!("The 200th asteroid destroyed is ({}, {})", a.0, a.1))
     }
 }
 
@@ -70,32 +78,9 @@ fn test_parse_map() {
 
 impl Map {
     fn asteroids_visible_from(&self, location: (usize, usize)) -> usize {
-        visible_from(&self.asteroids, location)
+        asteroids_visible_from(&self.asteroids, location).len()
     }
 
-    fn location_seeing_most_asteroids_1(&self) -> (usize, usize, usize) {
-        let mut greatest = 0;
-        let mut greatest_x = 0;
-        let mut greatest_y = 0;
-
-        for (x, y) in self.asteroids.iter().cloned() {
-            let visible_from = self.asteroids_visible_from((x, y));
-            println!("1: {} visible", visible_from);
-            if visible_from > greatest {
-                greatest = visible_from;
-                greatest_x = x;
-                greatest_y = y;
-            }
-            // sets are unsorted, always find the top-most leftmost answer if there are equals
-            if visible_from == greatest && (x < greatest_x || y < greatest_y) {
-                greatest = visible_from;
-                greatest_x = x;
-                greatest_y = y;
-            }
-        }
-
-        (greatest, greatest_x, greatest_y)
-    }
     fn location_seeing_most_asteroids(&self) -> (usize, usize, usize) {
         let mut greatest = 0;
         let mut greatest_x = 0;
@@ -103,7 +88,6 @@ impl Map {
 
         for (x, y) in self.asteroids.iter().cloned() {
             let visible_from = asteroids_visible_from(&self.asteroids, (x, y)).len();
-            println!("2: {} visible", visible_from);
             if visible_from > greatest {
                 greatest = visible_from;
                 greatest_x = x;
@@ -118,6 +102,37 @@ impl Map {
         }
 
         (greatest, greatest_x, greatest_y)
+    }
+
+    fn order_of_destruction(&self, location: (usize, usize)) -> Vec<(usize, usize)> {
+        asteroids_destroyed_from(&self.asteroids, location)
+    }
+
+    fn render_with_location_and_highlight(
+        &self,
+        location: (usize, usize),
+        highlight: (usize, usize),
+    ) -> String {
+        let max_x = self.asteroids.iter().map(|a| a.0).max().unwrap();
+        let max_y = self.asteroids.iter().map(|a| a.1).max().unwrap();
+        let mut string = String::new();
+        for y in 0..=max_y {
+            let mut line = String::new();
+            for x in 0..=max_x {
+                if location == (x, y) {
+                    line.push('X');
+                } else if highlight == (x, y) {
+                    line.push('*');
+                } else if self.asteroids.contains(&(x, y)) {
+                    line.push('#');
+                } else {
+                    line.push('.');
+                }
+            }
+            line.push('\n');
+            string.push_str(&line);
+        }
+        string
     }
 }
 
@@ -132,24 +147,6 @@ fn angle_between((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> f32 {
     };
     let angle = if angle >= 360.0 { angle - 360.0 } else { angle };
     angle
-}
-
-fn visible_from(asteroids: &HashSet<(usize, usize)>, (x, y): (usize, usize)) -> usize {
-    let angles = asteroids
-        .iter()
-        .filter(|(ax, ay)| !(*ax == x && *ay == y))
-        .map(|(ax, ay)| angle_between((x, y), (*ax, *ay)))
-        .collect::<Vec<f32>>();
-
-    let mut unique_angles = Vec::new();
-    for angle in angles {
-        if !unique_angles.contains(&angle) {
-            unique_angles.push(angle);
-        } else {
-        }
-    }
-
-    unique_angles.len()
 }
 
 #[derive(PartialEq, Debug, Clone)]
@@ -179,10 +176,6 @@ fn asteroids_visible_from(
         .map(|asteroid| AsteroidInfo::new(asteroid, (x, y)))
         .collect::<Vec<AsteroidInfo>>();
 
-    for asteroid in &all_asteroids {
-        println!("{:?}", asteroid);
-    }
-
     let mut done_angles = Vec::new();
 
     let mut visible = Vec::new();
@@ -197,7 +190,6 @@ fn asteroids_visible_from(
             .iter()
             .filter(|a| a.angle == asteroid.angle)
             .collect::<Vec<_>>();
-        println!("this angle {} has {}", asteroid.angle, this_angle.len());
         this_angle.sort_by(|a, b| {
             a.distance
                 .partial_cmp(&b.distance)
@@ -210,31 +202,30 @@ fn asteroids_visible_from(
     visible
 }
 
+fn asteroids_destroyed_from(
+    asteroids: &HashSet<(usize, usize)>,
+    location: (usize, usize),
+) -> Vec<(usize, usize)> {
+    let mut remaining_asteroids = asteroids.clone();
+    let mut destroyed = Vec::new();
+
+    let mut visible = asteroids_visible_from(&remaining_asteroids, location);
+    while !visible.is_empty() {
+        visible.sort_by(|a, b| a.angle.partial_cmp(&b.angle).unwrap());
+        for v in &visible {
+            destroyed.push(v.location.clone());
+            remaining_asteroids.remove(&v.location);
+        }
+        visible = asteroids_visible_from(&remaining_asteroids, location);
+    }
+
+    destroyed
+}
+
 fn distance_between((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> f32 {
     let dx = (x1 as isize - x2 as isize).abs() as f32;
     let dy = (y1 as isize - y2 as isize).abs() as f32;
     (dx * dx) + (dy * dy).sqrt()
-}
-
-fn asteroids_grouped_by_angle_from(asteroids: &HashSet<(usize, usize)>, (x, y): (usize, usize)) {
-    let mut asteroids_with_angle_and_distance = asteroids
-        .iter()
-        .filter(|(ax, ay)| !(*ax == x && *ay == y))
-        .map(|(ax, ay)| {
-            (
-                (ax, ay),
-                angle_between((x, y), (*ax, *ay)),
-                distance_between((x, y), (*ax, *ay)),
-            )
-        })
-        .collect::<Vec<_>>();
-
-    asteroids_with_angle_and_distance.sort_by(|(_, angle1, distance1), (_, angle2, distance2)| {
-        match angle1.partial_cmp(angle2).unwrap() {
-            Ordering::Equal => distance1.partial_cmp(distance2).unwrap(),
-            o => o,
-        }
-    });
 }
 
 #[test]
@@ -350,4 +341,28 @@ fn test_zeroth_sample() {
     .unwrap();
 
     assert_eq!(map.location_seeing_most_asteroids(), (8, 3, 4));
+}
+
+#[test]
+fn test_small_destruction() {
+    let map = Map::from_str(
+        ".#....#####...#..
+    ##...##.#####..##
+    ##...#...#.#####.
+    ..#.....X...###..
+    ..#.#.....#....##",
+    )
+    .unwrap();
+
+    let order = map.order_of_destruction((8, 3));
+    assert_eq!(order[0], (8, 1));
+    assert_eq!(order[1], (9, 0));
+    assert_eq!(order[8], (15, 1));
+}
+
+#[test]
+fn test_angle_between() {
+    let angle1 = angle_between((8, 3), (10, 0));
+    let angle2 = angle_between((8, 3), (9, 1));
+    assert_ne!(angle1, angle2, "These two angles must be different");
 }
