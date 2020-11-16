@@ -73,13 +73,37 @@ impl Map {
         visible_from(&self.asteroids, location)
     }
 
-    fn location_seeing_most_asteroids(&self) -> (usize, usize, usize) {
+    fn location_seeing_most_asteroids_1(&self) -> (usize, usize, usize) {
         let mut greatest = 0;
         let mut greatest_x = 0;
         let mut greatest_y = 0;
 
         for (x, y) in self.asteroids.iter().cloned() {
             let visible_from = self.asteroids_visible_from((x, y));
+            println!("1: {} visible", visible_from);
+            if visible_from > greatest {
+                greatest = visible_from;
+                greatest_x = x;
+                greatest_y = y;
+            }
+            // sets are unsorted, always find the top-most leftmost answer if there are equals
+            if visible_from == greatest && (x < greatest_x || y < greatest_y) {
+                greatest = visible_from;
+                greatest_x = x;
+                greatest_y = y;
+            }
+        }
+
+        (greatest, greatest_x, greatest_y)
+    }
+    fn location_seeing_most_asteroids(&self) -> (usize, usize, usize) {
+        let mut greatest = 0;
+        let mut greatest_x = 0;
+        let mut greatest_y = 0;
+
+        for (x, y) in self.asteroids.iter().cloned() {
+            let visible_from = asteroids_visible_from(&self.asteroids, (x, y)).len();
+            println!("2: {} visible", visible_from);
             if visible_from > greatest {
                 greatest = visible_from;
                 greatest_x = x;
@@ -126,6 +150,64 @@ fn visible_from(asteroids: &HashSet<(usize, usize)>, (x, y): (usize, usize)) -> 
     }
 
     unique_angles.len()
+}
+
+#[derive(PartialEq, Debug, Clone)]
+struct AsteroidInfo {
+    location: (usize, usize),
+    angle: f32,
+    distance: f32,
+}
+
+impl AsteroidInfo {
+    fn new(asteroid: (usize, usize), relative_to: (usize, usize)) -> AsteroidInfo {
+        AsteroidInfo {
+            location: asteroid,
+            angle: angle_between(relative_to, asteroid),
+            distance: distance_between(asteroid, relative_to),
+        }
+    }
+}
+
+fn asteroids_visible_from(
+    asteroids: &HashSet<(usize, usize)>,
+    (x, y): (usize, usize),
+) -> Vec<AsteroidInfo> {
+    let all_asteroids = asteroids
+        .iter()
+        .cloned()
+        .map(|asteroid| AsteroidInfo::new(asteroid, (x, y)))
+        .collect::<Vec<AsteroidInfo>>();
+
+    for asteroid in &all_asteroids {
+        println!("{:?}", asteroid);
+    }
+
+    let mut done_angles = Vec::new();
+
+    let mut visible = Vec::new();
+    for asteroid in &all_asteroids {
+        if asteroid.location == (x, y) {
+            continue;
+        }
+        if done_angles.contains(&asteroid.angle) {
+            continue;
+        }
+        let mut this_angle = all_asteroids
+            .iter()
+            .filter(|a| a.angle == asteroid.angle)
+            .collect::<Vec<_>>();
+        println!("this angle {} has {}", asteroid.angle, this_angle.len());
+        this_angle.sort_by(|a, b| {
+            a.distance
+                .partial_cmp(&b.distance)
+                .unwrap_or(Ordering::Equal)
+        });
+        visible.push(this_angle[0].clone());
+        done_angles.push(asteroid.angle);
+    }
+
+    visible
 }
 
 fn distance_between((x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> f32 {
