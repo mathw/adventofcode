@@ -16,6 +16,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("[1]: {}", part1);
 
+    let part2 = match day {
+        1 => crate::day1::part2()?,
+        d => return Err(BadDayError::boxed(d)),
+    };
+
+    println!("[2]: {}", part2);
+
     Ok(())
 }
 
