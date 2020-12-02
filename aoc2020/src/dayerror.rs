@@ -4,6 +4,8 @@ use thiserror::Error;
 pub enum DayError {
     #[error("No solution found")]
     NoSolutionFoundError,
+    #[error("Could not parse input")]
+    InputParseError(String),
     #[error(transparent)]
     IOError(#[from] std::io::Error),
     #[error(transparent)]

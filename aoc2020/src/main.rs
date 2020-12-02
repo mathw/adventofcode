@@ -1,5 +1,9 @@
 mod day1;
+mod day2;
 mod dayerror;
+
+#[macro_use]
+extern crate lazy_static;
 
 use std::{env::args, error::Error, fmt, str::FromStr};
 
@@ -11,6 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let part1 = match day {
         1 => crate::day1::part1()?,
+        2 => crate::day2::part1()?,
         d => return Err(BadDayError::boxed(d)),
     };
 
@@ -18,6 +23,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let part2 = match day {
         1 => crate::day1::part2()?,
+        2 => crate::day2::part2()?,
         d => return Err(BadDayError::boxed(d)),
     };
 
