@@ -7,7 +7,7 @@ mod dayerror;
 #[macro_use]
 extern crate lazy_static;
 
-use std::{env::args, error::Error, fmt, str::FromStr};
+use std::{env::args, error::Error, fmt, str::FromStr, time::Instant};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut args = args();
@@ -15,6 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let day: u8 =
         u8::from_str(&daynum).expect(&format!("Expected day number {} to be a u8", daynum));
 
+    let part1_start = Instant::now();
     let part1 = match day {
         1 => crate::day1::part1()?,
         2 => crate::day2::part1()?,
@@ -22,9 +23,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         4 => crate::day4::part1()?,
         d => return Err(BadDayError::boxed(d)),
     };
+    let part1_duration = part1_start.elapsed();
 
-    println!("[1]: {}", part1);
+    println!("[Part 1 in {}ms]: {}", part1_duration.as_millis(), part1);
 
+    let part2_start = Instant::now();
     let part2 = match day {
         1 => crate::day1::part2()?,
         2 => crate::day2::part2()?,
@@ -32,8 +35,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         4 => crate::day4::part2()?,
         d => return Err(BadDayError::boxed(d)),
     };
+    let part2_duration = part2_start.elapsed();
 
-    println!("[2]: {}", part2);
+    println!("[Part 2 in {}ms]: {}", part2_duration.as_millis(), part2);
 
     Ok(())
 }
