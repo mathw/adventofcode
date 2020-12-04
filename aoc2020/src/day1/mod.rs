@@ -18,7 +18,7 @@ pub fn part2() -> Result<String, DayError> {
 }
 
 fn get_input() -> Result<Vec<u32>, ParseIntError> {
-    include_str!("day1/input.txt")
+    include_str!("input.txt")
         .lines()
         .map(|line| u32::from_str(line))
         .collect::<Result<_, ParseIntError>>()
