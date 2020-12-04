@@ -1,5 +1,6 @@
 use crate::dayerror::DayError;
 use image::{Rgb, RgbImage};
+use rayon::prelude::*;
 use std::{iter, str::FromStr};
 
 pub fn part1() -> Result<String, DayError> {
@@ -12,27 +13,20 @@ pub fn part1() -> Result<String, DayError> {
 pub fn part2() -> Result<String, DayError> {
     let input = include_str!("input.txt");
     let trees = Trees::from_str(input)?;
-    let count11 = trees_for_gradient(&trees, 1, 1);
-    let count31 = trees_for_gradient(&trees, 3, 1);
-    let count51 = trees_for_gradient(&trees, 5, 1);
-    let count71 = trees_for_gradient(&trees, 7, 1);
-    let count12 = trees_for_gradient(&trees, 1, 2);
 
-    render_with_gradient(&trees, 1, 1);
-    render_with_gradient(&trees, 3, 1);
-    render_with_gradient(&trees, 5, 1);
-    render_with_gradient(&trees, 7, 1);
-    render_with_gradient(&trees, 1, 2);
+    let gradients = vec![(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
 
-    Ok(format!(
-        "{} {} {} {} {} The answer is {}",
-        count11,
-        count31,
-        count51,
-        count71,
-        count12,
-        count31 as u128 * count11 as u128 * count51 as u128 * count71 as u128 * count12 as u128
-    ))
+    let result = gradients
+        .par_iter()
+        .map(|&(right, down)| {
+            render_with_gradient(&trees, right, down);
+            let result = trees_for_gradient(&trees, right, down);
+            println!("Rendered {} by {}: {} trees", right, down, result);
+            result
+        })
+        .product::<usize>();
+
+    Ok(format!("The answer is {}", result))
 }
 
 struct Trees {

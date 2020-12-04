@@ -28,6 +28,7 @@ dependencies = [
  "image",
  "itertools",
  "lazy_static",
+ "rayon",
  "regex",
  "thiserror",
 ]
