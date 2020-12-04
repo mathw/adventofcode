@@ -38,24 +38,23 @@ fn parse_input<'a>(input: &'a str) -> Vec<HashMap<&'a str, &'a str>> {
     split_records(input).map(|r| parse_record(r)).collect()
 }
 
-static REQUIRED_FIELDS: [&str; 7] = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
 fn record_is_valid(record: &HashMap<&str, &str>) -> bool {
+    lazy_static! {
+        static ref REQUIRED_FIELDS: [&'static str; 7] =
+            ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
+    }
     REQUIRED_FIELDS.iter().all(|f| record.contains_key(f))
 }
 
 fn record_is_fully_valid(record: &HashMap<&str, &str>) -> bool {
-    if !record_is_valid(record) {
-        return false;
-    }
-
-    let byr = byr_is_valid(record["byr"]);
-    let iyr = iyr_is_valid(record["iyr"]);
-    let eyr = eyr_is_valid(record["eyr"]);
-    let hgt = hgt_is_valid(record["hgt"]);
-    let hcl = hcl_is_valid(record["hcl"]);
-    let ecl = ecl_is_valid(record["ecl"]);
-    let pid = pid_is_valid(record["pid"]);
-    return byr && iyr && hgt && hcl && ecl && pid && eyr;
+    record_is_valid(record)
+        && byr_is_valid(record["byr"])
+        && iyr_is_valid(record["iyr"])
+        && eyr_is_valid(record["eyr"])
+        && hgt_is_valid(record["hgt"])
+        && hcl_is_valid(record["hcl"])
+        && ecl_is_valid(record["ecl"])
+        && pid_is_valid(record["pid"])
 }
 
 fn byr_is_valid(input: &str) -> bool {
@@ -72,10 +71,10 @@ fn eyr_is_valid(input: &str) -> bool {
 
 fn hgt_is_valid(input: &str) -> bool {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"(\d+)(cm|in)").expect("REgex should parse");
+        static ref HEIGHT_RE: Regex = Regex::new(r"(\d+)(cm|in)").expect("REgex should parse");
     }
 
-    if let Some(c) = RE.captures(input) {
+    if let Some(c) = HEIGHT_RE.captures(input) {
         if let Ok(num) = u32::from_str(&c[1]) {
             if &c[2] == "cm" {
                 num >= 150 && num <= 193
@@ -92,10 +91,11 @@ fn hgt_is_valid(input: &str) -> bool {
 
 fn hcl_is_valid(input: &str) -> bool {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"^#([a-z]|[0-9]){6}$").expect("Regex should compile");
+        static ref HCL_RE: Regex =
+            Regex::new(r"^#([a-z]|[0-9]){6}$").expect("Regex should compile");
     }
 
-    RE.is_match(input)
+    HCL_RE.is_match(input)
 }
 
 fn ecl_is_valid(input: &str) -> bool {
