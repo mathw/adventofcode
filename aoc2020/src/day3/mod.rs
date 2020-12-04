@@ -1,5 +1,6 @@
 use crate::dayerror::DayError;
-use std::{fmt, iter, str::FromStr};
+use image::{Rgb, RgbImage};
+use std::{iter, str::FromStr};
 
 pub fn part1() -> Result<String, DayError> {
     let input = include_str!("input.txt");
@@ -16,6 +17,13 @@ pub fn part2() -> Result<String, DayError> {
     let count51 = trees_for_gradient(&trees, 5, 1);
     let count71 = trees_for_gradient(&trees, 7, 1);
     let count12 = trees_for_gradient(&trees, 1, 2);
+
+    render_with_gradient(&trees, 1, 1);
+    render_with_gradient(&trees, 3, 1);
+    render_with_gradient(&trees, 5, 1);
+    render_with_gradient(&trees, 7, 1);
+    render_with_gradient(&trees, 1, 2);
+
     Ok(format!(
         "{} {} {} {} {} The answer is {}",
         count11,
@@ -62,8 +70,8 @@ fn coords_for_gradient(right: usize, down: usize) -> impl Iterator<Item = (usize
 
 fn trees_for_gradient(trees: &Trees, right: usize, down: usize) -> usize {
     coords_for_gradient(right, down)
+        .take_while(|&(_, y)| y < trees.height)
         .map(move |(x, y)| trees.is_tree_at(x, y))
-        .take(trees.height / down)
         .filter(|&t| t)
         .count()
 }
@@ -100,6 +108,32 @@ impl FromStr for Trees {
             data,
         })
     }
+}
+
+fn render_with_gradient(trees: &Trees, right: usize, down: usize) {
+    let coords = coords_for_gradient(right, down)
+        .take_while(|&(_, y)| y < trees.height)
+        .collect::<Vec<_>>();
+    let max_x = coords[coords.len() - 1].0;
+
+    let mut img = RgbImage::new(max_x as u32 + 1, trees.height as u32);
+
+    for y in 0..trees.height {
+        for x in 0..=max_x {
+            let is_visited = coords.contains(&(x, y));
+            let has_tree = trees.is_tree_at(x, y);
+            let c = match (is_visited, has_tree) {
+                (true, true) => Rgb([255, 0, 0]),
+                (true, false) => Rgb([128, 128, 128]),
+                (false, true) => Rgb([0, 128, 0]),
+                (false, false) => Rgb([0, 0, 0]),
+            };
+            img.put_pixel(x as u32, y as u32, c);
+        }
+    }
+
+    let filename = format!("trees-{}-{}.png", right, down);
+    img.save(filename).expect("Couldn't save image");
 }
 
 #[cfg(test)]
