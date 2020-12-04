@@ -29,6 +29,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         1 => crate::day1::part2()?,
         2 => crate::day2::part2()?,
         3 => crate::day3::part2()?,
+        4 => crate::day4::part2()?,
         d => return Err(BadDayError::boxed(d)),
     };
 
