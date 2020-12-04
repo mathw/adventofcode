@@ -1,7 +1,6 @@
 use crate::dayerror::DayError;
 use regex::Regex;
-use std::{collections::HashMap, num::ParseIntError, str::FromStr};
-use thiserror::Error;
+use std::{collections::HashMap, str::FromStr};
 
 pub fn part1() -> Result<String, DayError> {
     let input = include_str!("input.txt");
