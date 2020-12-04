@@ -1,6 +1,7 @@
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 mod dayerror;
 
 #[macro_use]
@@ -18,6 +19,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         1 => crate::day1::part1()?,
         2 => crate::day2::part1()?,
         3 => crate::day3::part1()?,
+        4 => crate::day4::part1()?,
         d => return Err(BadDayError::boxed(d)),
     };
 
