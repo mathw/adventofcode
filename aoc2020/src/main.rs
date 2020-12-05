@@ -2,6 +2,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 mod dayerror;
 
 #[macro_use]
@@ -21,6 +22,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         2 => crate::day2::part1()?,
         3 => crate::day3::part1()?,
         4 => crate::day4::part1()?,
+        5 => crate::day5::part1()?,
         d => return Err(BadDayError::boxed(d)),
     };
     let part1_duration = part1_start.elapsed();
@@ -33,6 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         2 => crate::day2::part2()?,
         3 => crate::day3::part2()?,
         4 => crate::day4::part2()?,
+        5 => crate::day5::part2()?,
         d => return Err(BadDayError::boxed(d)),
     };
     let part2_duration = part2_start.elapsed();
