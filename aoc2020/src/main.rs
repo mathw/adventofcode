@@ -41,6 +41,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         4 => crate::day4::part2()?,
         5 => crate::day5::part2()?,
         6 => crate::day6::part2()?,
+        7 => crate::day7::part2()?,
         d => return Err(BadDayError::boxed(d)),
     };
     let part2_duration = part2_start.elapsed();

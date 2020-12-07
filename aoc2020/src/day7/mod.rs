@@ -19,6 +19,18 @@ pub fn part1() -> Result<String, DayError> {
     ))
 }
 
+pub fn part2() -> Result<String, DayError> {
+    let rules = include_str!("input.txt")
+        .lines()
+        .map(|l| ContainsRule::from_str(l))
+        .collect::<Result<Vec<_>, _>>()?;
+    let result = num_bags_inside("shiny gold", &rules);
+    Ok(format!(
+        "There must be {} bags inside your shiny gold bag",
+        result
+    ))
+}
+
 struct ContainsRule<'a> {
     container: &'a str,
     contains: HashMap<&'a str, usize>,
@@ -167,4 +179,54 @@ dotted black bags contain no other bags.";
     println!("{}", tree.render());
     let result = tree.unique_colours();
     assert_eq!(result.len(), 4);
+}
+
+fn num_bags_inside<'a>(target: &str, rules: &Vec<ContainsRule<'a>>) -> usize {
+    let mut total = 0;
+    for rule in rules.iter().filter(|r| r.container == target) {
+        total += rule
+            .contains
+            .iter()
+            .map(|c| c.1 + (num_bags_inside(c.0, rules) * c.1))
+            .sum::<usize>();
+    }
+    total
+}
+
+#[test]
+fn test_bags_inside() {
+    let rules_str = "light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags.";
+    let rules = rules_str
+        .lines()
+        .map(|line| ContainsRule::from_str(line))
+        .collect::<Result<Vec<_>, DayError>>()
+        .expect("didn't expect a parse error");
+    let result = num_bags_inside("shiny gold", &rules);
+    assert_eq!(result, 32);
+}
+
+#[test]
+fn test_bags_inside_2() {
+    let rules_str = "shiny gold bags contain 2 dark red bags.
+dark red bags contain 2 dark orange bags.
+dark orange bags contain 2 dark yellow bags.
+dark yellow bags contain 2 dark green bags.
+dark green bags contain 2 dark blue bags.
+dark blue bags contain 2 dark violet bags.
+dark violet bags contain no other bags.";
+    let rules = rules_str
+        .lines()
+        .map(|line| ContainsRule::from_str(line))
+        .collect::<Result<Vec<_>, DayError>>()
+        .expect("didn't expect a parse error");
+    let result = num_bags_inside("shiny gold", &rules);
+    assert_eq!(result, 126);
 }
