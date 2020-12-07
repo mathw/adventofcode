@@ -36,10 +36,6 @@ struct ContainsRule<'a> {
     contains: HashMap<&'a str, usize>,
 }
 
-fn words<'a>(line: &'a str) -> impl Iterator<Item = &'a str> {
-    line.split(" ")
-}
-
 impl<'a> ContainsRule<'a> {
     fn from_str(s: &'a str) -> Result<ContainsRule<'a>, DayError> {
         let bagindex = s
@@ -122,14 +118,6 @@ impl ContainsTree {
                 containers: Box::new(everything_containing_target),
             }
         }
-    }
-
-    fn count_containers(&self) -> usize {
-        self.containers
-            .iter()
-            .map(|c| c.count_containers())
-            .sum::<usize>()
-            + self.containers.len()
     }
 
     #[cfg(test)]
