@@ -5,6 +5,8 @@ use thiserror::Error;
 pub enum DayError {
     #[error("No solution found")]
     NoSolutionFoundError,
+    #[error("No solution found")]
+    NoSolutionFoundWithReasonError(String),
     #[error("Could not parse input")]
     InputParseError(String),
     #[error(transparent)]
