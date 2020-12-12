@@ -1,7 +1,5 @@
 use crate::dayerror::DayError;
 use std::{
-    cell::RefCell,
-    collections::HashMap,
     fmt::{self, Display},
     str::FromStr,
     thread::sleep,
@@ -16,32 +14,26 @@ use tui::{
     Frame, Terminal,
 };
 
-pub fn part1<B: Backend>(terminal: &mut Terminal<B>) -> Result<String, DayError> {
+pub fn part1<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<String, DayError> {
     let input = include_str!("input.txt");
-    let input = "L.LL.LL.LL
-LLLLLLL.LL
-L.L.L..L..
-LLLL.LL.LL
-L.LL.LL.LL
-L.LLLLL.LL
-..L.L.....
-LLLLLLLLLL
-L.LLLLLL.L
-L.LLLLL.LL";
     let seating = Seating::from_str(input)?;
 
     terminal.clear()?;
 
     terminal.draw(|f| render(f, &seating, 0))?;
 
-    let (fin, iterations) = seating.iterate_until_stable(
-        &mut |s, i| {
-            terminal
-                .draw(|f| render(f, s, i))
-                .expect("draw call failed")
-        },
-        Some(Duration::from_millis(1000)),
-    );
+    let (fin, iterations) = if visualise {
+        seating.iterate_until_stable(
+            &mut |s, i| {
+                terminal
+                    .draw(|f| render(f, s, i))
+                    .expect("draw call failed")
+            },
+            Some(Duration::from_millis(100)),
+        )
+    } else {
+        seating.iterate_until_stable(&mut |_, _| {}, None)
+    };
 
     let size = terminal.size()?;
     terminal.set_cursor(0, size.height - 1)?;
@@ -50,7 +42,39 @@ L.LLLLL.LL";
     Ok(format!(
         "Stable after {} iterations with {} seats filled",
         iterations,
-        fin.count_occupied_seats()
+        fin.count_occupied_seats(),
+    ))
+}
+
+pub fn part2<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<String, DayError> {
+    let input = include_str!("input.txt");
+    let seating = Seating::from_str(input)?;
+
+    terminal.clear()?;
+
+    terminal.draw(|f| render(f, &seating, 0))?;
+
+    let (fin, iterations) = if visualise {
+        seating.iterate_until_stable_2(
+            &mut |s, i| {
+                terminal
+                    .draw(|f| render(f, s, i))
+                    .expect("draw call failed")
+            },
+            Some(Duration::from_millis(100)),
+        )
+    } else {
+        seating.iterate_until_stable_2(&mut |_, _| {}, None)
+    };
+
+    let size = terminal.size()?;
+    terminal.set_cursor(0, size.height - 1)?;
+    terminal.show_cursor()?;
+
+    Ok(format!(
+        "Stable after {} iterations with {} seats filled",
+        iterations,
+        fin.count_occupied_seats(),
     ))
 }
 
@@ -113,7 +137,6 @@ struct Seating {
     width: usize,
     height: usize,
     seats: Vec<Seat>,
-    adjacency_cache: RefCell<HashMap<(usize, usize), Vec<(usize, usize)>>>,
 }
 
 impl Seating {
@@ -122,7 +145,6 @@ impl Seating {
             width,
             height,
             seats,
-            adjacency_cache: RefCell::new(HashMap::new()),
         }
     }
 
@@ -131,7 +153,7 @@ impl Seating {
     }
 
     fn to_index(&self, x: usize, y: usize) -> Option<usize> {
-        let index = y * self.height + x;
+        let index = self.to_index_unchecked(x, y);
         if index >= self.seats.len() {
             None
         } else {
@@ -140,7 +162,7 @@ impl Seating {
     }
 
     fn to_index_unchecked(&self, x: usize, y: usize) -> usize {
-        y * self.height + x
+        y * self.width + x
     }
 
     fn iterate(&self) -> Seating {
@@ -155,9 +177,45 @@ impl Seating {
         new
     }
 
+    fn iterate_2(&self) -> Seating {
+        let mut new = self.clone();
+
+        for y in 0..self.height {
+            for x in 0..self.width {
+                let index = self.to_index_unchecked(x, y);
+                new.seats[index] = self.iterate_seat_2(x, y, index);
+            }
+        }
+        new
+    }
+
     fn iterate_until_stable<F>(&self, drawfunc: &mut F, delay: Option<Duration>) -> (Seating, usize)
     where
         F: (FnMut(&Seating, usize) -> ()),
+    {
+        self.iterate_until_stable_with(drawfunc, delay, |s| s.iterate())
+    }
+
+    fn iterate_until_stable_2<F>(
+        &self,
+        drawfunc: &mut F,
+        delay: Option<Duration>,
+    ) -> (Seating, usize)
+    where
+        F: (FnMut(&Seating, usize) -> ()),
+    {
+        self.iterate_until_stable_with(drawfunc, delay, |s| s.iterate_2())
+    }
+
+    fn iterate_until_stable_with<F, I>(
+        &self,
+        drawfunc: &mut F,
+        delay: Option<Duration>,
+        iterfunc: I,
+    ) -> (Seating, usize)
+    where
+        F: (FnMut(&Seating, usize) -> ()),
+        I: Fn(&Seating) -> Seating,
     {
         let mut previous = self.clone();
         let mut next = self.iterate();
@@ -166,7 +224,7 @@ impl Seating {
         while previous != next {
             drawfunc(&next, iterations);
             previous = next;
-            next = previous.iterate();
+            next = iterfunc(&previous);
             iterations += 1;
             if let Some(d) = delay {
                 sleep(d);
@@ -179,21 +237,23 @@ impl Seating {
     fn iterate_seat(&self, x: usize, y: usize, index: usize) -> Seat {
         let seat = self.seats[index];
         match seat {
-            Seat::Floor => Seat::Floor,
-            Seat::Empty => {
-                if self.count_adjacent_occupied(x, y) == 0 {
-                    Seat::Full
-                } else {
-                    Seat::Empty
-                }
-            }
-            Seat::Full => {
-                if self.count_adjacent_occupied(x, y) >= 4 {
-                    Seat::Empty
-                } else {
-                    Seat::Full
-                }
-            }
+            Seat::Empty if self.count_adjacent_occupied(x, y) == 0 => Seat::Full,
+            Seat::Full if self.count_adjacent_occupied(x, y) >= 4 => Seat::Empty,
+            x => x,
+        }
+    }
+
+    fn iterate_seat_2(&self, x: usize, y: usize, index: usize) -> Seat {
+        let seat = self.seats[index];
+        if seat == Seat::Floor {
+            return Seat::Floor;
+        }
+
+        let visible = self.visible_occupied_seats_from(x, y);
+        match seat {
+            Seat::Empty if visible == 0 => Seat::Full,
+            Seat::Full if visible >= 5 => Seat::Empty,
+            x => x,
         }
     }
 
@@ -256,6 +316,191 @@ impl Seating {
 
     fn count_occupied_seats(&self) -> usize {
         self.seats.iter().filter(|s| **s == Seat::Full).count()
+    }
+
+    fn can_see_occupied_north_of(&self, x: usize, y: usize) -> bool {
+        self.seats
+            .chunks_exact(self.width)
+            .take(y)
+            .map(|chunk| chunk[x])
+            .rev()
+            .filter_map(|s| match s {
+                Seat::Full => Some(true),
+                Seat::Empty => Some(false),
+                Seat::Floor => None,
+            })
+            .next()
+            .unwrap_or(false)
+    }
+
+    fn can_see_occupied_south_of(&self, x: usize, y: usize) -> bool {
+        self.seats
+            .chunks_exact(self.width)
+            .skip(y + 1)
+            .map(|chunk| chunk[x])
+            .filter_map(|s| match s {
+                Seat::Full => Some(true),
+                Seat::Empty => Some(false),
+                Seat::Floor => None,
+            })
+            .next()
+            .unwrap_or(false)
+    }
+
+    fn can_see_occupied_east_of(&self, x: usize, y: usize) -> bool {
+        if x + 1 == self.width {
+            return false;
+        }
+        let start_index = self.to_index_unchecked(x + 1, y);
+        let end_index = self.to_index_unchecked(self.width - 1, y);
+        self.seats[start_index..=end_index]
+            .iter()
+            .filter_map(|s| match s {
+                Seat::Full => Some(true),
+                Seat::Empty => Some(false),
+                Seat::Floor => None,
+            })
+            .next()
+            .unwrap_or(false)
+    }
+
+    fn can_see_occupied_west_of(&self, x: usize, y: usize) -> bool {
+        if x == 0 {
+            return false;
+        }
+        let start_index = self.to_index_unchecked(0, y);
+        let end_index = self.to_index_unchecked(x, y);
+        (start_index..end_index)
+            .rev()
+            .map(|i| self.seats[i])
+            .filter_map(|s| match s {
+                Seat::Full => Some(true),
+                Seat::Empty => Some(false),
+                Seat::Floor => None,
+            })
+            .next()
+            .unwrap_or(false)
+    }
+
+    fn can_see_occupied_southeast_of(&self, x: usize, y: usize) -> bool {
+        if x + 1 == self.width {
+            return false;
+        }
+        let start_index = self.to_index_unchecked(x, y);
+        let mut current_index = start_index + self.width + 1;
+        while current_index < self.seats.len() {
+            if current_index % self.width == 0 {
+                // we've wrapped into column 0! won't find anything now
+                return false;
+            }
+            match self.seats[current_index] {
+                Seat::Full => return true,
+                Seat::Empty => return false,
+                Seat::Floor => {}
+            }
+            current_index += self.width + 1;
+        }
+        return false;
+    }
+
+    fn can_see_occupied_southwest_of(&self, x: usize, y: usize) -> bool {
+        if x == 0 {
+            return false;
+        }
+        let start_index = self.to_index_unchecked(x, y);
+        let mut current_index = start_index;
+        loop {
+            current_index += self.width - 1;
+
+            if current_index >= self.seats.len() {
+                // off the bottom
+                return false;
+            }
+            match self.seats[current_index] {
+                Seat::Full => return true,
+                Seat::Empty => return false,
+                Seat::Floor => {}
+            }
+            if current_index % self.width == 0 {
+                // start of line, not going to find anything now
+                return false;
+            }
+        }
+    }
+
+    fn can_see_occupied_northeast_of(&self, x: usize, y: usize) -> bool {
+        let start_index = self.to_index_unchecked(x, y);
+        let mut current_index = start_index;
+        loop {
+            match current_index.checked_sub(self.width - 1) {
+                Some(i) => {
+                    if i % self.width == 0 {
+                        // ran over into next line!
+                        return false;
+                    }
+
+                    current_index = i;
+                    match self.seats[current_index] {
+                        Seat::Full => return true,
+                        Seat::Empty => return false,
+                        Seat::Floor => {}
+                    }
+                }
+                None => {
+                    return false;
+                }
+            }
+        }
+    }
+
+    fn can_see_occupied_northwest_of(&self, x: usize, y: usize) -> bool {
+        if x == 0 {
+            return false;
+        }
+        let start_index = self.to_index_unchecked(x, y);
+        let mut current_index = start_index;
+        loop {
+            match current_index.checked_sub(self.width + 1) {
+                Some(i) => {
+                    current_index = i;
+                    match self.seats[current_index] {
+                        Seat::Full => return true,
+                        Seat::Empty => return false,
+                        Seat::Floor => {}
+                    };
+                    if i % self.width == 0 {
+                        // start of line, not going to find anything now
+                        return false;
+                    }
+                }
+                None => {
+                    return false;
+                }
+            }
+        }
+    }
+
+    fn visible_occupied_seats_from(&self, x: usize, y: usize) -> usize {
+        let north = self.can_see_occupied_north_of(x, y);
+        let south = self.can_see_occupied_south_of(x, y);
+        let east = self.can_see_occupied_east_of(x, y);
+        let west = self.can_see_occupied_west_of(x, y);
+        let southeast = self.can_see_occupied_southeast_of(x, y);
+        let southwest = self.can_see_occupied_southwest_of(x, y);
+        let northeast = self.can_see_occupied_northeast_of(x, y);
+        let northwest = self.can_see_occupied_northwest_of(x, y);
+
+        [
+            north, south, east, west, southeast, southwest, northeast, northwest,
+        ]
+        .iter()
+        .filter(|x| **x)
+        .count()
+    }
+
+    #[cfg(test)]
+    fn count_empty_seats(&self) -> usize {
+        self.seats.iter().filter(|s| **s == Seat::Empty).count()
     }
 }
 
@@ -485,101 +730,11 @@ L.LLLLL.LL",
 
 #[test]
 fn test_many_surround_counts() {
-    let scenarios = vec![
-        (vec![1, 1, 1, 1, 2, 1, 1, 1, 1], 8, (1, 1)),
-        (vec![0, 1, 1, 1, 2, 1, 1, 1, 1], 7, (1, 1)),
-        (vec![1, 0, 1, 1, 2, 1, 1, 1, 1], 7, (1, 1)),
-        (vec![1, 1, 0, 1, 2, 1, 1, 1, 1], 7, (1, 1)),
-        (vec![1, 1, 1, 0, 2, 1, 1, 1, 1], 7, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 0, 1, 1, 1], 7, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 1, 0, 1, 1], 7, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 1, 1, 0, 1], 7, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 1, 1, 1, 0], 7, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 1, 1, 0, 0], 6, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 1, 0, 0, 1], 6, (1, 1)),
-        (vec![1, 1, 1, 1, 2, 0, 0, 1, 1], 6, (1, 1)),
-        (vec![1, 1, 1, 0, 2, 0, 1, 1, 1], 6, (1, 1)),
-        (vec![1, 1, 0, 0, 2, 1, 1, 1, 1], 6, (1, 1)),
-        (vec![1, 0, 0, 1, 2, 1, 1, 1, 1], 6, (1, 1)),
-        (vec![0, 0, 1, 1, 2, 1, 1, 1, 1], 6, (1, 1)),
-        (vec![0, 1, 1, 1, 2, 1, 1, 1, 0], 6, (1, 1)),
-        (vec![1, 0, 1, 1, 2, 1, 1, 0, 1], 6, (1, 1)),
-        (vec![1, 1, 0, 1, 2, 1, 0, 1, 1], 6, (1, 1)),
-        (vec![1, 1, 1, 0, 2, 0, 1, 1, 1], 6, (1, 1)),
-        (vec![1, 1, 1, 0, 2, 0, 1, 1, 1], 6, (1, 1)),
-        (vec![1, 1, 0, 1, 2, 1, 0, 1, 1], 6, (1, 1)),
-        (vec![1, 0, 1, 1, 2, 1, 1, 0, 1], 6, (1, 1)),
-        (vec![0, 1, 1, 1, 2, 1, 1, 1, 0], 6, (1, 1)),
-        (vec![0, 1, 1, 1, 2, 1, 1, 0, 1], 6, (1, 1)),
-        (vec![1, 0, 1, 1, 2, 1, 0, 1, 1], 6, (1, 1)),
-        (vec![1, 1, 0, 1, 2, 0, 1, 1, 1], 6, (1, 1)),
-        (vec![1, 0, 1, 0, 2, 1, 1, 1, 1], 6, (1, 1)),
-        (vec![0, 1, 1, 1, 2, 0, 1, 1, 1], 6, (1, 1)),
-        (vec![0, 1, 2, 1, 1, 2, 2, 2, 2], 3, (0, 0)),
-        (vec![0, 0, 2, 1, 1, 2, 2, 2, 2], 2, (0, 0)),
-        (vec![0, 1, 2, 0, 1, 2, 2, 2, 2], 2, (0, 0)),
-        (vec![0, 1, 2, 1, 0, 2, 2, 2, 2], 2, (0, 0)),
-        (vec![0, 1, 2, 0, 0, 2, 2, 2, 2], 1, (0, 0)),
-        (vec![0, 0, 2, 1, 0, 2, 2, 2, 2], 1, (0, 0)),
-        (vec![0, 0, 2, 0, 1, 2, 2, 2, 2], 1, (0, 0)),
-        (vec![0, 0, 2, 0, 0, 2, 2, 2, 2], 0, (0, 0)),
-        (vec![2, 0, 0, 2, 0, 0, 2, 2, 2], 0, (2, 0)),
-        (vec![2, 1, 0, 2, 0, 0, 2, 2, 2], 1, (2, 0)),
-        (vec![2, 0, 0, 2, 1, 0, 2, 2, 2], 1, (2, 0)),
-        (vec![2, 0, 0, 2, 0, 1, 2, 2, 2], 1, (2, 0)),
-        (vec![2, 1, 0, 2, 1, 0, 2, 2, 2], 2, (2, 0)),
-        (vec![2, 0, 0, 2, 1, 1, 2, 2, 2], 2, (2, 0)),
-        (vec![2, 1, 0, 2, 0, 1, 2, 2, 2], 2, (2, 0)),
-        (vec![2, 2, 2, 0, 0, 2, 2, 0, 2], 0, (0, 2)),
-        (vec![2, 2, 2, 0, 1, 2, 2, 0, 2], 1, (0, 2)),
-        (vec![2, 2, 2, 1, 0, 2, 2, 0, 2], 1, (0, 2)),
-        (vec![2, 2, 2, 0, 0, 2, 2, 1, 2], 1, (0, 2)),
-        (vec![2, 2, 2, 1, 1, 2, 2, 0, 2], 2, (0, 2)),
-        (vec![2, 2, 2, 1, 0, 2, 2, 1, 2], 2, (0, 2)),
-        (vec![2, 2, 2, 0, 1, 2, 2, 1, 2], 2, (0, 2)),
-        (vec![2, 2, 2, 1, 1, 2, 2, 1, 2], 3, (0, 2)),
-        (vec![2, 2, 2, 2, 0, 0, 2, 0, 2], 0, (2, 2)),
-        (vec![2, 2, 2, 2, 1, 0, 2, 0, 2], 1, (2, 2)),
-        (vec![2, 2, 2, 2, 0, 1, 2, 0, 2], 1, (2, 2)),
-        (vec![2, 2, 2, 2, 0, 0, 2, 1, 2], 1, (2, 2)),
-        (vec![2, 2, 2, 2, 1, 1, 2, 0, 2], 2, (2, 2)),
-        (vec![2, 2, 2, 2, 0, 1, 2, 1, 2], 2, (2, 2)),
-        (vec![2, 2, 2, 2, 1, 0, 2, 1, 2], 2, (2, 2)),
-        (vec![2, 2, 2, 2, 1, 1, 2, 1, 2], 3, (2, 2)),
-        (vec![0, 2, 0, 0, 0, 0, 2, 2, 2], 0, (1, 0)),
-        (vec![1, 2, 0, 0, 0, 0, 2, 2, 2], 1, (1, 0)),
-        (vec![0, 2, 1, 0, 0, 0, 2, 2, 2], 1, (1, 0)),
-        (vec![0, 2, 0, 1, 0, 0, 2, 2, 2], 1, (1, 0)),
-        (vec![0, 2, 0, 0, 1, 0, 2, 2, 2], 1, (1, 0)),
-        (vec![0, 2, 0, 0, 0, 1, 2, 2, 2], 1, (1, 0)),
-        (vec![1, 2, 1, 0, 0, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 1, 1, 0, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 1, 0, 1, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 1, 0, 0, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![1, 2, 0, 1, 0, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 1, 1, 0, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 0, 1, 1, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 0, 1, 0, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![1, 2, 0, 0, 1, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 1, 0, 1, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 0, 1, 1, 0, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 0, 0, 1, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![1, 2, 0, 0, 0, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 1, 0, 0, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 0, 1, 0, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![0, 2, 0, 0, 1, 1, 2, 2, 2], 2, (1, 0)),
-        (vec![1, 2, 1, 1, 0, 0, 2, 2, 2], 3, (1, 0)),
-        (vec![0, 2, 1, 1, 1, 0, 2, 2, 2], 3, (1, 0)),
-        (vec![0, 2, 1, 1, 0, 1, 2, 2, 2], 3, (1, 0)),
-        (vec![1, 2, 0, 1, 1, 0, 2, 2, 2], 3, (1, 0)),
-        (vec![1, 2, 0, 1, 0, 1, 2, 2, 2], 3, (1, 0)),
-        (vec![1, 2, 0, 1, 1, 0, 2, 2, 2], 3, (1, 0)),
-        (vec![0, 2, 1, 1, 1, 0, 2, 2, 2], 3, (1, 0)),
-        (vec![0, 2, 0, 1, 1, 1, 2, 2, 2], 3, (1, 0)),
-        (vec![1, 2, 0, 0, 1, 1, 2, 2, 2], 3, (1, 0)),
-        (vec![0, 2, 1, 0, 1, 1, 2, 2, 2], 3, (1, 0)),
-        (vec![0, 2, 0, 1, 1, 1, 2, 2, 2], 3, (1, 0)),
-    ];
+    let scenarios = vec![1, 0, 0, 1, 0, 1, 0, 1, 0]
+        .into_iter()
+        .permutations(9)
+        .map(|seats| (seats.clone(), if seats[4] == 1 { 3 } else { 4 }, (1, 1)));
+
     fn scenario_to_seating(template: &Vec<u8>) -> Seating {
         Seating::new(
             3,
@@ -628,4 +783,184 @@ fn test_real_input_first_line() {
             .collect::<Vec<Seat>>()
     );
     assert_eq!(seating.to_string(), line);
+}
+
+#[test]
+fn test_hayward_input() {
+    let input = include_str!("hayward_input.txt");
+    let seating = Seating::from_str(input).unwrap();
+    let (fin, _) = seating.iterate_until_stable(&mut |_, _| {}, None);
+    assert_eq!(fin.count_occupied_seats(), 2354);
+}
+
+#[test]
+fn test_iterate_hayward_1() {
+    let input = include_str!("hayward_input.txt");
+    let seating = Seating::from_str(input).unwrap();
+    let new = seating.iterate();
+    assert_eq!(
+        seating.count_empty_seats(),
+        new.count_occupied_seats(),
+        "First iteration: all empty seats should always become occupied"
+    );
+}
+
+#[test]
+fn test_index() {
+    let seating = Seating {
+        height: 97,
+        width: 99,
+        seats: Vec::new(),
+    };
+    let index = seating.to_index_unchecked(0, 1);
+    assert_eq!(index, 99);
+}
+
+#[test]
+fn test_visible_occupied_seats_from() {
+    let seat = Seating::from_str(
+        ".......#.
+...#.....
+.#.......
+.........
+..#L....#
+....#....
+.........
+#........
+...#.....",
+    )
+    .unwrap();
+    assert_eq!(seat.visible_occupied_seats_from(3, 4), 8);
+
+    let seat = Seating::from_str(
+        ".............
+.L.L.#.#.#.#.
+.............",
+    )
+    .unwrap();
+    assert_eq!(seat.visible_occupied_seats_from(1, 1), 0);
+
+    let seat = Seating::from_str(
+        ".##.##.
+#.#.#.#
+##...##
+...L...
+##...##
+#.#.#.#
+.##.##.",
+    )
+    .unwrap();
+    assert_eq!(seat.visible_occupied_seats_from(3, 3), 0);
+}
+
+#[test]
+fn test_iterate_2() {
+    let seating = Seating::from_str(
+        "L.LL.LL.LL
+LLLLLLL.LL
+L.L.L..L..
+LLLL.LL.LL
+L.LL.LL.LL
+L.LLLLL.LL
+..L.L.....
+LLLLLLLLLL
+L.LLLLLL.L
+L.LLLLL.LL",
+    )
+    .unwrap();
+    let seating = seating.iterate_2();
+    assert_eq!(
+        seating.to_string(),
+        "#.##.##.##
+#######.##
+#.#.#..#..
+####.##.##
+#.##.##.##
+#.#####.##
+..#.#.....
+##########
+#.######.#
+#.#####.##
+"
+    );
+
+    let seating = seating.iterate_2();
+    assert_eq!(
+        seating.to_string(),
+        "#.LL.LL.L#
+#LLLLLL.LL
+L.L.L..L..
+LLLL.LL.LL
+L.LL.LL.LL
+L.LLLLL.LL
+..L.L.....
+LLLLLLLLL#
+#.LLLLLL.L
+#.LLLLL.L#
+"
+    );
+
+    let seating = seating.iterate_2();
+    assert_eq!(
+        seating.to_string(),
+        "#.L#.##.L#
+#L#####.LL
+L.#.#..#..
+##L#.##.##
+#.##.#L.##
+#.#####.#L
+..#.#.....
+LLL####LL#
+#.L#####.L
+#.L####.L#
+"
+    );
+
+    let seating = seating.iterate_2();
+    assert_eq!(
+        seating.to_string(),
+        "#.L#.L#.L#
+#LLLLLL.LL
+L.L.L..#..
+##LL.LL.L#
+L.LL.LL.L#
+#.LLLLL.LL
+..L.L.....
+LLLLLLLLL#
+#.LLLLL#.L
+#.L#LL#.L#
+"
+    );
+
+    let seating = seating.iterate_2();
+    assert_eq!(
+        seating.to_string(),
+        "#.L#.L#.L#
+#LLLLLL.LL
+L.L.L..#..
+##L#.#L.L#
+L.L#.#L.L#
+#.L####.LL
+..#.#.....
+LLL###LLL#
+#.LLLLL#.L
+#.L#LL#.L#
+"
+    );
+
+    let seating = seating.iterate_2();
+    assert_eq!(
+        seating.to_string(),
+        "#.L#.L#.L#
+#LLLLLL.LL
+L.L.L..#..
+##L#.#L.L#
+L.L#.LL.L#
+#.LLLL#.LL
+..#.L.....
+LLL###LLL#
+#.LLLLL#.L
+#.L#LL#.L#
+"
+    );
 }
