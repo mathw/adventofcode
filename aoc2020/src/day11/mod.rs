@@ -1,6 +1,7 @@
 use crate::dayerror::DayError;
 use std::{
     fmt::{self, Display},
+    io,
     str::FromStr,
     thread::sleep,
     time::Duration,
@@ -16,16 +17,31 @@ use tui::{
 
 pub fn part1<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<String, DayError> {
     let input = include_str!("input.txt");
-    let seating = Seating::from_str(input)?;
+    let seating = SeatingWithPart1Rules(Seating::from_str(input)?);
 
+    part_n(terminal, visualise, seating)
+}
+
+pub fn part2<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<String, DayError> {
+    let input = include_str!("input.txt");
+    let seating = SeatingWithPart2Rules(Seating::from_str(input)?);
+
+    part_n(terminal, visualise, seating)
+}
+
+fn part_n<B: Backend>(
+    terminal: &mut Terminal<B>,
+    visualise: bool,
+    solutionfinder: impl SolutionFinder,
+) -> Result<String, DayError> {
     if visualise {
         terminal.clear()?;
 
-        terminal.draw(|f| render(f, &seating, 0))?;
+        terminal.draw(|f| render(f, solutionfinder.seating(), 0))?;
     }
 
     let (fin, iterations) = if visualise {
-        seating.iterate_until_stable(
+        solutionfinder.find_solution_visually(
             &mut |s, i| {
                 terminal
                     .draw(|f| render(f, s, i))
@@ -34,12 +50,10 @@ pub fn part1<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<
             Some(Duration::from_millis(100)),
         )
     } else {
-        seating.iterate_until_stable(&mut |_, _| {}, None)
+        solutionfinder.find_solution()
     };
 
-    let size = terminal.size()?;
-    terminal.set_cursor(0, size.height - 1)?;
-    terminal.show_cursor()?;
+    tidy_cursor(terminal)?;
 
     Ok(format!(
         "Stable after {} iterations with {} seats filled",
@@ -48,38 +62,10 @@ pub fn part1<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<
     ))
 }
 
-pub fn part2<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<String, DayError> {
-    let input = include_str!("input.txt");
-    let seating = Seating::from_str(input)?;
-
-    if visualise {
-        terminal.clear()?;
-
-        terminal.draw(|f| render(f, &seating, 0))?;
-    }
-
-    let (fin, iterations) = if visualise {
-        seating.iterate_until_stable_2(
-            &mut |s, i| {
-                terminal
-                    .draw(|f| render(f, s, i))
-                    .expect("draw call failed")
-            },
-            Some(Duration::from_millis(100)),
-        )
-    } else {
-        seating.iterate_until_stable_2(&mut |_, _| {}, None)
-    };
-
+fn tidy_cursor<B: Backend>(terminal: &mut Terminal<B>) -> Result<(), io::Error> {
     let size = terminal.size()?;
     terminal.set_cursor(0, size.height - 1)?;
-    terminal.show_cursor()?;
-
-    Ok(format!(
-        "Stable after {} iterations with {} seats filled",
-        iterations,
-        fin.count_occupied_seats(),
-    ))
+    terminal.show_cursor()
 }
 
 fn render<B: Backend>(frame: &mut Frame<B>, seating: &Seating, iteration: usize) {
@@ -143,6 +129,63 @@ struct Seating {
     seats: Vec<Seat>,
 }
 
+struct SeatingWithPart1Rules(Seating);
+struct SeatingWithPart2Rules(Seating);
+
+trait SolutionFinder {
+    fn find_solution_visually<D>(
+        &self,
+        drawfunc: &mut D,
+        delay: Option<Duration>,
+    ) -> (Seating, usize)
+    where
+        D: FnMut(&Seating, usize) -> ();
+
+    fn find_solution(&self) -> (Seating, usize);
+
+    fn seating(&self) -> &Seating;
+}
+
+impl SolutionFinder for SeatingWithPart1Rules {
+    fn find_solution(&self) -> (Seating, usize) {
+        self.0.iterate_until_stable(&mut |_, _| {}, None)
+    }
+    fn find_solution_visually<D>(
+        &self,
+        drawfunc: &mut D,
+        delay: Option<Duration>,
+    ) -> (Seating, usize)
+    where
+        D: FnMut(&Seating, usize) -> (),
+    {
+        self.0.iterate_until_stable(drawfunc, delay)
+    }
+
+    fn seating(&self) -> &Seating {
+        &self.0
+    }
+}
+
+impl SolutionFinder for SeatingWithPart2Rules {
+    fn find_solution(&self) -> (Seating, usize) {
+        self.0.iterate_until_stable_2(&mut |_, _| {}, None)
+    }
+    fn find_solution_visually<D>(
+        &self,
+        drawfunc: &mut D,
+        delay: Option<Duration>,
+    ) -> (Seating, usize)
+    where
+        D: FnMut(&Seating, usize) -> (),
+    {
+        self.0.iterate_until_stable_2(drawfunc, delay)
+    }
+
+    fn seating(&self) -> &Seating {
+        &self.0
+    }
+}
+
 impl Seating {
     fn new(width: usize, height: usize, seats: Vec<Seat>) -> Seating {
         Seating {
@@ -195,7 +238,7 @@ impl Seating {
 
     fn iterate_until_stable<F>(&self, drawfunc: &mut F, delay: Option<Duration>) -> (Seating, usize)
     where
-        F: (FnMut(&Seating, usize) -> ()),
+        F: FnMut(&Seating, usize) -> (),
     {
         self.iterate_until_stable_with(drawfunc, delay, |s| s.iterate())
     }
