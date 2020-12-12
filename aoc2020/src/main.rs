@@ -1,5 +1,6 @@
 mod day1;
 mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -14,13 +15,20 @@ mod interpreter;
 #[macro_use]
 extern crate lazy_static;
 
-use std::{env::args, error::Error, fmt, str::FromStr, time::Instant};
+use crate::dayerror::DayError;
+use std::{env::args, error::Error, fmt, io, str::FromStr, time::Instant};
+use thiserror::Error;
+use tui::{backend::CrosstermBackend, Terminal};
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<(), ApplicationError> {
     let mut args = args();
     let daynum = args.nth(1).expect("Expected a day number argument");
     let day: u8 =
         u8::from_str(&daynum).expect(&format!("Expected day number {} to be a u8", daynum));
+
+    let stdout = io::stdout();
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
 
     let part1_start = Instant::now();
     let part1 = match day {
@@ -34,7 +42,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         8 => crate::day8::part1()?,
         9 => crate::day9::part1()?,
         10 => crate::day10::part1()?,
-        d => return Err(BadDayError::boxed(d)),
+        11 => crate::day11::part1(&mut terminal)?,
+        d => return Err(ApplicationError::BadDayError(BadDayError(d))),
     };
     let part1_duration = part1_start.elapsed();
 
@@ -52,7 +61,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         8 => crate::day8::part2()?,
         9 => crate::day9::part2()?,
         10 => crate::day10::part2()?,
-        d => return Err(BadDayError::boxed(d)),
+        d => return Err(ApplicationError::BadDayError(BadDayError(d))),
     };
     let part2_duration = part2_start.elapsed();
 
@@ -61,21 +70,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-#[derive(Debug)]
-struct BadDayError {
-    day: u8,
+#[derive(Debug, Error)]
+enum ApplicationError {
+    #[error(transparent)]
+    DayError(#[from] DayError),
+    #[error(transparent)]
+    BadDayError(#[from] BadDayError),
+    #[error(transparent)]
+    IoError(#[from] io::Error),
 }
 
-impl BadDayError {
-    fn boxed(day: u8) -> Box<BadDayError> {
-        Box::new(BadDayError { day })
-    }
-}
-
-impl fmt::Display for BadDayError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Unknown or bad day {}", self.day)
-    }
-}
-
-impl Error for BadDayError {}
+#[derive(Debug, Error)]
+#[error("Unknown or invalid day")]
+struct BadDayError(u8);
