@@ -1,6 +1,7 @@
 mod day1;
 mod day10;
 mod day11;
+mod day12;
 mod day2;
 mod day3;
 mod day4;
@@ -43,6 +44,7 @@ fn main() -> Result<(), ApplicationError> {
         9 => crate::day9::part1()?,
         10 => crate::day10::part1()?,
         11 => crate::day11::part1(&mut terminal)?,
+        12 => crate::day12::part1()?,
         d => return Err(ApplicationError::BadDayError(BadDayError(d))),
     };
     let part1_duration = part1_start.elapsed();
@@ -61,6 +63,7 @@ fn main() -> Result<(), ApplicationError> {
         8 => crate::day8::part2()?,
         9 => crate::day9::part2()?,
         10 => crate::day10::part2()?,
+        12 => crate::day12::part2()?,
         d => return Err(ApplicationError::BadDayError(BadDayError(d))),
     };
     let part2_duration = part2_start.elapsed();
