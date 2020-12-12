@@ -17,14 +17,40 @@ mod interpreter;
 extern crate lazy_static;
 
 use crate::dayerror::DayError;
-use std::{env::args, io, num::ParseIntError, str::FromStr, time::Instant};
+use clap::{App, Arg};
+use std::{io, num::ParseIntError, str::FromStr, time::Instant};
 use thiserror::Error;
 use tui::{backend::CrosstermBackend, Terminal};
 
 fn main() -> Result<(), ApplicationError> {
-    let mut args = args();
-    let daynum = args.nth(1).expect("Expected a day number argument");
-    let partnum = args.nth(0).unwrap_or("3".into());
+    let matches = App::new("Advent of Code 2020")
+        .version("0.0")
+        .author("Matthew Walton")
+        .about("Solutions to Advent of Code 2020 puzzles")
+        .arg(
+            Arg::with_name("DAY")
+                .help("Specifies which day to execute")
+                .required(true)
+                .index(1),
+        )
+        .arg(
+            Arg::with_name("part")
+                .short("p")
+                .long("part")
+                .value_name("PART")
+                .help("Specifies which part to execute (both will run if not specified)")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("visualise")
+                .short("v")
+                .long("visualise")
+                .help("If present, days with optional visualisations will run them"),
+        )
+        .get_matches();
+    let daynum = matches.value_of("DAY").unwrap();
+    let partnum = matches.value_of("part").unwrap_or("3");
+    let do_visualisation = matches.occurrences_of("visualise") == 1;
     let day: u8 =
         u8::from_str(&daynum).expect(&format!("Expected day number {} to be a u8", daynum));
     let part: u8 = u8::from_str(&partnum)?;
@@ -33,7 +59,12 @@ fn main() -> Result<(), ApplicationError> {
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    println!("Running part {}", part);
+    println!(
+        "Running day {} part {} {} visualisation",
+        day,
+        part,
+        if do_visualisation { "with" } else { "without" }
+    );
 
     if part == 1 || part == 3 {
         let part1_start = Instant::now();
@@ -48,7 +79,7 @@ fn main() -> Result<(), ApplicationError> {
             8 => crate::day8::part1()?,
             9 => crate::day9::part1()?,
             10 => crate::day10::part1()?,
-            11 => crate::day11::part1(&mut terminal, true)?,
+            11 => crate::day11::part1(&mut terminal, do_visualisation)?,
             12 => crate::day12::part1()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
@@ -70,7 +101,7 @@ fn main() -> Result<(), ApplicationError> {
             8 => crate::day8::part2()?,
             9 => crate::day9::part2()?,
             10 => crate::day10::part2()?,
-            11 => crate::day11::part2(&mut terminal, true)?,
+            11 => crate::day11::part2(&mut terminal, do_visualisation)?,
             12 => crate::day12::part2()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };

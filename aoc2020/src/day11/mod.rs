@@ -18,9 +18,11 @@ pub fn part1<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<
     let input = include_str!("input.txt");
     let seating = Seating::from_str(input)?;
 
-    terminal.clear()?;
+    if visualise {
+        terminal.clear()?;
 
-    terminal.draw(|f| render(f, &seating, 0))?;
+        terminal.draw(|f| render(f, &seating, 0))?;
+    }
 
     let (fin, iterations) = if visualise {
         seating.iterate_until_stable(
@@ -50,9 +52,11 @@ pub fn part2<B: Backend>(terminal: &mut Terminal<B>, visualise: bool) -> Result<
     let input = include_str!("input.txt");
     let seating = Seating::from_str(input)?;
 
-    terminal.clear()?;
+    if visualise {
+        terminal.clear()?;
 
-    terminal.draw(|f| render(f, &seating, 0))?;
+        terminal.draw(|f| render(f, &seating, 0))?;
+    }
 
     let (fin, iterations) = if visualise {
         seating.iterate_until_stable_2(
