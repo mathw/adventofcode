@@ -63,7 +63,11 @@ fn main() -> Result<(), ApplicationError> {
     println!(
         "Running day {} part {} {} visualisation",
         day,
-        part,
+        if part == 3 {
+            "1 + 2".to_string()
+        } else {
+            part.to_string()
+        },
         if do_visualisation { "with" } else { "without" }
     );
 
@@ -105,6 +109,7 @@ fn main() -> Result<(), ApplicationError> {
             10 => crate::day10::part2()?,
             11 => crate::day11::part2(&mut terminal, do_visualisation)?,
             12 => crate::day12::part2()?,
+            13 => crate::day13::part2()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part2_duration = part2_start.elapsed();
