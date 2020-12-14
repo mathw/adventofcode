@@ -112,6 +112,7 @@ fn main() -> Result<(), ApplicationError> {
             11 => crate::day11::part2(&mut terminal, do_visualisation)?,
             12 => crate::day12::part2()?,
             13 => crate::day13::part2()?,
+            14 => crate::day14::part2()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part2_duration = part2_start.elapsed();

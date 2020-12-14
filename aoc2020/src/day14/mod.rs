@@ -1,3 +1,5 @@
+mod part2;
+
 use crate::dayerror::DayError;
 use regex::Regex;
 use std::{collections::HashMap, str, str::FromStr};
@@ -11,6 +13,8 @@ pub fn part1() -> Result<String, DayError> {
         computer.memory_sum()
     ))
 }
+
+pub use part2::part2;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 struct Mask(HashMap<usize, bool>);
