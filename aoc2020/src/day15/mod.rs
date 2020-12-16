@@ -36,7 +36,6 @@ fn run_memory_game(starting_numbers: &[u32], iterations: u32) -> u32 {
 
     while turn < iterations - 1 {
         turn += 1;
-        let this_turn = number_to_speak;
         number_to_speak = memory_game_turn(&mut memory, number_to_speak, turn);
     }
 
