@@ -17,8 +17,10 @@ mod day8;
 mod day9;
 mod dayerror;
 mod grid3d;
+mod grid4d;
 mod interpreter;
 mod point3d;
+mod point4d;
 
 #[macro_use]
 extern crate lazy_static;
@@ -123,6 +125,7 @@ fn main() -> Result<(), ApplicationError> {
             14 => crate::day14::part2()?,
             15 => crate::day15::part2()?,
             16 => crate::day16::part2()?,
+            17 => crate::day17::part2()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part2_duration = part2_start.elapsed();
