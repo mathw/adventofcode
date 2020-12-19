@@ -7,6 +7,7 @@ pub struct Point3D {
     pub z: i64,
 }
 
+#[allow(unused)]
 impl Point3D {
     pub fn new(x: i64, y: i64, z: i64) -> Point3D {
         Point3D { x, y, z }

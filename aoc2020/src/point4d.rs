@@ -1,5 +1,4 @@
 use std::ops::Add;
-
 #[derive(Hash, PartialEq, Eq, Clone, Debug)]
 pub struct Point4D {
     pub x: i64,
@@ -8,6 +7,7 @@ pub struct Point4D {
     pub w: i64,
 }
 
+#[allow(unused)]
 impl Point4D {
     pub fn new(x: i64, y: i64, z: i64, w: i64) -> Point4D {
         Point4D { x, y, z, w }

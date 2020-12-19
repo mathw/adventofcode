@@ -7,6 +7,7 @@ mod day14;
 mod day15;
 mod day16;
 mod day17;
+mod day18;
 mod day2;
 mod day3;
 mod day4;
@@ -24,6 +25,8 @@ mod point4d;
 
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate lalrpop_util;
 
 use crate::dayerror::DayError;
 use clap::{App, Arg};
@@ -99,6 +102,7 @@ fn main() -> Result<(), ApplicationError> {
             15 => crate::day15::part1()?,
             16 => crate::day16::part1()?,
             17 => crate::day17::part1()?,
+            18 => crate::day18::part1()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part1_duration = part1_start.elapsed();
@@ -126,6 +130,7 @@ fn main() -> Result<(), ApplicationError> {
             15 => crate::day15::part2()?,
             16 => crate::day16::part2()?,
             17 => crate::day17::part2()?,
+            18 => crate::day18::part2()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part2_duration = part2_start.elapsed();

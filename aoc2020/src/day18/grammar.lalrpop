@@ -1,0 +1,19 @@
+use std::str::FromStr;
+use crate::day18::expressions::{Expression, Operand};
+
+grammar;
+
+pub Num: u32 = {
+    r"[0-9]+" => u32::from_str(<>).unwrap()
+}
+
+pub Operand: Operand = {
+    Num => Operand::Number(<>),
+    "(" <Expr> ")" => Operand::Expression(Box::new(<>))
+}
+
+pub Expr: Expression = {
+    <l:Expr> "+" <r:Operand> => Expression::Add { left: Box::new(l), right: r},
+    <l:Expr> "*" <r:Operand> => Expression::Multiply { left: Box::new(l), right: r },
+    <Operand> => Expression::Operand(<>)
+} 
