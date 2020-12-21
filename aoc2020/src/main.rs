@@ -133,6 +133,7 @@ fn main() -> Result<(), ApplicationError> {
             16 => crate::day16::part2()?,
             17 => crate::day17::part2()?,
             18 => crate::day18::part2()?,
+            19 => crate::day19::part2()?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part2_duration = part2_start.elapsed();
