@@ -3,7 +3,7 @@ use crate::day18::expressions::{Expr, Factor, Term};
 
 grammar;
 
-pub Num: u64 = {
+Num: u64 = {
     r"[0-9]+" => u64::from_str(<>).unwrap()
 }
 
@@ -12,12 +12,12 @@ pub Expr: Expr = {
     <Factor> => Expr::Factor(<>)
 }
 
-pub Factor: Factor = {
+Factor: Factor = {
     <l:Factor> "+" <r:Term> => Factor::Add(Box::new(l), r),
     <Term> => Factor::Term(<>)
 }
 
-pub Term: Term = {
+Term: Term = {
     <Num> => Term::Number(<>),
     "(" <Expr> ")" => Term::Expr(Box::new(<>))
 

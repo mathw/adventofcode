@@ -153,8 +153,8 @@ fn test_evaluate() {
 #[test]
 fn test_grammar_part2() {
     let parser = grammar2::ExprParser::new();
-    let parsed = parser.parse("1 + 2").unwrap();
-    let parsed = parser.parse("1 + 2 + 3").unwrap();
+    let _ = parser.parse("1 + 2").unwrap();
+    let _ = parser.parse("1 + 2 + 3").unwrap();
     let parsed = parser.parse("1 + 2 * 3 + 4 * 5 + 6").unwrap();
     assert_eq!(evaluate2(&parsed), 231);
 }

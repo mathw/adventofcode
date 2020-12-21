@@ -3,11 +3,11 @@ use crate::day18::expressions::{Expression, Operand};
 
 grammar;
 
-pub Num: u32 = {
+Num: u32 = {
     r"[0-9]+" => u32::from_str(<>).unwrap()
 }
 
-pub Operand: Operand = {
+Operand: Operand = {
     Num => Operand::Number(<>),
     "(" <Expr> ")" => Operand::Expression(Box::new(<>))
 }
