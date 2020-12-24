@@ -2,7 +2,7 @@ mod ring;
 
 use self::ring::Ring;
 use crate::dayerror::DayError;
-use std::{fmt::Debug, fmt::Display, str::FromStr};
+use std::{fmt::Debug, fmt::Display, hash::Hash, str::FromStr};
 
 pub fn part1(visualise: bool) -> Result<String, DayError> {
     let answer = run_part1("368195742", visualise)?;
@@ -22,7 +22,7 @@ pub fn part2(visualise: bool) -> Result<String, DayError> {
 
 fn make_move<T>(cups: &mut Ring<T>, current_cup: T, visualise: bool) -> T
 where
-    T: Debug + Display + Eq + PartialOrd + CheckedDecrement + Copy,
+    T: Debug + Display + Eq + PartialOrd + CheckedDecrement + Copy + Hash,
 {
     if visualise {
         println!(
@@ -68,7 +68,7 @@ where
 
 fn find_destination_cup<T>(cups: &Ring<T>, current_cup: &T) -> T
 where
-    T: PartialOrd + CheckedDecrement + Eq + Copy,
+    T: PartialOrd + CheckedDecrement + Eq + Copy + Hash,
 {
     let minus_one = current_cup.checked_decrement();
     match minus_one {
@@ -88,15 +88,12 @@ where
 
 fn make_moves<T>(cups: &mut Ring<T>, current_cup: T, moves: usize, visualise: bool)
 where
-    T: Debug + Display + Eq + PartialOrd + CheckedDecrement + Copy,
+    T: Debug + Display + Eq + PartialOrd + CheckedDecrement + Copy + Hash,
 {
     let mut current_cup = current_cup;
     for m in 1..=moves {
         if visualise {
             println!("** MOVE {} **", m);
-        }
-        if m % 10 == 0 {
-            println!("Move {} of {}", m, moves);
         }
         current_cup = make_move(cups, current_cup, visualise);
     }
@@ -141,17 +138,9 @@ fn run_part1(input: &str, visualise: bool) -> Result<String, DayError> {
 }
 
 fn two_cups_after_one(cups: &Ring<u32>) -> (u32, u32) {
-    let cups = cups.iter().collect::<Vec<&u32>>();
-    let index_of_one = cups
-        .iter()
-        .enumerate()
-        .filter(|(_, v)| v == &&&1)
-        .next()
-        .expect("1 must be in the circle")
-        .0;
-    let first_answer_index = (index_of_one + 1) % cups.len();
-    let second_answer_index = (index_of_one + 2) % cups.len();
-    (*cups[first_answer_index], *cups[second_answer_index])
+    let first = cups.value_after(&1).unwrap();
+    let second = cups.value_after(first).unwrap();
+    (*first, *second)
 }
 
 fn run_part2(input: &str, visualise: bool) -> Result<u64, DayError> {
@@ -162,13 +151,15 @@ fn run_part2(input: &str, visualise: bool) -> Result<u64, DayError> {
     let highest_cup = cups
         .iter()
         .fold(0, |acc, x| if *x > acc { *x } else { acc });
-    for cup in highest_cup..(highest_cup + (1_000_000 - cups.len() as u32)) {
-        cups.push(cup);
+    let mut current = highest_cup + 1;
+    while current <= 1_000_000 {
+        cups.push(current);
+        current += 1;
     }
     assert_eq!(cups.len(), 1_000_000);
     let current_cup = cups[0];
     let mut cups = Ring::new(cups);
-    make_moves(&mut cups, current_cup, 1_000_000, visualise);
+    make_moves(&mut cups, current_cup, 10_000_000, visualise);
     let (first, second) = two_cups_after_one(&cups);
     Ok(first as u64 * second as u64)
 }
@@ -206,4 +197,10 @@ impl CheckedDecrement for u32 {
     fn checked_decrement(self) -> Option<Self> {
         self.checked_sub(1)
     }
+}
+
+#[test]
+fn test_sample_part2() {
+    let answer = run_part2("389125467", false).unwrap();
+    assert_eq!(answer, 149245887792);
 }
