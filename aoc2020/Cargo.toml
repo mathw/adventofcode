@@ -12,6 +12,7 @@ lalrpop = {version = "0.19.1", features = ['lexer']}
 [dependencies]
 clap = "2.33.3"
 crossterm = "0.18"
+hex2d = "1.0.0"
 image = "0.23.12"
 itertools = "0.9.0"
 lalrpop-util = "0.19.1"
