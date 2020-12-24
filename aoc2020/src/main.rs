@@ -11,6 +11,7 @@ mod day18;
 mod day19;
 mod day2;
 mod day22;
+mod day23;
 mod day3;
 mod day4;
 mod day5;
@@ -107,6 +108,7 @@ fn main() -> Result<(), ApplicationError> {
             18 => crate::day18::part1()?,
             19 => crate::day19::part1()?,
             22 => crate::day22::part1()?,
+            23 => crate::day23::part1(do_visualisation)?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part1_duration = part1_start.elapsed();
