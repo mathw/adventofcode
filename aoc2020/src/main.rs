@@ -139,6 +139,7 @@ fn main() -> Result<(), ApplicationError> {
             18 => crate::day18::part2()?,
             19 => crate::day19::part2()?,
             22 => crate::day22::part2(do_visualisation)?,
+            23 => crate::day23::part2(do_visualisation)?,
             d => return Err(ApplicationError::BadDayError(BadDayError(d))),
         };
         let part2_duration = part2_start.elapsed();
