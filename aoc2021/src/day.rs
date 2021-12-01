@@ -17,6 +17,12 @@ pub struct DayResult {
     part2: PartResult,
 }
 
+impl DayResult {
+    pub fn new(part1: PartResult, part2: PartResult) -> DayResult {
+        DayResult { part1, part2 }
+    }
+}
+
 impl Default for DayResult {
     fn default() -> Self {
         DayResult {
