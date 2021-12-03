@@ -7,6 +7,7 @@ mod common;
 mod day;
 mod day1;
 mod day2;
+mod day3;
 
 fn main() {
     simple_logger::SimpleLogger::new().env().init().unwrap();
@@ -30,9 +31,8 @@ fn main() {
             let mut day = day1::Day1::new();
             day.run()
         }),
-        "2" => {
-            run_day(2, || day2::run());
-        }
+        "2" => run_day(2, || day2::run()),
+        "3" => run_day(3, || day3::run()),
         _ => log::error!("Unimplemented day {}", day),
     }
 }
