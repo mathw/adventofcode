@@ -9,15 +9,25 @@ use std::str::FromStr;
 pub fn run() -> Result<DayResult, Box<dyn Error + 'static>> {
     let input = include_str!("inputs/day4.txt");
     let part1 = run_part1(input)?;
+    let part2 = run_part2(input)?;
     Ok(DayResult::new(
         PartResult::Success(format!("Score of winning board is {}", part1)),
-        PartResult::NotImplemented,
+        PartResult::Success(format!("Score of winning board is {}", part2)),
     ))
 }
 
 fn run_part1(input: &str) -> Result<u32, Box<dyn Error + 'static>> {
     let (draw, boards) = parse_input(input)?;
     let result = play(&boards, &draw);
+    match result {
+        None => Err(format!("No winning board found").into()),
+        Some((winner, lastcalled)) => Ok(board_score(&winner) * lastcalled as u32),
+    }
+}
+
+fn run_part2(input: &str) -> Result<u32, Box<dyn Error + 'static>> {
+    let (draw, boards) = parse_input(input)?;
+    let result = play_to_win_last(&boards, &draw);
     match result {
         None => Err(format!("No winning board found").into()),
         Some((winner, lastcalled)) => Ok(board_score(&winner) * lastcalled as u32),
@@ -51,6 +61,14 @@ fn play(boards: &Vec<Board>, order: &Vec<u8>) -> Option<(Board, u8)> {
         .par_iter()
         .map(|b| play_board(b.clone(), order.iter().cloned()))
         .min_by(|(_, _, moves1), (_, _, moves2)| moves1.cmp(moves2))
+        .map(|(board, _, moves)| (board, order[moves - 1]))
+}
+
+fn play_to_win_last(boards: &Vec<Board>, order: &Vec<u8>) -> Option<(Board, u8)> {
+    boards
+        .par_iter()
+        .map(|b| play_board(b.clone(), order.iter().cloned()))
+        .max_by(|(_, _, moves1), (_, _, moves2)| moves1.cmp(moves2))
         .map(|(board, _, moves)| (board, order[moves - 1]))
 }
 
@@ -127,7 +145,18 @@ fn test_part1_sample() {
     let input = include_str!("inputs/day4-sample.txt");
     let (drawn, boards) = parse_input(input).unwrap();
 
-    let result = play(&boards, &drawn).expect("Expected a winning board");
-    println!("{}", result);
+    let (result, last_called) = play(&boards, &drawn).expect("Expected a winning board");
     assert_eq!(result.check_state(), BoardState::WinRow(0));
+    assert_eq!(last_called, 24);
+}
+
+#[test]
+fn test_part2_sample() {
+    let input = include_str!("inputs/day4-sample.txt");
+    let (drawn, boards) = parse_input(input).unwrap();
+
+    let (result, last_called) =
+        play_to_win_last(&boards, &drawn).expect("Expected a winning board");
+    assert_eq!(result.check_state(), BoardState::WinColumn(2));
+    assert_eq!(last_called, 13);
 }
