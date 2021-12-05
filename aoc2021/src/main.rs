@@ -10,6 +10,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 
 fn main() {
     simple_logger::SimpleLogger::new().env().init().unwrap();
@@ -36,6 +37,7 @@ fn main() {
         "2" => run_day(2, || day2::run()),
         "3" => run_day(3, || day3::run()),
         "4" => run_day(4, || day4::run()),
+        "5" => run_day(5, || day5::run()),
         _ => log::error!("Unimplemented day {}", day),
     }
 }
