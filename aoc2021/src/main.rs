@@ -3,11 +3,13 @@ use crate::day::DayResult;
 use clap::{App, Arg};
 use std::error::Error;
 
+mod bingo;
 mod common;
 mod day;
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 fn main() {
     simple_logger::SimpleLogger::new().env().init().unwrap();
@@ -33,6 +35,7 @@ fn main() {
         }),
         "2" => run_day(2, || day2::run()),
         "3" => run_day(3, || day3::run()),
+        "4" => run_day(4, || day4::run()),
         _ => log::error!("Unimplemented day {}", day),
     }
 }
