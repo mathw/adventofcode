@@ -1,4 +1,4 @@
-use crate::bingo::{Board, BoardState};
+use crate::bingo::Board;
 use crate::day::{DayResult, PartResult};
 
 use itertools::Itertools;
@@ -95,6 +95,9 @@ fn board_score(board: &Board) -> u32 {
         .sum()
 }
 
+#[cfg(test)]
+use crate::bingo::BoardState;
+
 #[test]
 fn test_parse_input() {
     let input = "2,3,4
@@ -132,7 +135,7 @@ fn test_part1_sample_single_board() {
     )
     .unwrap();
 
-    let (played_board, won, moves) = play_board(
+    let (_played_board, won, moves) = play_board(
         board,
         vec![7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24].into_iter(),
     );

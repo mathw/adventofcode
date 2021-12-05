@@ -32,12 +32,6 @@ impl Board {
         Some(self.marks[Board::index_of(x, y)?])
     }
 
-    pub fn mark(&mut self, x: usize, y: usize) {
-        if let Some(index) = Board::index_of(x, y) {
-            self.marks[index] = true;
-        }
-    }
-
     pub fn check_state(&self) -> BoardState {
         // check rows
         for row in 0..5 {
