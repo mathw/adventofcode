@@ -9,7 +9,7 @@ pub fn run() -> Result<DayResult, Box<dyn Error + 'static>> {
 
     Ok(DayResult::new(
         PartResult::Success(format!("{} points overlap at least 2", part1(&lines))),
-        PartResult::NotImplemented,
+        PartResult::Success(format!("{} points overlap at least 2", part2(&lines))),
     ))
 }
 
@@ -20,6 +20,11 @@ fn part1(input: &Vec<Line>) -> usize {
         .cloned()
         .collect();
     let layered = layer_lines(&filtered);
+    count_points_at_least(&layered, 2)
+}
+
+fn part2(input: &Vec<Line>) -> usize {
+    let layered = layer_lines(&input);
     count_points_at_least(&layered, 2)
 }
 
@@ -121,4 +126,11 @@ fn test_part1_sample() {
     let lines = parse_input(include_str!("inputs/samples/day5.txt")).unwrap();
     let answer = part1(&lines);
     assert_eq!(answer, 5);
+}
+
+#[test]
+fn test_part2_sample() {
+    let lines = parse_input(include_str!("inputs/samples/day5.txt")).unwrap();
+    let answer = part2(&lines);
+    assert_eq!(answer, 12);
 }
