@@ -3,6 +3,9 @@ use crate::day::DayResult;
 use clap::{App, Arg};
 use std::error::Error;
 
+#[macro_use]
+extern crate lazy_static;
+
 mod bingo;
 mod common;
 mod day;
