@@ -1,4 +1,5 @@
 use crate::day::{DayResult, PartResult};
+use rayon::prelude::*;
 use std::error::Error;
 use std::str::FromStr;
 
@@ -13,38 +14,20 @@ pub fn run() -> Result<DayResult, Box<dyn Error>> {
 
 type Fish = u8;
 
-const FISH_SPAWN_DAY: Fish = 0;
 const FISH_POST_SPAWN: Fish = 6;
 const NEW_FISH: Fish = 8;
 
-enum FishDayEvent {
-    Ages,
-    Produces,
-}
-
-fn lanternfish_day(fish: Fish) -> FishDayEvent {
-    if fish == FISH_SPAWN_DAY {
-        FishDayEvent::Produces
-    } else {
-        FishDayEvent::Ages
-    }
-}
-
 fn simulate_fish(fish: Fish, days: usize) -> u64 {
-    let mut all_fish = vec![fish];
-    for _ in 0..days {
-        for index in 0..all_fish.len() {
-            let fish = all_fish[index];
-            match lanternfish_day(fish) {
-                FishDayEvent::Ages => all_fish[index] = fish - 1,
-                FishDayEvent::Produces => {
-                    all_fish[index] = FISH_POST_SPAWN;
-                    all_fish.push(NEW_FISH);
-                }
-            }
-        }
+    if days < fish as usize {
+        return 1;
     }
-    all_fish.len() as u64
+    // jump to next spawning day
+    let days = days - fish as usize;
+    if days == 0 {
+        return 1;
+    }
+    // run this fish and the new fish
+    simulate_fish(FISH_POST_SPAWN, days - 1) + simulate_fish(NEW_FISH, days - 1)
 }
 
 fn simulate_fishes(fishes: &Vec<Fish>, days: usize) -> u64 {
@@ -79,3 +62,10 @@ fn test_part1_sample_long() {
     let fish = simulate_fishes(&fish, 80);
     assert_eq!(fish, 5934);
 }
+
+// #[test]
+// fn test_part2_sample() {
+//     let fish = vec![3];
+//     let fish = simulate_fishes(&fish, 256);
+//     assert_eq!(fish, 26984457539);
+// }
