@@ -6,7 +6,7 @@ pub fn run() -> Result<DayResult, Box<dyn Error>> {
     let input = parse_input(include_str!("inputs/day6.txt"))?;
     let day1 = simulate_fishes(&input, 80);
     return Ok(DayResult::new(
-        PartResult::Success(format!("There are {} fish after 80 days", day1.len())),
+        PartResult::Success(format!("There are {} fish after 80 days", day1)),
         PartResult::NotImplemented,
     ));
 }
@@ -30,7 +30,7 @@ fn lanternfish_day(fish: Fish) -> FishDayEvent {
     }
 }
 
-fn simulate_fish(fish: Fish, days: usize) -> Vec<Fish> {
+fn simulate_fish(fish: Fish, days: usize) -> u64 {
     let mut all_fish = vec![fish];
     for _ in 0..days {
         for index in 0..all_fish.len() {
@@ -44,14 +44,11 @@ fn simulate_fish(fish: Fish, days: usize) -> Vec<Fish> {
             }
         }
     }
-    all_fish
+    all_fish.len() as u64
 }
 
-fn simulate_fishes(fishes: &Vec<Fish>, days: usize) -> Vec<Fish> {
-    fishes
-        .iter()
-        .flat_map(|fish| simulate_fish(*fish, days))
-        .collect()
+fn simulate_fishes(fishes: &Vec<Fish>, days: usize) -> u64 {
+    fishes.iter().map(|fish| simulate_fish(*fish, days)).sum()
 }
 
 fn parse_input(input: &str) -> Result<Vec<Fish>, impl Error> {
@@ -66,21 +63,19 @@ fn parse_input(input: &str) -> Result<Vec<Fish>, impl Error> {
 #[test]
 fn test_one_sample_fish() {
     let result = simulate_fish(3, 5);
-    assert_eq!(result.len(), 2, "one extra fish should have been spawned");
-    assert_eq!(result[0], 5, "the first fish should have 5 days to go");
-    assert_eq!(result[1], 7, "the second fish should have 7 days to go");
+    assert_eq!(result, 2, "one extra fish should have been spawned");
 }
 
 #[test]
 fn test_part1_sample_short() {
     let fish = vec![3, 4, 3, 1, 2];
     let fish = simulate_fishes(&fish, 18);
-    assert_eq!(fish.len(), 26);
+    assert_eq!(fish, 26);
 }
 
 #[test]
 fn test_part1_sample_long() {
     let fish = vec![3, 4, 3, 1, 2];
     let fish = simulate_fishes(&fish, 80);
-    assert_eq!(fish.len(), 5934);
+    assert_eq!(fish, 5934);
 }
