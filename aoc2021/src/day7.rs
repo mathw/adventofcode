@@ -1,7 +1,6 @@
 use crate::day::{DayResult, PartResult};
 use memoise::memoise;
 use rayon::prelude::*;
-use std::collections::HashMap;
 use std::error::Error;
 
 pub fn run() -> Result<DayResult, Box<dyn Error>> {
