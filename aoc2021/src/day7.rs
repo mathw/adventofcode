@@ -1,4 +1,5 @@
 use crate::day::{DayResult, PartResult};
+use memoise::memoise;
 use rayon::prelude::*;
 use std::collections::HashMap;
 use std::error::Error;
@@ -67,19 +68,9 @@ fn part2_fuel_to(target: u32, positions: &Vec<u32>) -> u32 {
         .sum()
 }
 
+#[memoise(distance < 3000)]
 fn fuel_for_distance_part2(distance: u32) -> u32 {
     (1..=distance).sum()
-}
-
-fn mode(data: &Vec<u32>) -> Option<u32> {
-    let frequencies = data.iter().fold(HashMap::new(), |mut freqs, value| {
-        *freqs.entry(value).or_insert(0) += 1;
-        freqs
-    });
-    frequencies
-        .into_iter()
-        .max_by_key(|&(_, count)| count)
-        .map(|(value, _)| *value)
 }
 
 #[test]
