@@ -30,7 +30,16 @@ impl HeightMap {
         Some(*self.data.get(self.index_of(x, y)?)?)
     }
 
-    fn surrounding(&self, x: usize, y: usize) -> Vec<u8> {
+    fn surrounding<'a>(&'a self, x: usize, y: usize) -> impl Iterator<Item = u8> + 'a {
+        self.surrounding_coords(x, y)
+            .filter_map(|(cx, cy)| self.get(cx, cy))
+    }
+
+    fn surrounding_coords<'a>(
+        &'a self,
+        x: usize,
+        y: usize,
+    ) -> impl Iterator<Item = (usize, usize)> + 'a {
         let mut coords = [None; 4];
         coords[0] = if x == 0 { None } else { Some((x - 1, y)) };
         coords[1] = if x >= self.width {
@@ -44,20 +53,12 @@ impl HeightMap {
         } else {
             Some((x, y + 1))
         };
-
-        coords
-            .into_iter()
-            .filter_map(|c| match c {
-                Some((x, y)) => self.get(x, y),
-                None => None,
-            })
-            .collect()
+        coords.into_iter().filter_map(|c| c)
     }
 
     fn is_low_point(&self, x: usize, y: usize) -> Option<bool> {
         let value = self.get(x, y)?;
-        let surrounds = self.surrounding(x, y);
-        Some(surrounds.into_iter().all(|v| value < v))
+        Some(self.surrounding(x, y).all(|v| value < v))
     }
 
     fn all_low_point_values<'a>(&'a self) -> impl Iterator<Item = u8> + 'a {

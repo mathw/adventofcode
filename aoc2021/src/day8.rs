@@ -257,24 +257,6 @@ impl Default for Constraint {
 }
 
 impl Constraint {
-    fn combine_with(&self, other: &Constraint) -> Option<Constraint> {
-        let new_is_one_of: HashSet<_> = self
-            .is_one_of
-            .intersection(&other.is_one_of)
-            .cloned()
-            .collect();
-
-        let new_is_not_one_of: HashSet<_> = self
-            .is_not_one_of
-            .union(&other.is_not_one_of)
-            .cloned()
-            .collect();
-        Some(Constraint {
-            is_one_of: new_is_one_of,
-            is_not_one_of: new_is_not_one_of,
-        })
-    }
-
     fn with(&self, potentials: &HashSet<Segment>) -> Constraint {
         let allowed_new: HashSet<_> = potentials
             .difference(&self.is_not_one_of)
@@ -295,31 +277,11 @@ impl Constraint {
         }
     }
 
-    fn could_be(&self, segment: Segment) -> bool {
-        self.is_one_of.contains(&segment) && !self.is_not_one_of.contains(&segment)
-    }
-
-    fn definitely_is_not(&self, segment: Segment) -> bool {
-        self.is_not_one_of.contains(&segment)
-    }
-
     fn possibilities(&self) -> HashSet<Segment> {
         self.is_one_of
             .difference(&self.is_not_one_of)
             .cloned()
             .collect()
-    }
-
-    fn normalised(self) -> Self {
-        let new_is_one_of = self
-            .is_one_of
-            .difference(&self.is_not_one_of)
-            .cloned()
-            .collect();
-        Self {
-            is_one_of: new_is_one_of,
-            ..self
-        }
     }
 }
 
