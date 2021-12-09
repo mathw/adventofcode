@@ -1,13 +1,15 @@
 use crate::day::{DayResult, PartResult};
+use std::collections::HashSet;
 use std::error::Error;
 use std::str::FromStr;
 
 pub fn run() -> Result<DayResult, Box<dyn Error>> {
     let heightmap = HeightMap::from_str(include_str!("inputs/day9.txt"))?;
     let part1 = part1(&heightmap);
+    let part2 = part2(&heightmap);
     Ok(DayResult::new(
         PartResult::Success(format!("Total risk level {}", part1)),
-        PartResult::NotImplemented,
+        PartResult::Success(format!("Product of three largest basins {}", part2)),
     ))
 }
 
@@ -42,13 +44,13 @@ impl HeightMap {
     ) -> impl Iterator<Item = (usize, usize)> + 'a {
         let mut coords = [None; 4];
         coords[0] = if x == 0 { None } else { Some((x - 1, y)) };
-        coords[1] = if x >= self.width {
+        coords[1] = if x >= self.width - 1 {
             None
         } else {
             Some((x + 1, y))
         };
         coords[2] = if y == 0 { None } else { Some((x, y - 1)) };
-        coords[3] = if y >= self.height {
+        coords[3] = if y >= self.height - 1 {
             None
         } else {
             Some((x, y + 1))
@@ -62,9 +64,14 @@ impl HeightMap {
     }
 
     fn all_low_point_values<'a>(&'a self) -> impl Iterator<Item = u8> + 'a {
+        self.all_low_point_coordinates()
+            .filter_map(|(x, y)| self.get(x, y))
+    }
+
+    fn all_low_point_coordinates<'a>(&'a self) -> impl Iterator<Item = (usize, usize)> + 'a {
         self.all_point_coordinates().filter_map(|(x, y)| {
             if self.is_low_point(x, y)? {
-                self.get(x, y)
+                Some((x, y))
             } else {
                 None
             }
@@ -73,6 +80,43 @@ impl HeightMap {
 
     fn all_point_coordinates<'a>(&'a self) -> impl Iterator<Item = (usize, usize)> + 'a {
         (0..self.height).flat_map(|y| (0..self.width).map(move |x| (x, y)))
+    }
+
+    fn basin_coords_from_low_point(&self, x: usize, y: usize) -> Option<HashSet<(usize, usize)>> {
+        fn recurse(fc: &mut HashSet<(usize, usize)>, cx: usize, cy: usize, this: &HeightMap) {
+            for (ccx, ccy) in this.surrounding_basin_candidates(cx, cy) {
+                if fc.insert((ccx, ccy)) {
+                    recurse(fc, ccx, ccy, this)
+                }
+            }
+        }
+        if !self.is_low_point(x, y)? {
+            return None;
+        }
+        let mut found_coords = HashSet::new();
+        found_coords.insert((x, y));
+
+        for (cx, cy) in self.surrounding_basin_candidates(x, y) {
+            if found_coords.insert((cx, cy)) {
+                recurse(&mut found_coords, cx, cy, self);
+            }
+        }
+
+        Some(found_coords)
+    }
+
+    fn surrounding_basin_candidates<'a>(
+        &'a self,
+        x: usize,
+        y: usize,
+    ) -> impl Iterator<Item = (usize, usize)> + 'a {
+        let value = self.get(x, y).expect("Valid coordinate must be provided");
+        self.surrounding_coords(x, y).filter(move |(px, py)| {
+            let v = self
+                .get(*px, *py)
+                .expect("Invalid coordinate from surrounding_coords");
+            v >= value && v < 9
+        })
     }
 }
 
@@ -124,6 +168,20 @@ fn part1(heightmap: &HeightMap) -> u32 {
     heightmap.all_low_point_values().map(|h| h as u32 + 1).sum()
 }
 
+fn part2(heightmap: &HeightMap) -> u64 {
+    let mut all_basins: Vec<u64> = heightmap
+        .all_low_point_coordinates()
+        .map(|(x, y)| {
+            heightmap
+                .basin_coords_from_low_point(x, y)
+                .expect("Got a low point that isn't a low point")
+                .len() as u64
+        })
+        .collect();
+    all_basins.sort();
+    all_basins.into_iter().rev().take(3).product()
+}
+
 #[test]
 fn test_part1_sample() {
     let input = "2199943210
@@ -135,4 +193,36 @@ fn test_part1_sample() {
     let heightmap = HeightMap::from_str(input).expect("Should parse");
     let risk_level = part1(&heightmap);
     assert_eq!(risk_level, 15);
+}
+
+#[test]
+fn test_part2_sample() {
+    let input = "2199943210
+3987894921
+9856789892
+8767896789
+9899965678";
+
+    let heightmap = HeightMap::from_str(input).expect("Should parse");
+    let topleft = heightmap.basin_coords_from_low_point(1, 0).unwrap();
+    assert_eq!(topleft.len(), 3);
+    let topright = heightmap.basin_coords_from_low_point(9, 0).unwrap();
+    assert_eq!(topright.len(), 9);
+    let middle = heightmap.basin_coords_from_low_point(2, 2).unwrap();
+    assert_eq!(middle.len(), 14);
+    let bottom = heightmap.basin_coords_from_low_point(6, 4).unwrap();
+    assert_eq!(bottom.len(), 9);
+}
+
+#[test]
+fn test_part2_sample_full() {
+    let input = "2199943210
+3987894921
+9856789892
+8767896789
+9899965678";
+
+    let heightmap = HeightMap::from_str(input).expect("Should parse");
+    let result = part2(&heightmap);
+    assert_eq!(result, 1134);
 }
