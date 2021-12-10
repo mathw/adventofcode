@@ -10,6 +10,7 @@ mod bingo;
 mod common;
 mod day;
 mod day1;
+mod day10;
 mod day2;
 mod day3;
 mod day4;
@@ -49,6 +50,7 @@ fn main() {
         "7" => run_day(7, || day7::run()),
         "8" => run_day(8, || day8::run()),
         "9" => run_day(9, || day9::run()),
+        "10" => run_day(10, || day10::run()),
         _ => log::error!("Unimplemented day {}", day),
     }
 }
