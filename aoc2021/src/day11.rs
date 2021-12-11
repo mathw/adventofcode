@@ -4,20 +4,36 @@ use std::collections::VecDeque;
 use std::error::Error;
 
 pub fn run() -> Result<DayResult, Box<dyn Error>> {
-    let part1_flashes = part1()?;
+    let part1_flashes = part1(include_str!("inputs/day11.txt"))?;
+    let part2_step = part2(include_str!("inputs/day11.txt"))?;
     Ok(DayResult::new(
         PartResult::Success(format!("There were {} flashes", part1_flashes)),
-        PartResult::NotImplemented,
+        PartResult::Success(format!(
+            "The octopodes will flash simultaneously at step {}",
+            part2_step
+        )),
     ))
 }
 
-fn part1() -> Result<u64, Box<dyn Error>> {
-    let mut input = parse_input(include_str!("inputs/day11.txt"))?;
+fn part1(input: &str) -> Result<u64, Box<dyn Error>> {
+    let mut input = parse_input(input)?;
     let mut flashes = 0;
     for _ in 0..100 {
         flashes += step(&mut input);
     }
     Ok(flashes)
+}
+
+fn part2(input: &str) -> Result<u64, Box<dyn Error>> {
+    let mut input = parse_input(input)?;
+    let num_octopodes = (input.width() * input.height()) as u64;
+    for step_num in 1.. {
+        let flashes = step(&mut input);
+        if flashes == num_octopodes {
+            return Ok(step_num);
+        }
+    }
+    Err(format!("The octopodes did not simultaneously flash").into())
 }
 
 fn step(octopodes: &mut Grid<u8>) -> u64 {
@@ -189,4 +205,10 @@ fn test_part1_small_sample_step1() {
     .unwrap();
 
     assert_eq!(squid, should_be);
+}
+
+#[test]
+fn test_part2_sample() {
+    let step = part2(include_str!("inputs/samples/day11.txt")).unwrap();
+    assert_eq!(step, 195);
 }
