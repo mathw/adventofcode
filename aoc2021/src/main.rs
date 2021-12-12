@@ -2,6 +2,7 @@ use crate::day::Day;
 use crate::day::DayResult;
 use clap::{App, Arg};
 use std::error::Error;
+use std::time::Instant;
 
 #[macro_use]
 extern crate lazy_static;
@@ -61,8 +62,11 @@ fn main() {
 
 fn run_day(day_num: u8, day_func: impl Fn() -> Result<DayResult, Box<dyn Error>>) {
     log::info!("Starting day {}", day_num);
+    let now = Instant::now();
     match day_func() {
         Ok(r) => log::info!("Day {} result:\n{}", day_num, r),
         Err(e) => log::error!("{}", e),
     }
+    let elapsed = Instant::now() - now;
+    log::info!("Time taken: {} seconds", elapsed.as_secs_f32());
 }
