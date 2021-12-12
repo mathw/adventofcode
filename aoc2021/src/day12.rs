@@ -275,7 +275,7 @@ impl<'a> CaveSystem<'a> {
     fn next_path_nodes(
         &self,
         path: &Path<'a>,
-        is_valid_cave_for_path: &impl Fn(&Path<'a>, &str) -> bool,
+        is_valid_cave_for_path: &(impl Fn(&Path<'a>, &str) -> bool + Sync),
     ) -> HashSet<Cave<'a>> {
         let last_cave = path
             .back()
@@ -292,7 +292,7 @@ impl<'a> CaveSystem<'a> {
 
         let all_forward_tunnels = self
             .all_tunnels_for_cave(last_cave)
-            .into_iter()
+            .par_iter()
             .map(|t| t.other_end_to(last_cave.label).expect("Found a tunnel which doesn't connect to its own source cave - tunnel finder must be broken"))
             .filter(|l| is_valid_cave_for_path(path, l)).map(|l| Cave::new(l)).collect::<HashSet<_>>();
         all_forward_tunnels
