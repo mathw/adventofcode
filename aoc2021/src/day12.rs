@@ -1,6 +1,7 @@
 use crate::day::{DayResult, PartResult};
 #[cfg(test)]
 use maplit::hashset;
+use rayon::prelude::*;
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::error::Error;
 use std::hash::{Hash, Hasher};
@@ -197,7 +198,7 @@ fn print_path(path: &Path<'_>) {
 impl<'a> CaveSystem<'a> {
     fn find_all_paths(
         &self,
-        is_valid_cave_for_path: &impl Fn(&Path<'a>, &str) -> bool,
+        is_valid_cave_for_path: &(impl Fn(&Path<'a>, &str) -> bool + Sync),
     ) -> HashSet<Path<'a>> {
         let mut paths = HashSet::new();
         {
@@ -213,37 +214,43 @@ impl<'a> CaveSystem<'a> {
             if paths.len() == 0 {
                 panic!("Paths are empty when starting new loop!");
             }
-            let mut new_paths = HashSet::new();
-            for path in paths.iter() {
-                #[cfg(test)]
-                {
-                    print!("## Searching to extend path ");
-                    print_path(path);
-                }
-                let next_nodes = self.next_path_nodes(&path, is_valid_cave_for_path);
-
-                #[cfg(test)]
-                println!("## Found {} next nodes {:?}", next_nodes.len(), next_nodes);
-
-                if next_nodes.len() == 0 {
-                    #[cfg(test)]
-                    println!("## no extension to this path possible. Pushing and moving on.");
-                    new_paths.insert(path.clone());
-                }
-
-                for n in next_nodes {
-                    let mut new_path = path.clone();
-                    new_path.push(n);
-
+            let new_paths = paths
+                .par_iter()
+                .flat_map(|path| {
                     #[cfg(test)]
                     {
-                        print!("## New path: ");
-                        print_path(&new_path);
+                        print!("## Searching to extend path ");
+                        print_path(path);
+                    }
+                    let next_nodes = self.next_path_nodes(&path, &is_valid_cave_for_path);
+
+                    #[cfg(test)]
+                    println!("## Found {} next nodes {:?}", next_nodes.len(), next_nodes);
+
+                    let mut new_paths = HashSet::new();
+
+                    if next_nodes.len() == 0 {
+                        #[cfg(test)]
+                        println!("## no extension to this path possible. Pushing and moving on.");
+                        new_paths.insert(path.clone());
                     }
 
-                    new_paths.insert(new_path);
-                }
-            }
+                    for n in next_nodes {
+                        let mut new_path = path.clone();
+                        new_path.push(n);
+
+                        #[cfg(test)]
+                        {
+                            print!("## New path: ");
+                            print_path(&new_path);
+                        }
+
+                        new_paths.insert(new_path);
+                    }
+                    new_paths
+                })
+                .collect();
+
             if new_paths == paths {
                 #[cfg(test)]
                 println!("## No change to paths. Search complete.");
@@ -268,7 +275,7 @@ impl<'a> CaveSystem<'a> {
     fn next_path_nodes(
         &self,
         path: &Path<'a>,
-        is_valid_cave_for_path: impl Fn(&Path<'a>, &str) -> bool,
+        is_valid_cave_for_path: &impl Fn(&Path<'a>, &str) -> bool,
     ) -> HashSet<Cave<'a>> {
         let last_cave = path
             .back()
@@ -398,7 +405,7 @@ a-end";
         .expect("A starting cave was expected");
     let mut path = Path::new();
     path.push(start);
-    let next = system.next_path_nodes(&path, part1_okay_to_visit);
+    let next = system.next_path_nodes(&path, &part1_okay_to_visit);
     assert_eq!(next, hashset![Cave::new("a")])
 }
 
@@ -412,7 +419,7 @@ A-end";
         .expect("A starting cave was expected");
     let mut path = Path::new();
     path.push(start);
-    let next = system.next_path_nodes(&path, part1_okay_to_visit);
+    let next = system.next_path_nodes(&path, &part1_okay_to_visit);
     assert_eq!(next, hashset![Cave::new("A")])
 }
 
@@ -429,7 +436,7 @@ b-end";
     let mut path = Path::new();
     path.push(start);
     path.push(a);
-    let next = system.next_path_nodes(&path, part1_okay_to_visit);
+    let next = system.next_path_nodes(&path, &part1_okay_to_visit);
     // should only find b, as we won't go back to start as it's a small cave in the path
     assert_eq!(next, hashset![Cave::new("b")])
 }
@@ -449,7 +456,7 @@ b-end";
     path.push(start);
     path.push(a);
     path.push(b);
-    let next = system.next_path_nodes(&path, part1_okay_to_visit);
+    let next = system.next_path_nodes(&path, &part1_okay_to_visit);
     // should find A and end as A can be returned to as it's large
     assert_eq!(next, hashset![Cave::new("end"), Cave::new("A")])
 }
