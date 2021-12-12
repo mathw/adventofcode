@@ -40,11 +40,6 @@ impl<T> Grid<T> {
         Some(())
     }
 
-    pub fn surrounding<'a>(&'a self, x: usize, y: usize) -> impl Iterator<Item = &T> + 'a {
-        self.surrounding_coords(x, y)
-            .filter_map(|(cx, cy)| self.get(cx, cy))
-    }
-
     pub fn surrounding_coords<'a>(
         &'a self,
         x: usize,
