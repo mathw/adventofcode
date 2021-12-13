@@ -14,6 +14,7 @@ mod day1;
 mod day10;
 mod day11;
 mod day12;
+mod day13;
 mod day2;
 mod day3;
 mod day4;
@@ -56,6 +57,7 @@ fn main() {
         "10" => run_day(10, || day10::run()),
         "11" => run_day(11, || day11::run()),
         "12" => run_day(12, || day12::run()),
+        "13" => run_day(13, || day13::run()),
         _ => log::error!("Unimplemented day {}", day),
     }
 }

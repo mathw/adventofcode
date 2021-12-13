@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Formatter};
 
-#[derive(Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct Grid<T> {
     data: Vec<T>,
     width: usize,
@@ -132,6 +132,10 @@ impl<T> Grid<T> {
 
     pub fn all_coords<'a>(&'a self) -> impl Iterator<Item = (usize, usize)> + 'a {
         (0..self.width).flat_map(|x| (0..self.height).map(move |y| (x, y)))
+    }
+
+    pub fn all_values<'a>(&'a self) -> impl Iterator<Item = &T> + 'a {
+        self.data.iter()
     }
 }
 
