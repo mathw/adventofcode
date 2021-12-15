@@ -20,6 +20,18 @@ impl<T> Grid<T> {
         }
     }
 
+    pub fn new_with_value(width: usize, height: usize, value: T) -> Grid<T>
+    where
+        T: Clone,
+    {
+        let data = (0..(width * height)).map(|_| value.clone()).collect();
+        Grid {
+            width,
+            height,
+            data,
+        }
+    }
+
     pub fn index_of(&self, x: usize, y: usize) -> Option<usize> {
         if x < self.width && y < self.height {
             Some(y * self.width + x)
@@ -38,6 +50,27 @@ impl<T> Grid<T> {
         self.data[index] = value;
 
         Some(())
+    }
+
+    pub fn surrounding_coords_no_diagonals<'a>(
+        &'a self,
+        x: usize,
+        y: usize,
+    ) -> impl Iterator<Item = (usize, usize)> + 'a {
+        let mut coords = [None; 8];
+        coords[0] = if x == 0 { None } else { Some((x - 1, y)) };
+        coords[1] = if x >= self.width - 1 {
+            None
+        } else {
+            Some((x + 1, y))
+        };
+        coords[2] = if y == 0 { None } else { Some((x, y - 1)) };
+        coords[3] = if y >= self.height - 1 {
+            None
+        } else {
+            Some((x, y + 1))
+        };
+        coords.into_iter().filter_map(|c| c)
     }
 
     pub fn surrounding_coords<'a>(
