@@ -20,18 +20,6 @@ impl<T> Grid<T> {
         }
     }
 
-    pub fn new_with_value(width: usize, height: usize, value: T) -> Grid<T>
-    where
-        T: Clone,
-    {
-        let data = (0..(width * height)).map(|_| value.clone()).collect();
-        Grid {
-            width,
-            height,
-            data,
-        }
-    }
-
     pub fn index_of(&self, x: usize, y: usize) -> Option<usize> {
         if x < self.width && y < self.height {
             Some(y * self.width + x)

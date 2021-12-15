@@ -2,19 +2,29 @@ use crate::{
     common::grid::Grid,
     day::{DayResult, PartResult},
 };
+use pathfinding::directed::dijkstra::dijkstra;
 use std::error::Error;
 
 pub fn run() -> Result<DayResult, Box<dyn Error>> {
     let part1 = part1(include_str!("inputs/day15.txt"))?;
+    let part2 = part2(include_str!("inputs/day15.txt"))?;
     Ok(DayResult::new(
         PartResult::Success(format!("{} is the lowest risk path", part1)),
-        PartResult::NotImplemented,
+        PartResult::Success(format!(
+            "{} is the lowest risk path in the monster grid",
+            part2
+        )),
     ))
 }
 
 fn part1(input: &str) -> Result<usize, Box<dyn Error>> {
     let grid = parse_input_grid(input)?;
-    Ok(djikstra(&grid))
+    Ok(solve_part1(&grid)?)
+}
+
+fn part2(input: &str) -> Result<usize, Box<dyn Error>> {
+    let grid = parse_input_grid(input)?;
+    Ok(solve_part2(&grid)?)
 }
 
 fn parse_input_grid(input: &str) -> Result<Grid<u8>, Box<dyn Error>> {
@@ -32,107 +42,65 @@ fn parse_input_grid(input: &str) -> Result<Grid<u8>, Box<dyn Error>> {
     Ok(grid)
 }
 
-fn djikstra(caves_grid: &Grid<u8>) -> usize {
-    println!("{}\n-----------------------", caves_grid);
-    let mut current_node = (0, 0);
-    let destination_node = (caves_grid.width() - 1, caves_grid.height() - 1);
-    let mut node_distances: Grid<usize> =
-        Grid::new_with_value(caves_grid.width(), caves_grid.height(), usize::MAX);
-    let mut visited_grid: Grid<bool> = Grid::new(caves_grid.width(), caves_grid.height());
-    node_distances.set(current_node.0, current_node.1, 0);
+fn solve_part1(caves_grid: &Grid<u8>) -> Result<usize, String> {
+    let successors = |node: &(usize, usize)| {
+        caves_grid
+            .surrounding_coords_no_diagonals(node.0, node.1)
+            .map(|(nx, ny)| ((nx, ny), *caves_grid.get(nx, ny).unwrap() as usize))
+    };
+    let success =
+        |node: &(usize, usize)| *node == (caves_grid.width() - 1, caves_grid.height() - 1);
 
-    loop {
-        // termination condition
-        if current_node == destination_node {
-            println!("{}", node_distances);
-            return *node_distances
-                .get(destination_node.0, destination_node.1)
-                .expect("This should always find an answer");
-        }
-
-        let current_distance = *node_distances.get(current_node.0, current_node.1).unwrap();
-        let is_problem_node = current_node == (1, 3);
-        if is_problem_node {
-            println!(
-                "Evaluating node {:?} current distance is {}\nDistance grid state is\n{}\n",
-                current_node, current_distance, node_distances
-            );
-        }
-
-        for neighbour in caves_grid.surrounding_coords_no_diagonals(current_node.0, current_node.1)
-        {
-            if is_problem_node {
-                println!(
-                    "Evaluating neighbour {:?} with cost {}...",
-                    neighbour,
-                    caves_grid.get(neighbour.0, neighbour.1).unwrap()
-                );
-            }
-
-            let neighbour_distance_from_here =
-                current_distance + *caves_grid.get(neighbour.0, neighbour.1).unwrap() as usize;
-
-            if is_problem_node {
-                println!("Distance is {}", neighbour_distance_from_here);
-            }
-
-            if neighbour_distance_from_here < *node_distances.get(neighbour.0, neighbour.1).unwrap()
-            {
-                if is_problem_node {
-                    println!("Distance replaced as it is shorter");
-                }
-                node_distances.set(neighbour.0, neighbour.1, neighbour_distance_from_here);
-            }
-        }
-
-        visited_grid.set(current_node.0, current_node.1, true);
-
-        let smallest_unvisited_neighbour = caves_grid
-            .surrounding_coords_no_diagonals(current_node.0, current_node.1)
-            .filter(|(nx, ny)| !*visited_grid.get(*nx, *ny).unwrap())
-            .min_by_key(|(nx, ny)| visited_grid.get(*nx, *ny).unwrap())
-            .expect("Should have found a smallest unvisited node");
-
-        current_node = smallest_unvisited_neighbour;
+    if let Some((_, cost)) = dijkstra(&(0, 0), successors, success) {
+        Ok(cost)
+    } else {
+        Err(format!("Couldn't find a path :("))
     }
 }
 
-impl std::fmt::Display for Grid<usize> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        for y in 0..self.height() {
-            for x in 0..self.width() {
-                let val = self.get(x, y).unwrap();
-                write!(
-                    f,
-                    " {} ",
-                    if *val == usize::MAX {
-                        format!("--")
-                    } else {
-                        format!("{:02}", val)
-                    }
-                )?;
-            }
-            write!(f, "\n")?;
-        }
-        Ok(())
-    }
+fn solve_part2(caves_grid: &Grid<u8>) -> Result<usize, String> {
+    let mega_grid = make_full_map(&caves_grid);
+    solve_part1(&mega_grid)
 }
 
-impl std::fmt::Display for Grid<u8> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        for y in 0..self.height() {
-            for x in 0..self.width() {
-                write!(f, " {} ", self.get(x, y).unwrap())?;
+fn make_full_map(source_grid: &Grid<u8>) -> Grid<u8> {
+    let mut target_grid = Grid::new(source_grid.width() * 5, source_grid.height() * 5);
+    for gx in 0..5u8 {
+        for gy in 0..5u8 {
+            let add = gx + gy;
+            let x_offset = source_grid.width() * gx as usize;
+            let y_offset = source_grid.height() * gy as usize;
+            for (x, y) in source_grid.all_coords() {
+                let target_x = x + x_offset;
+                let target_y = y + y_offset;
+                let target_value = add_risk(*source_grid.get(x, y).unwrap(), add);
+                target_grid.set(target_x, target_y, target_value);
             }
-            write!(f, "\n")?;
         }
-        Ok(())
+    }
+    target_grid
+}
+
+fn add_risk(risk: u8, add: u8) -> u8 {
+    let add = add - (add / 9) * 9;
+    let r = risk + add;
+    if r > 9 {
+        r - 9
+    } else {
+        r
     }
 }
 
 #[test]
 fn test_part1_sample() {
     let caves = parse_input_grid(include_str!("inputs/samples/day15.txt")).unwrap();
-    let total_risk = djikstra(&caves);
+    let total_risk = solve_part1(&caves).unwrap();
     assert_eq!(total_risk, 40);
+}
+
+#[test]
+fn test_part2_sample() {
+    let caves = parse_input_grid(include_str!("inputs/samples/day15.txt")).unwrap();
+    let total_risk = solve_part2(&caves).unwrap();
+    assert_eq!(total_risk, 315);
 }
