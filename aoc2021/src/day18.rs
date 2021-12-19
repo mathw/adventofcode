@@ -1,12 +1,17 @@
 use crate::day::{DayResult, PartResult};
 use chumsky::prelude::*;
+use itertools::Itertools;
 use std::{collections::LinkedList, ops::Add, str::FromStr};
 
 pub fn run() -> Result<DayResult, Box<dyn std::error::Error>> {
     let part1 = part1(include_str!("inputs/day18.txt"))?;
+    let part2 = part2(include_str!("inputs/day18.txt"))?;
     Ok(DayResult::new(
         PartResult::Success(format!("The answer is {}", part1)),
-        PartResult::NotImplemented,
+        PartResult::Success(format!(
+            "The largest magnitude from two numbers is {}",
+            part2
+        )),
     ))
 }
 
@@ -225,6 +230,17 @@ fn part1(input: &str) -> Result<u32, Box<dyn std::error::Error>> {
     Ok(result.magnitude())
 }
 
+fn part2(input: &str) -> Result<u32, Box<dyn std::error::Error>> {
+    let sfns = input
+        .lines()
+        .map(|l| SnailfishNumber::from_str(l))
+        .collect::<Result<Vec<_>, _>>()?;
+    let pairs = sfns.into_iter().permutations(2);
+    let magnitudes = pairs.map(|p| (p[0].clone() + p[1].clone()).magnitude());
+    let answer = magnitudes.max().ok_or(format!("No numbers were parsed"))?;
+    Ok(answer)
+}
+
 #[test]
 fn test_parser() {
     let pair = SnailfishNumber::from_str("[1,2]").unwrap();
@@ -318,4 +334,22 @@ fn test_part1_sample() {
     )
     .unwrap();
     assert_eq!(result, 4140);
+}
+
+#[test]
+fn test_part2_sample() {
+    let result = part2(
+        "[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
+[[[5,[2,8]],4],[5,[[9,9],0]]]
+[6,[[[6,2],[5,6]],[[7,6],[4,7]]]]
+[[[6,[0,7]],[0,9]],[4,[9,[9,0]]]]
+[[[7,[6,4]],[3,[1,3]]],[[[5,5],1],9]]
+[[6,[[7,3],[3,2]]],[[[3,8],[5,7]],4]]
+[[[[5,4],[7,7]],8],[[8,3],8]]
+[[9,3],[[9,9],[6,[4,9]]]]
+[[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]
+[[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]",
+    )
+    .unwrap();
+    assert_eq!(result, 3993);
 }
